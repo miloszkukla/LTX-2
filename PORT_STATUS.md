@@ -7,13 +7,18 @@
 - Accepted M2 plan: `C_SHARP_PORT_PLAN.M2.md`, revision M2, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `f53c216a4a9598d1bc626923744095aac7311a46`.
 - Current M3 plan: `C_SHARP_PORT_PLAN.md`, revision M3, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M3.md`; the coordinator's M3 revision is content-identical to the accepted M1 and M2 revisions.
 
-## M3 — handoff acknowledged, implementation not started
+## M3 — accepted checkpoint
 
-- Handoff acknowledged on 2026-08-20 UTC from accepted M2 checkpoint `f53c216a4a9598d1bc626923744095aac7311a46`; no M3 implementation was started before this documentation/status checkpoint.
+- Handoff acknowledged on 2026-08-20 UTC from accepted M2 checkpoint `f53c216a4a9598d1bc626923744095aac7311a46`; no M3 implementation was started before the pushed documentation/status checkpoint `16531ddd4cd279232c021a4c939d71b46a042535`.
 - Plan input: `/root/C_SHARP_PORT_PLAN.M3.md`, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`; tracked as `C_SHARP_PORT_PLAN.md` with the accepted M0, M1, and M2 plan copies retained as historical evidence.
-- Exact acceptance gate: transformer, VAE, audio/vocoder, conditioning, and offload fixture suites pass with seeded numerical parity at FP32 `rtol=1e-4`, `atol=1e-5` and BF16/FP8 `rtol=2e-2`, `atol=5e-3`.
-- Required verification: `scripts/remote/verify-milestone.sh M3` on the existing 32 GB RTX 5090 worker. The implementation source checkpoint will be this handoff commit after it is pushed and will be recorded in the accepted M3 status and redacted heartbeat.
-- Known failures: none. Next action: begin M3 only after this documentation/status checkpoint is committed and pushed.
+- Verification: `scripts/remote/verify-milestone.sh M3` (exit 0). The Release solution build, M1 ABI/native and parity regressions, M2 storage/model-loading regressions, and all five required M3 core-model fixture suites passed.
+- Starting/source checkpoint: `16531ddd4cd279232c021a4c939d71b46a042535`; the final fork checkpoint SHA is recorded by the redacted heartbeat immediately after the atomic push because it cannot be embedded in its own commit.
+- Scope completed: transformer timestep embeddings, tanh-GELU feed-forward, and masked/unmasked multi-head attention; video VAE patch/unpatch, pixel normalization, and latent channel statistics; audio Snake/SnakeBeta and vocoder layout/final activation; conditioning cross/self-attention masks; and deterministic no-offload, CPU-offload, and safetensors disk-offload linear execution.
+- Worker: existing Vast instance `48162892`, single RTX 5090 32 GB, compute capability 12.0. The accepted ABI remains PyTorch `2.13.0+cu132`, CUDA `13.2`, TorchSharp `0.107.0`, and `sm_120` SASS-only native code.
+- Fixed fixture: `m3-core-model-execution-v1`, seed `20260820`, fixture-set SHA-256 `6964b807c01b0b15a191031432eaf54b4a6945d3cfa96b27cdddda47a204c1cd`. Individual file SHA-256 values are recorded in `artifacts/M3/summary.json`; no production model checkpoint bytes were required for M3.
+- Numerical results: FP32 passed at `rtol=1e-4`, `atol=1e-5`; BF16 passed at `rtol=2e-2`, `atol=5e-3`. The new suites passed transformer 7, VAE 8, audio/vocoder 9, conditioning 4, and offload 6 checks.
+- Redacted evidence: `artifacts/M3/abi-smoke.json`, `artifacts/M3/foundation-parity.json`, `artifacts/M3/storage.json`, `artifacts/M3/core-model.json`, and `artifacts/M3/summary.json`; 56 checks passed, 0 failed, 0 skipped including all prerequisite regressions.
+- Known failures: none. Next milestone: M4 is not started.
 
 ## M2 — accepted checkpoint
 

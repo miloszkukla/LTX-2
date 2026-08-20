@@ -53,12 +53,17 @@ wandb/
 !artifacts/M1/*.json
 !artifacts/M2/
 !artifacts/M2/*.json
+!artifacts/M3/
+!artifacts/M3/*.json
 !tests/fixtures/
 !tests/fixtures/M1/
 !tests/fixtures/M1/*.json
 !tests/fixtures/M2/
 !tests/fixtures/M2/*.json
 !tests/fixtures/M2/*.safetensors
+!tests/fixtures/M3/
+!tests/fixtures/M3/*.json
+!tests/fixtures/M3/*.safetensors
 
 # .NET build products
 **/bin/

@@ -1,0 +1,117 @@
+{
+  "abi": {
+    "cuda": "13.2",
+    "cxx11_abi": 1,
+    "ltx": "1.0",
+    "pytorch": "2.13.0",
+    "torchsharp_managed": "0.107.0",
+    "torchsharp_revision": "8f4def03b641b6753f18076aa5438f8eaaef2d30"
+  },
+  "artifact_sha256": {
+    "abi-smoke.json": "c866a4e7a7deaafee5f2ef423abf13b4356888790b6ba426f4d1ab7ae4df3d01",
+    "core-model.json": "aab5861d45010b817bd96826624fce209456c76dd79f0e464f6070dc422c8f85",
+    "foundation-parity.json": "4eb9b28cd3371491db28f1931f02f29f08dc405416b16e65d481e5b3439917d9",
+    "storage.json": "171c69b40378149c5b6ba1f10a1edb774d7d244d7b32cc310a927c576f791c9c"
+  },
+  "commands": [
+    {
+      "command": "dotnet build Ltx.sln --configuration Release --nologo",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-smoke.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-parity.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m2-storage.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m3-core.sh",
+      "exit_code": 0
+    }
+  ],
+  "dependencies": {
+    "numpy": "2.3.2",
+    "packaging": "25.0",
+    "safetensors": "0.6.2",
+    "torch": "2.13.0+cu132",
+    "torchsharp": "0.107.0"
+  },
+  "fixture_revision": "m3-core-model-execution-v1",
+  "fixture_set_sha256": "6964b807c01b0b15a191031432eaf54b4a6945d3cfa96b27cdddda47a204c1cd",
+  "fixture_sha256": {
+    "manifest.json": "69ab62a76df5cc52dacb493ad39a436dd2c72cf65c20c872ebca9bcb02419bc1",
+    "offload.safetensors": "204445739b5df36eba2fb49e812d30f7ba9fb30ddb27d2d3a3b6f0ff76563370"
+  },
+  "generated_at_utc": "2026-08-20T02:52:44.136243Z",
+  "gpu": {
+    "compute_capability": "12.0",
+    "driver": "580.95.05",
+    "driver_policy": "CUDA 13.x minor-version compatibility; SASS-only native build; no PTX JIT",
+    "memory_total_mib": 32607,
+    "memory_used_mib": 2,
+    "name": "NVIDIA GeForce RTX 5090",
+    "sass_architecture": "sm_120",
+    "temperature_c": 35
+  },
+  "milestone": "M3",
+  "numerical_tolerances": {
+    "bf16": {
+      "atol": 0.005,
+      "result": "pass",
+      "rtol": 0.02
+    },
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "plan_revision": "M3",
+  "plan_sha256": "7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_reference_sha": "16531ddd4cd279232c021a4c939d71b46a042535",
+  "state": "accepted",
+  "suite_totals": {
+    "audio_vocoder": 9,
+    "conditioning": 4,
+    "offload": 6,
+    "transformer": 7,
+    "vae": 8
+  },
+  "test_totals": {
+    "failed": 0,
+    "passed": 56,
+    "skipped": 0
+  },
+  "tests": {
+    "audio_vocoder": "seeded_fp32_bf16_pass",
+    "conditioning": "seeded_fp32_pass",
+    "foundation_parity": "2_pass",
+    "ltx_native_cuda": "pass",
+    "offload": "none_cpu_disk_seeded_fp32_bf16_pass",
+    "sass_only": "pass",
+    "storage_regression": "16_pass",
+    "torchsharp_abi_probe": "pass",
+    "torchsharp_cuda_tensor": "pass",
+    "transformer": "seeded_fp32_bf16_pass",
+    "vae": "seeded_fp32_bf16_pass"
+  },
+  "toolchain": {
+    "cmake": "cmake version 3.28.3",
+    "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "cuda_release": "13.2",
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "ninja": "1.11.1",
+    "python": "Python 3.12.3",
+    "uv": "uv 0.12.5 (x86_64-unknown-linux-gnu)"
+  },
+  "verification_command": "scripts/remote/verify-milestone.sh M3"
+}

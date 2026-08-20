@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ltx.ParityRunner", "tests/L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ltx.StorageTests", "tests/Ltx.StorageTests/Ltx.StorageTests.csproj", "{10A48C53-45F0-4484-BE01-04A6ED20A00A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ltx.CoreExecutionTests", "tests/Ltx.CoreExecutionTests/Ltx.CoreExecutionTests.csproj", "{10A48C53-45F0-4484-BE01-04A6ED20A00B}"
+EndProject
 Global
   GlobalSection(SolutionConfigurationPlatforms) = preSolution
     Debug|Any CPU = Debug|Any CPU
@@ -68,5 +70,9 @@ Global
     {10A48C53-45F0-4484-BE01-04A6ED20A00A}.Debug|Any CPU.Build.0 = Debug|Any CPU
     {10A48C53-45F0-4484-BE01-04A6ED20A00A}.Release|Any CPU.ActiveCfg = Release|Any CPU
     {10A48C53-45F0-4484-BE01-04A6ED20A00A}.Release|Any CPU.Build.0 = Release|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A00B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A00B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A00B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A00B}.Release|Any CPU.Build.0 = Release|Any CPU
   EndGlobalSection
 EndGlobal
