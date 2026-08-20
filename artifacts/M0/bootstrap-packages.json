@@ -1,0 +1,26 @@
+{
+  "generated_at_utc": "2026-08-20T00:48:28.958326Z",
+  "packages": {
+    "cmake": "3.28.3-1build7",
+    "dotnet-sdk-10.0": "10.0.111-0ubuntu1~24.04.1",
+    "ffmpeg": "7:6.1.1-3ubuntu5",
+    "gh": "2.45.0-1ubuntu0.3",
+    "git": "1:2.43.0-1ubuntu7.3",
+    "libavcodec-dev": "7:6.1.1-3ubuntu5",
+    "libavformat-dev": "7:6.1.1-3ubuntu5",
+    "libavutil-dev": "7:6.1.1-3ubuntu5",
+    "libopencv-dev": "4.6.0+dfsg-13.1ubuntu1",
+    "libopenimageio-dev": "2.4.17.0+dfsg-1.1build4",
+    "ninja-build": "1.11.1-2",
+    "python3": "3.12.3-0ubuntu2.1"
+  },
+  "platform": {
+    "machine": "x86_64",
+    "system": "Linux"
+  },
+  "schema_version": 1,
+  "tools": {
+    "dotnet": "10.0.111",
+    "uv": "uv 0.12.5 (x86_64-unknown-linux-gnu)"
+  }
+}

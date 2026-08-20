@@ -44,6 +44,15 @@ wandb/
 *.wav
 *.webp
 
+# Tracked redacted milestone evidence
+!artifacts/
+!artifacts/M0/
+!artifacts/M0/*.json
+
+# .NET build products
+**/bin/
+**/obj/
+
 # Full-params expected results for the --full-e2e quality lane (checked in via Git LFS)
 !packages/ltx-pipelines/tests/assets/full_e2e/
 !packages/ltx-pipelines/tests/assets/full_e2e/*.mp4

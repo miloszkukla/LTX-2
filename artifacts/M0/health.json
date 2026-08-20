@@ -1,0 +1,13 @@
+{
+  "disk_free_bytes": 209197297664,
+  "gpu": {
+    "memory_total_mib": 32607,
+    "memory_used_mib": 2,
+    "power_w": 11.0,
+    "temperature_c": 35,
+    "utilization_percent": 0
+  },
+  "redacted": true,
+  "schema_version": 1,
+  "timestamp_utc": "2026-08-20T00:54:55.974909Z"
+}

@@ -1,0 +1,95 @@
+{
+  "artifact_sha256": {
+    "artifact-manifest.json": "18c04af7d717b6d58696a79bf6b8019e713a97f4570e07914f92947794a4bee6",
+    "bootstrap-packages.json": "174c33390c5300e0ab516db96131d7114793fd32b31c40ec2647db537ecc742e",
+    "ghcr.json": "67a95d18ecd69646c1c12411f7c1aff512e49791a72d64d2d4fdbd45dca1b7e5",
+    "health.json": "c17f8466a3e058984b20f974b0615af0362db7da35b95765b2160a74cc348ca8",
+    "model-access.json": "7beee9a3515f98d95187b090d3db5044232fe1c2401e065037cb6ad902b10804",
+    "native-smoke.json": "13d6e5715458237e1199887ea5b37ba1b338f79809a073898e7e286b7658cba8",
+    "preflight.json": "af1a4d27217f7abcf7b50d0804b8c20ce4940e65a6650e4b745e6c0ed867275e",
+    "source-surface.json": "5504665a59eef60db9cb14e8230336447d7f3d25dfd1a896fff21373809ddfa4",
+    "vast-preflight.json": "c04b11939db4097276cdd35190a1345c7f5512fdf6f23c75d312835030f1771e"
+  },
+  "commands": [
+    {
+      "command": "generate-source-surface.py",
+      "exit_code": 0
+    },
+    {
+      "command": "probe-model-access.py",
+      "exit_code": 0
+    },
+    {
+      "command": "vast-preflight.py",
+      "exit_code": 0
+    },
+    {
+      "command": "probe-ghcr.py",
+      "exit_code": 0
+    },
+    {
+      "command": "preflight.py",
+      "exit_code": 0
+    },
+    {
+      "command": "run-native-smoke.sh",
+      "exit_code": 0
+    }
+  ],
+  "generated_at_utc": "2026-08-20T00:54:59.216558Z",
+  "gpu": {
+    "compute_capability": "12.0",
+    "driver": "580.95.05",
+    "driver_policy": "CUDA 13.x minor-version compatibility; SASS-only native build; no PTX JIT",
+    "memory_total_mib": 32607,
+    "memory_used_mib": 2,
+    "name": "NVIDIA GeForce RTX 5090",
+    "sass_architecture": "sm_120",
+    "temperature_c": 35
+  },
+  "milestone": "M0",
+  "model_artifacts": {
+    "authenticated_probes_passed": 16,
+    "required_disk_with_headroom_bytes": 124242028445
+  },
+  "numerical_tolerances": {
+    "result": "not_applicable_to_bootstrap_smoke"
+  },
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_reference_sha": "400fd31054597515f47125691032c04b1c3ee24e",
+  "source_surface_counts": {
+    "cli_entrypoints": 26,
+    "cli_flag_declarations": 194,
+    "native_bindings": 15,
+    "native_kernels": 29,
+    "native_sources": 47,
+    "pipelines": 15,
+    "python_modules": 280,
+    "python_packages": 39
+  },
+  "state": "accepted",
+  "test_totals": {
+    "failed": 0,
+    "passed": 4,
+    "skipped": 0
+  },
+  "tests": {
+    "cuda_kernel": "pass",
+    "ldconfig_pinvoke": "pass",
+    "sass_only": "pass",
+    "torchsharp_tensor": "pass"
+  },
+  "toolchain": {
+    "cmake": "cmake version 3.28.3",
+    "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "cuda_release": "13.2",
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "ninja": "1.11.1",
+    "python": "Python 3.12.3",
+    "uv": "uv 0.12.5 (x86_64-unknown-linux-gnu)"
+  },
+  "verification_command": "scripts/remote/verify-milestone.sh M0",
+  "worker_strategy": "nvidia_base_plus_checked_in_bootstrap"
+}

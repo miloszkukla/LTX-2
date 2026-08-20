@@ -1,0 +1,49 @@
+{
+  "access": {
+    "codex_cli_authenticated": true,
+    "direct_ssh": true,
+    "hf_token_present": true,
+    "hf_token_value_recorded": false
+  },
+  "base_image": {
+    "linux_amd64_digest": "sha256:293837d7ad950f195e6ba5e3c0478c50b8c80349a70ad14687f39ed8ff0a8e4a",
+    "tag": "nvidia/cuda:13.2.0-cudnn-devel-ubuntu24.04"
+  },
+  "capacity": {
+    "disk_free_bytes": 209197297664,
+    "disk_gate": "pass",
+    "disk_total_bytes": 214748364800,
+    "ram_bytes": 32712769536,
+    "required_disk_with_headroom_bytes": 124242028445
+  },
+  "generated_at_utc": "2026-08-20T00:54:55.847551Z",
+  "gpu": {
+    "compute_capability": "12.0",
+    "driver": "580.95.05",
+    "driver_policy": "CUDA 13.x minor-version compatibility; SASS-only native build; no PTX JIT",
+    "memory_total_mib": 32607,
+    "memory_used_mib": 2,
+    "name": "NVIDIA GeForce RTX 5090",
+    "sass_architecture": "sm_120",
+    "temperature_c": 35
+  },
+  "native_libraries": {
+    "ffmpeg_avcodec": true,
+    "ffmpeg_avformat": true,
+    "opencv_core": true,
+    "openimageio": true
+  },
+  "plan_sha256": "d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6",
+  "result": "pass",
+  "schema_version": 1,
+  "toolchain": {
+    "cmake": "cmake version 3.28.3",
+    "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "cuda_release": "13.2",
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "ninja": "1.11.1",
+    "python": "Python 3.12.3",
+    "uv": "uv 0.12.5 (x86_64-unknown-linux-gnu)"
+  }
+}

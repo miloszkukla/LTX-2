@@ -1,0 +1,358 @@
+{
+  "artifacts": [
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "diffusion_models/ltx-2.5-22b-dev-transformer-bf16.safetensors",
+          "sha256": "792a2bad501ca03262c0bc2ce7a2949e85b142ce18e30894aad5bc849c8e7584",
+          "size_bytes": 42018190584
+        }
+      ],
+      "id": "ltx25-dev-transformer",
+      "phase": "ltx25-dev-standard",
+      "repo": "Lightricks/LTX-2.5",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6c7e5e573ac1667efc83407806fe9b0b93730e60",
+      "selector": "diffusion_models/ltx-2.5-22b-dev-transformer-bf16.safetensors",
+      "size_bytes": 42018190584
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "diffusion_models/ltx-2.5-22b-distilled-transformer-bf16.safetensors",
+          "sha256": "31eb3cad89b9e54e99dd3baf286f70825ac4f6c660a70d9184d895be76d7bff4",
+          "size_bytes": 42018190584
+        }
+      ],
+      "id": "ltx25-distilled-transformer",
+      "phase": "ltx25-distilled-standard",
+      "repo": "Lightricks/LTX-2.5",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6c7e5e573ac1667efc83407806fe9b0b93730e60",
+      "selector": "diffusion_models/ltx-2.5-22b-distilled-transformer-bf16.safetensors",
+      "size_bytes": 42018190584
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "text_encoders/gemma4-12b-with-proj-ltx-2.5-bf16.safetensors",
+          "sha256": "ef7243612fdae7a75cb4d5cee9433e81380675fb6c213bd98ae74a9cd16561d1",
+          "size_bytes": 26263858182
+        }
+      ],
+      "id": "ltx25-text-encoder",
+      "phase": "ltx25-common",
+      "repo": "Lightricks/LTX-2.5",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6c7e5e573ac1667efc83407806fe9b0b93730e60",
+      "selector": "text_encoders/gemma4-12b-with-proj-ltx-2.5-bf16.safetensors",
+      "size_bytes": 26263858182
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "vae/ltx-2.5-video-vae-bf16.safetensors",
+          "sha256": "847e14ca7f3355debca0cea4eaa24ac0fbcdf0061da054ac89ca638a869ddba3",
+          "size_bytes": 1472223346
+        }
+      ],
+      "id": "ltx25-video-vae-diffusion",
+      "phase": "ltx25-common",
+      "repo": "Lightricks/LTX-2.5",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6c7e5e573ac1667efc83407806fe9b0b93730e60",
+      "selector": "vae/ltx-2.5-video-vae-bf16.safetensors",
+      "size_bytes": 1472223346
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "vae/ltx-2.5-video-vae-conv-bf16.safetensors",
+          "sha256": "685b06ee3d9b2039647698fc4ea33175112462fc374e2777312c907897dfce8d",
+          "size_bytes": 1452269922
+        }
+      ],
+      "id": "ltx25-video-vae-convolutional",
+      "phase": "ltx25-common",
+      "repo": "Lightricks/LTX-2.5",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6c7e5e573ac1667efc83407806fe9b0b93730e60",
+      "selector": "vae/ltx-2.5-video-vae-conv-bf16.safetensors",
+      "size_bytes": 1452269922
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "vae/ltx-2.5-audio-vae-bf16.safetensors",
+          "sha256": "c52733d37f6a7fb7949c3dc0fb468c6cb2169e4d836983a73babb9f0d54837a5",
+          "size_bytes": 364866540
+        }
+      ],
+      "id": "ltx25-audio-vae",
+      "phase": "ltx25-common",
+      "repo": "Lightricks/LTX-2.5",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6c7e5e573ac1667efc83407806fe9b0b93730e60",
+      "selector": "vae/ltx-2.5-audio-vae-bf16.safetensors",
+      "size_bytes": 364866540
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "latent_upscale_models/ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors",
+          "sha256": "eb5a71fe4068ee87ccdb1c3aa635e547ca76bd2d30ae20ae889f2c325c0677e8",
+          "size_bytes": 995778752
+        }
+      ],
+      "id": "ltx25-spatial-upscaler",
+      "phase": "ltx25-common",
+      "repo": "Lightricks/LTX-2.5",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6c7e5e573ac1667efc83407806fe9b0b93730e60",
+      "selector": "latent_upscale_models/ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors",
+      "size_bytes": 995778752
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "latent_upscale_models/ltx-2.5-latent-temporal-upscaler-x2-bf16-1.0.safetensors",
+          "sha256": "2bc3300f2b3c3c1834d72164fbf13a3b9fd73e5a741e8a2c3f4035f89a75c3fe",
+          "size_bytes": 261944000
+        }
+      ],
+      "id": "ltx25-temporal-upscaler",
+      "phase": "ltx25-common",
+      "repo": "Lightricks/LTX-2.5",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6c7e5e573ac1667efc83407806fe9b0b93730e60",
+      "selector": "latent_upscale_models/ltx-2.5-latent-temporal-upscaler-x2-bf16-1.0.safetensors",
+      "size_bytes": 261944000
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "loras/ltx-2.5-22b-distilled-lora-450-bf16.safetensors",
+          "sha256": "86370bbf79a9eb4edaa158907e2b48a5188fe4c5dc8ce30c7eb8f2f131a9bbf5",
+          "size_bytes": 8899889568
+        }
+      ],
+      "id": "ltx25-distilled-lora",
+      "phase": "ltx25-common",
+      "repo": "Lightricks/LTX-2.5",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6c7e5e573ac1667efc83407806fe9b0b93730e60",
+      "selector": "loras/ltx-2.5-22b-distilled-lora-450-bf16.safetensors",
+      "size_bytes": 8899889568
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "model_patches/ltx-2.5-duration-head-bf16.safetensors",
+          "sha256": "2ec71e4206ed365d015f00c05a48caccfb0ee862986809d06ae376c09f5d9190",
+          "size_bytes": 3843690
+        }
+      ],
+      "id": "ltx25-duration-head",
+      "phase": "ltx25-common",
+      "repo": "Lightricks/LTX-2.5",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6c7e5e573ac1667efc83407806fe9b0b93730e60",
+      "selector": "model_patches/ltx-2.5-duration-head-bf16.safetensors",
+      "size_bytes": 3843690
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "ltx-2.5-22b-ic-lora-pixel-spatial-upscaler-x2-1.0.safetensors",
+          "sha256": "984851b769ea2bcb4c9e0a239a7676239e42c6a6001ddc69943b41ff0b283c1d",
+          "size_bytes": 327322640
+        }
+      ],
+      "id": "ltx25-detailing-ic-lora",
+      "phase": "ltx25-common",
+      "repo": "Lightricks/LTX-2.5-22b-IC-LoRA-Pixel-Spatial-Upscaler",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "74c4e68ee7dd99f3997d5a1bb1a3784941822222",
+      "selector": "ltx-2.5-22b-ic-lora-pixel-spatial-upscaler-x2-1.0.safetensors",
+      "size_bytes": 327322640
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "ltx-2.3-22b-distilled-1.1.safetensors",
+          "sha256": "b33b7fe4bbfe084f484be4aaf90b0f1d95dca20d403ac4c0e037eb8c4f0af7cc",
+          "size_bytes": 46149345334
+        }
+      ],
+      "id": "ltx23-distilled-checkpoint",
+      "phase": "ltx23-specialized",
+      "repo": "Lightricks/LTX-2.3",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6b5a83e3045eaf8e46cfa0acce512412aa2b9cce",
+      "selector": "ltx-2.3-22b-distilled-1.1.safetensors",
+      "size_bytes": 46149345334
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "ltx-2.3-spatial-upscaler-x2-1.1.safetensors",
+          "sha256": "5f416311fa8172b65af67530758964708d29a317b830d689a51143b7f91913ed",
+          "size_bytes": 995743560
+        }
+      ],
+      "id": "ltx23-spatial-upscaler",
+      "phase": "ltx23-specialized",
+      "repo": "Lightricks/LTX-2.3",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "6b5a83e3045eaf8e46cfa0acce512412aa2b9cce",
+      "selector": "ltx-2.3-spatial-upscaler-x2-1.1.safetensors",
+      "size_bytes": 995743560
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "model-00001-of-00005.safetensors",
+          "sha256": "e6fb899db428481aafb45a20130457df6e247e7cb03b7d9f01ee4bc2a9a08138",
+          "size_bytes": 4979902192
+        },
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "model-00002-of-00005.safetensors",
+          "sha256": "d251e7fe9799d529405ddb61705a44cd700bd30a8b66a8d44ae26ddf8365dbc6",
+          "size_bytes": 4931296592
+        },
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "model-00003-of-00005.safetensors",
+          "sha256": "0684ef801385f0669a0b3e4ab160c50877efdbfa40eb97788595985de2743e78",
+          "size_bytes": 4931296656
+        },
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "model-00004-of-00005.safetensors",
+          "sha256": "b4b964e6526f81ccfa625c900b72ce92d5e0fd2debb75998763038ad06b9c541",
+          "size_bytes": 4931296656
+        },
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "model-00005-of-00005.safetensors",
+          "sha256": "4ef2de8f93e165b4e02425769fc566000b0674256ef0c3a27b23a0d45eb12088",
+          "size_bytes": 4601000928
+        }
+      ],
+      "id": "ltx23-gemma3-assets",
+      "phase": "ltx23-specialized",
+      "repo": "google/gemma-3-12b-it-qat-q4_0-unquantized",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "68f7ee4fbd59087436ada77ed2d62f373fdd4482",
+      "selector": "*.safetensors",
+      "size_bytes": 24374793024
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "ltx-2.3-22b-ic-lora-hdr-0.9.safetensors",
+          "sha256": "c56bfa0f2e4461a8b2f318f494c61c5bf97f462f2220e31ece93ea7851ca871e",
+          "size_bytes": 327309312
+        },
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "ltx-2.3-22b-ic-lora-hdr-scene-emb.safetensors",
+          "sha256": "78bffa6049bae2649a4365ec8769db88052c21348d643e8fc1ce6d483d994c5b",
+          "size_bytes": 12583096
+        }
+      ],
+      "id": "ltx23-hdr-assets",
+      "phase": "ltx23-specialized",
+      "repo": "Lightricks/LTX-2.3-22b-IC-LoRA-HDR",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "577ab50f447358d00ba68ef204648dfe05646300",
+      "selector": "*.safetensors",
+      "size_bytes": 339892408
+    },
+    {
+      "access": "authenticated_read_succeeded",
+      "files": [
+        {
+          "checksum_source": "huggingface_lfs_metadata",
+          "path": "ltx-2.3-22b-ic-lora-dubit-0.9.safetensors",
+          "sha256": "fc415b12cb639e78511bc264f85080c2f7b188e334c1d9fade76b310e2bc419c",
+          "size_bytes": 2466665072
+        }
+      ],
+      "id": "ltx23-dubit-lora",
+      "phase": "ltx23-specialized",
+      "repo": "Lightricks/LTX-2.3-22b-IC-LoRA-DubIt",
+      "requested_revision": "main",
+      "required": true,
+      "resolved_revision": "1456334c3d69924de5083e553733b108ed1147f2",
+      "selector": "ltx-2.3-22b-ic-lora-dubit-0.9.safetensors",
+      "size_bytes": 2466665072
+    }
+  ],
+  "disk_gate": {
+    "cache_and_fixture_reserve_bytes": 21474836480,
+    "cache_eviction_between_phases": true,
+    "peak_model_bytes": 82060187224,
+    "phase_model_bytes": {
+      "ltx23-specialized": 74326439398,
+      "ltx25-dev-standard": 82060187224,
+      "ltx25-distilled-standard": 82060187224
+    },
+    "required_disk_bytes": 103535023704,
+    "required_disk_with_20_percent_headroom_bytes": 124242028445
+  },
+  "generated_at_utc": "2026-08-20T00:54:50.316503Z",
+  "hf_token": {
+    "present": true,
+    "scope_expected": "fine-grained/read-only",
+    "source": "pid1_transient"
+  },
+  "probe": "authenticated metadata-only; no model bytes downloaded",
+  "schema_version": 1
+}

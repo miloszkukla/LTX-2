@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- CPU-only LibTorch is intentional at M0. The CUDA ABI fork starts in M1. -->
+    <PackageReference Include="TorchSharp-cpu" Version="0.107.0" />
+  </ItemGroup>
+</Project>

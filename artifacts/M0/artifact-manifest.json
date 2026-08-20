@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "revision_policy": "Resolve main once during M0 and pin the returned immutable repository revision in model-access.json.",
+  "cache_and_fixture_reserve_bytes": 21474836480,
+  "phases_are_cache_eviction_boundaries": true,
+  "artifacts": [
+    {
+      "id": "ltx25-dev-transformer",
+      "repo": "Lightricks/LTX-2.5",
+      "revision": "main",
+      "selector": "diffusion_models/ltx-2.5-22b-dev-transformer-bf16.safetensors",
+      "phase": "ltx25-dev-standard",
+      "required": true
+    },
+    {
+      "id": "ltx25-distilled-transformer",
+      "repo": "Lightricks/LTX-2.5",
+      "revision": "main",
+      "selector": "diffusion_models/ltx-2.5-22b-distilled-transformer-bf16.safetensors",
+      "phase": "ltx25-distilled-standard",
+      "required": true
+    },
+    {
+      "id": "ltx25-text-encoder",
+      "repo": "Lightricks/LTX-2.5",
+      "revision": "main",
+      "selector": "text_encoders/gemma4-12b-with-proj-ltx-2.5-bf16.safetensors",
+      "phase": "ltx25-common",
+      "required": true
+    },
+    {
+      "id": "ltx25-video-vae-diffusion",
+      "repo": "Lightricks/LTX-2.5",
+      "revision": "main",
+      "selector": "vae/ltx-2.5-video-vae-bf16.safetensors",
+      "phase": "ltx25-common",
+      "required": true
+    },
+    {
+      "id": "ltx25-video-vae-convolutional",
+      "repo": "Lightricks/LTX-2.5",
+      "revision": "main",
+      "selector": "vae/ltx-2.5-video-vae-conv-bf16.safetensors",
+      "phase": "ltx25-common",
+      "required": true
+    },
+    {
+      "id": "ltx25-audio-vae",
+      "repo": "Lightricks/LTX-2.5",
+      "revision": "main",
+      "selector": "vae/ltx-2.5-audio-vae-bf16.safetensors",
+      "phase": "ltx25-common",
+      "required": true
+    },
+    {
+      "id": "ltx25-spatial-upscaler",
+      "repo": "Lightricks/LTX-2.5",
+      "revision": "main",
+      "selector": "latent_upscale_models/ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors",
+      "phase": "ltx25-common",
+      "required": true
+    },
+    {
+      "id": "ltx25-temporal-upscaler",
+      "repo": "Lightricks/LTX-2.5",
+      "revision": "main",
+      "selector": "latent_upscale_models/ltx-2.5-latent-temporal-upscaler-x2-bf16-1.0.safetensors",
+      "phase": "ltx25-common",
+      "required": true
+    },
+    {
+      "id": "ltx25-distilled-lora",
+      "repo": "Lightricks/LTX-2.5",
+      "revision": "main",
+      "selector": "loras/ltx-2.5-22b-distilled-lora-450-bf16.safetensors",
+      "phase": "ltx25-common",
+      "required": true
+    },
+    {
+      "id": "ltx25-duration-head",
+      "repo": "Lightricks/LTX-2.5",
+      "revision": "main",
+      "selector": "model_patches/ltx-2.5-duration-head-bf16.safetensors",
+      "phase": "ltx25-common",
+      "required": true
+    },
+    {
+      "id": "ltx25-detailing-ic-lora",
+      "repo": "Lightricks/LTX-2.5-22b-IC-LoRA-Pixel-Spatial-Upscaler",
+      "revision": "main",
+      "selector": "ltx-2.5-22b-ic-lora-pixel-spatial-upscaler-x2-1.0.safetensors",
+      "phase": "ltx25-common",
+      "required": true
+    },
+    {
+      "id": "ltx23-distilled-checkpoint",
+      "repo": "Lightricks/LTX-2.3",
+      "revision": "main",
+      "selector": "ltx-2.3-22b-distilled-1.1.safetensors",
+      "phase": "ltx23-specialized",
+      "required": true
+    },
+    {
+      "id": "ltx23-spatial-upscaler",
+      "repo": "Lightricks/LTX-2.3",
+      "revision": "main",
+      "selector": "ltx-2.3-spatial-upscaler-x2-1.1.safetensors",
+      "phase": "ltx23-specialized",
+      "required": true
+    },
+    {
+      "id": "ltx23-gemma3-assets",
+      "repo": "google/gemma-3-12b-it-qat-q4_0-unquantized",
+      "revision": "main",
+      "selector": "*.safetensors",
+      "phase": "ltx23-specialized",
+      "required": true
+    },
+    {
+      "id": "ltx23-hdr-assets",
+      "repo": "Lightricks/LTX-2.3-22b-IC-LoRA-HDR",
+      "revision": "main",
+      "selector": "*.safetensors",
+      "phase": "ltx23-specialized",
+      "required": true
+    },
+    {
+      "id": "ltx23-dubit-lora",
+      "repo": "Lightricks/LTX-2.3-22b-IC-LoRA-DubIt",
+      "revision": "main",
+      "selector": "ltx-2.3-22b-ic-lora-dubit-0.9.safetensors",
+      "phase": "ltx23-specialized",
+      "required": true
+    }
+  ]
+}

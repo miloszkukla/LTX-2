@@ -1,0 +1,24 @@
+{
+  "accepted": true,
+  "failure": "HTTP 401 Unauthorized on anonymous manifest request",
+  "fallback": {
+    "base": "nvidia/cuda@sha256:293837d7ad950f195e6ba5e3c0478c50b8c80349a70ad14687f39ed8ff0a8e4a",
+    "bootstrap": "scripts/remote/bootstrap-host.sh"
+  },
+  "generated_at_utc": "2026-08-20T00:54:55.703649Z",
+  "ghcr": {
+    "anonymous_manifest": "unavailable",
+    "digest": null,
+    "image": "ghcr.io/miloszkukla/ltx-csharp-base",
+    "personal_token_used": false,
+    "workflow": ".github/workflows/remote-base.yml"
+  },
+  "nvidia_base": {
+    "index_digest": "sha256:9a8b00be0596b5a2a088249ef1d5ed8e5cdd45bc662a4e6937e57af0cc495d1f",
+    "linux_amd64_digest": "sha256:293837d7ad950f195e6ba5e3c0478c50b8c80349a70ad14687f39ed8ff0a8e4a",
+    "tag": "nvidia/cuda:13.2.0-cudnn-devel-ubuntu24.04",
+    "verified": true
+  },
+  "schema_version": 1,
+  "worker_strategy": "nvidia_base_plus_checked_in_bootstrap"
+}

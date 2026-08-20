@@ -1,0 +1,29 @@
+{
+  "authorization": {
+    "h100_validation_worker_max_usd_per_hour": 1.2,
+    "per_instance_duration": "unlimited",
+    "routine_worker_max_usd_per_hour": 0.6,
+    "total_spend": "unlimited"
+  },
+  "cli": {
+    "search_offers_raw": "pass",
+    "show_instances_raw": "pass"
+  },
+  "current_worker": {
+    "direct_ssh": true,
+    "dph_total_usd": 0.4259259259259259,
+    "gpu_name": "RTX 5090",
+    "instance_id": 48162892,
+    "num_gpus": 1,
+    "within_cap": true
+  },
+  "generated_at_utc": "2026-08-20T00:54:54.590761Z",
+  "live_search": {
+    "h100_compatible_offer_count": 0,
+    "h100_min_dph_total_usd": null,
+    "routine_compatible_offer_count": 36,
+    "routine_min_dph_total_usd": 0.31268518518518523
+  },
+  "redaction": "No account environment, host address, SSH port, or credential value is persisted.",
+  "schema_version": 1
+}

@@ -1,0 +1,26 @@
+{
+  "dotnet_sdk": "10.0.111",
+  "generated_at_utc": "2026-08-20T00:54:59.099830Z",
+  "native": {
+    "library_sha256": "e5ea2bc66fecacc51c129943377eeb8b0f397c51d7515e66c45f2284390c980c",
+    "project_sha256": "f8fcf93493c60f60d129c59513ee9d0e0fa422d3aa2ab18b75b16b2ef1c17850",
+    "ptx_embedded": false,
+    "source_sha256": "b7f83ba1683d1c0074ddd0e438f60bc47a13e6eddf51728a6de353eb3b8d023d",
+    "target": "sm_120"
+  },
+  "nvcc": "Build cuda_13.2.r13.2/compiler.37434383_0",
+  "output": "TorchSharp=pass PInvoke=pass CUDA=pass SASS=sm_120",
+  "result": "pass",
+  "schema_version": 1,
+  "tests": {
+    "cuda_kernel": "pass",
+    "ldconfig_pinvoke": "pass",
+    "sass_only": "pass",
+    "torchsharp_tensor": "pass"
+  },
+  "torchsharp": {
+    "cuda_runtime_mixed": false,
+    "package": "TorchSharp-cpu",
+    "version": "0.107.0"
+  }
+}

@@ -1,0 +1,4563 @@
+{
+  "classification_rules": {
+    "deferred": "Multi-GPU/distributed/all-to-all, B200-only CUTLASS DSL, and full fine-tuning are deferred by C_SHARP_PORT_PLAN.md.",
+    "in_scope": "Single-GPU model, pipeline, trainer, media, storage, CLI, quantization, LoRA, and non-B200 kernel surface."
+  },
+  "cli_entrypoints": [
+    {
+      "invocation": "python packages/ltx-kernels/setup.py",
+      "locally_declared_flags": [],
+      "name": "packages.ltx-kernels.setup",
+      "path": "packages/ltx-kernels/setup.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.a2vid_two_stage",
+      "locally_declared_flags": [
+        "--audio-max-duration",
+        "--audio-path",
+        "--audio-start-time"
+      ],
+      "name": "ltx_pipelines.a2vid_two_stage",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/a2vid_two_stage.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.dfr_pipeline",
+      "locally_declared_flags": [
+        "--detailing-lora",
+        "--temporal-upsample-rounds",
+        "--temporal-upsampler-path"
+      ],
+      "name": "ltx_pipelines.dfr_pipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/dfr_pipeline.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.distilled",
+      "locally_declared_flags": [],
+      "name": "ltx_pipelines.distilled",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/distilled.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.distilled_mgpu",
+      "locally_declared_flags": [],
+      "name": "ltx_pipelines.distilled_mgpu",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/distilled_mgpu.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.dubit",
+      "locally_declared_flags": [],
+      "name": "ltx_pipelines.dubit",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/dubit.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.hdr_ic_lora",
+      "locally_declared_flags": [
+        "--diffvae-optimization",
+        "--distilled-checkpoint-path",
+        "--hdr-lora",
+        "--high-quality",
+        "--input",
+        "--num-frames",
+        "--offload",
+        "--output-dir",
+        "--seed",
+        "--skip-mp4",
+        "--spatial-tile",
+        "--spatial-upsampler-path",
+        "--text-embeddings",
+        "--video-vae-path"
+      ],
+      "name": "ltx_pipelines.hdr_ic_lora",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.ic_lora",
+      "locally_declared_flags": [
+        "--conditioning-attention-mask",
+        "--skip-stage-2",
+        "--video-conditioning"
+      ],
+      "name": "ltx_pipelines.ic_lora",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ic_lora.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.keyframe_interpolation",
+      "locally_declared_flags": [],
+      "name": "ltx_pipelines.keyframe_interpolation",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/keyframe_interpolation.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.retake",
+      "locally_declared_flags": [],
+      "name": "ltx_pipelines.retake",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/retake.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.t2a_one_stage",
+      "locally_declared_flags": [],
+      "name": "ltx_pipelines.t2a_one_stage",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/t2a_one_stage.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.ti2vid_one_stage",
+      "locally_declared_flags": [],
+      "name": "ltx_pipelines.ti2vid_one_stage",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_one_stage.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.ti2vid_two_stages",
+      "locally_declared_flags": [],
+      "name": "ltx_pipelines.ti2vid_two_stages",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.ti2vid_two_stages_hq",
+      "locally_declared_flags": [],
+      "name": "ltx_pipelines.ti2vid_two_stages_hq",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_hq.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.ti2vid_two_stages_hq_mgpu",
+      "locally_declared_flags": [],
+      "name": "ltx_pipelines.ti2vid_two_stages_hq_mgpu",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_hq_mgpu.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "invocation": "python -m ltx_pipelines.ti2vid_two_stages_mgpu",
+      "locally_declared_flags": [],
+      "name": "ltx_pipelines.ti2vid_two_stages_mgpu",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_mgpu.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "invocation": "python packages/ltx-trainer/scripts/caption_videos.py",
+      "locally_declared_flags": [
+        "--api-key",
+        "--captioner-type",
+        "--enable-thinking/--no-thinking",
+        "--extensions",
+        "--fps",
+        "--instruction",
+        "--max-tokens",
+        "--num-workers",
+        "--output",
+        "--override",
+        "--recursive",
+        "--vllm-model",
+        "--vllm-url",
+        "-c",
+        "-e",
+        "-f",
+        "-i",
+        "-o",
+        "-r",
+        "-w",
+        "<input_path>"
+      ],
+      "name": "ltx_trainer.scripts.caption_videos",
+      "path": "packages/ltx-trainer/scripts/caption_videos.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python packages/ltx-trainer/scripts/compute_reference.py",
+      "locally_declared_flags": [
+        "--batch-size",
+        "--output",
+        "--override",
+        "-o",
+        "<input_path>"
+      ],
+      "name": "ltx_trainer.scripts.compute_reference",
+      "path": "packages/ltx-trainer/scripts/compute_reference.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python packages/ltx-trainer/scripts/decode_latents.py",
+      "locally_declared_flags": [
+        "--audio-latents-dir",
+        "--audio-vae-path",
+        "--device",
+        "--model-path",
+        "--seed",
+        "--vae-tiling",
+        "--video-vae-path",
+        "--with-audio",
+        "<latents_dir>",
+        "<output_dir>"
+      ],
+      "name": "ltx_trainer.scripts.decode_latents",
+      "path": "packages/ltx-trainer/scripts/decode_latents.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python packages/ltx-trainer/scripts/process_captions.py",
+      "locally_declared_flags": [
+        "--batch-size",
+        "--caption-column",
+        "--device",
+        "--load-text-encoder-in-8bit",
+        "--lora-trigger",
+        "--media-column",
+        "--model-path",
+        "--output-dir",
+        "--overwrite",
+        "--remove-llm-prefixes",
+        "--text-encoder-path",
+        "<dataset_file>"
+      ],
+      "name": "ltx_trainer.scripts.process_captions",
+      "path": "packages/ltx-trainer/scripts/process_captions.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python packages/ltx-trainer/scripts/process_dataset.py",
+      "locally_declared_flags": [
+        "--audio-durations",
+        "--audio-vae-path",
+        "--batch-size",
+        "--caption-column",
+        "--decode",
+        "--device",
+        "--load-text-encoder-in-8bit",
+        "--lora-trigger",
+        "--model-path",
+        "--output-dir",
+        "--overwrite",
+        "--reference-downscale-factor",
+        "--reference-temporal-scale-factor",
+        "--remove-llm-prefixes",
+        "--resolution-buckets",
+        "--skip-audio",
+        "--text-encoder-path",
+        "--vae-tiling",
+        "--video-column",
+        "--video-vae-path",
+        "--with-audio",
+        "<dataset_path>"
+      ],
+      "name": "ltx_trainer.scripts.process_dataset",
+      "path": "packages/ltx-trainer/scripts/process_dataset.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python packages/ltx-trainer/scripts/process_videos.py",
+      "locally_declared_flags": [
+        "--audio-output-dir",
+        "--audio-vae-path",
+        "--batch-size",
+        "--device",
+        "--model-path",
+        "--output-dir",
+        "--overwrite",
+        "--reshape-mode",
+        "--resolution-buckets",
+        "--vae-tiling",
+        "--video-column",
+        "--video-vae-path",
+        "--with-audio",
+        "<dataset_file>"
+      ],
+      "name": "ltx_trainer.scripts.process_videos",
+      "path": "packages/ltx-trainer/scripts/process_videos.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python packages/ltx-trainer/scripts/serve_captioner.py",
+      "locally_declared_flags": [
+        "--gpu-memory-utilization",
+        "--hf-home",
+        "--host",
+        "--max-model-len",
+        "--model",
+        "--port",
+        "--print-cmd",
+        "--quantization",
+        "--vllm-spec",
+        "-q",
+        "<extra_args>"
+      ],
+      "name": "ltx_trainer.scripts.serve_captioner",
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python packages/ltx-trainer/scripts/split_scenes.py",
+      "locally_declared_flags": [
+        "--adaptive-window",
+        "--detector",
+        "--downscale",
+        "--fade-bias",
+        "--filter-shorter-than",
+        "--frame-skip",
+        "--luma-only",
+        "--max-scenes",
+        "--min-scene-length",
+        "--save-images",
+        "--skip-end",
+        "--skip-start",
+        "--stats-file",
+        "--threshold",
+        "-d",
+        "<output_dir>",
+        "<video_path>"
+      ],
+      "name": "ltx_trainer.scripts.split_scenes",
+      "path": "packages/ltx-trainer/scripts/split_scenes.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python packages/ltx-trainer/scripts/train.py",
+      "locally_declared_flags": [
+        "--disable-progress-bars",
+        "<config_path>"
+      ],
+      "name": "ltx_trainer.scripts.train",
+      "path": "packages/ltx-trainer/scripts/train.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "invocation": "python -m ltx_trainer.timestep_samplers",
+      "locally_declared_flags": [],
+      "name": "ltx_trainer.timestep_samplers",
+      "path": "packages/ltx-trainer/src/ltx_trainer/timestep_samplers.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    }
+  ],
+  "cli_flag_declarations": [
+    {
+      "declared_names": [
+        "--audio-path"
+      ],
+      "kind": "argparse",
+      "line": 312,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/a2vid_two_stage.py"
+    },
+    {
+      "declared_names": [
+        "--audio-start-time"
+      ],
+      "kind": "argparse",
+      "line": 318,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/a2vid_two_stage.py"
+    },
+    {
+      "declared_names": [
+        "--audio-max-duration"
+      ],
+      "kind": "argparse",
+      "line": 324,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/a2vid_two_stage.py"
+    },
+    {
+      "declared_names": [
+        "--detailing-lora"
+      ],
+      "kind": "argparse",
+      "line": 569,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/dfr_pipeline.py"
+    },
+    {
+      "declared_names": [
+        "--temporal-upsampler-path"
+      ],
+      "kind": "argparse",
+      "line": 578,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/dfr_pipeline.py"
+    },
+    {
+      "declared_names": [
+        "--temporal-upsample-rounds"
+      ],
+      "kind": "argparse",
+      "line": 584,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/dfr_pipeline.py"
+    },
+    {
+      "declared_names": [
+        "--input"
+      ],
+      "kind": "argparse",
+      "line": 831,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--output-dir"
+      ],
+      "kind": "argparse",
+      "line": 832,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--hdr-lora"
+      ],
+      "kind": "argparse",
+      "line": 833,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--text-embeddings"
+      ],
+      "kind": "argparse",
+      "line": 834,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--distilled-checkpoint-path"
+      ],
+      "kind": "argparse",
+      "line": 835,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--spatial-upsampler-path"
+      ],
+      "kind": "argparse",
+      "line": 836,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--num-frames"
+      ],
+      "kind": "argparse",
+      "line": 837,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--spatial-tile"
+      ],
+      "kind": "argparse",
+      "line": 843,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--skip-mp4"
+      ],
+      "kind": "argparse",
+      "line": 850,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--seed"
+      ],
+      "kind": "argparse",
+      "line": 851,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--offload"
+      ],
+      "kind": "argparse",
+      "line": 852,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--high-quality"
+      ],
+      "kind": "argparse",
+      "line": 866,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--video-vae-path"
+      ],
+      "kind": "argparse",
+      "line": 872,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--diffvae-optimization"
+      ],
+      "kind": "argparse",
+      "line": 883,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--video-conditioning"
+      ],
+      "kind": "argparse",
+      "line": 415,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--conditioning-attention-mask"
+      ],
+      "kind": "argparse",
+      "line": 426,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--skip-stage-2"
+      ],
+      "kind": "argparse",
+      "line": 442,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ic_lora.py"
+    },
+    {
+      "declared_names": [
+        "--hdr"
+      ],
+      "kind": "argparse",
+      "line": 40,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "<positional>"
+      ],
+      "kind": "argparse",
+      "line": 467,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--transformer-path"
+      ],
+      "kind": "argparse",
+      "line": 468,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--distilled-checkpoint-path"
+      ],
+      "kind": "argparse",
+      "line": 504,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--checkpoint-path"
+      ],
+      "kind": "argparse",
+      "line": 515,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--num-inference-steps"
+      ],
+      "kind": "argparse",
+      "line": 525,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--gemma-root"
+      ],
+      "kind": "argparse",
+      "line": 534,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--transformer-path"
+      ],
+      "kind": "argparse",
+      "line": 544,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--text-encoder-path"
+      ],
+      "kind": "argparse",
+      "line": 553,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--video-vae-path"
+      ],
+      "kind": "argparse",
+      "line": 559,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--audio-vae-path"
+      ],
+      "kind": "argparse",
+      "line": 569,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--duration-head-path"
+      ],
+      "kind": "argparse",
+      "line": 575,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--prompt"
+      ],
+      "kind": "argparse",
+      "line": 581,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--output-path"
+      ],
+      "kind": "argparse",
+      "line": 587,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--seed"
+      ],
+      "kind": "argparse",
+      "line": 593,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--lora"
+      ],
+      "kind": "argparse",
+      "line": 599,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--enhance-prompt"
+      ],
+      "kind": "argparse",
+      "line": 613,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--enhance-static-cache"
+      ],
+      "kind": "argparse",
+      "line": 614,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--prompt-enhancer-gemma-root"
+      ],
+      "kind": "argparse",
+      "line": 622,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--offload"
+      ],
+      "kind": "argparse",
+      "line": 644,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--max-batch-size"
+      ],
+      "kind": "argparse",
+      "line": 659,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--quantization"
+      ],
+      "kind": "argparse",
+      "line": 673,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--compile"
+      ],
+      "kind": "argparse",
+      "line": 688,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--diffvae-optimization"
+      ],
+      "kind": "argparse",
+      "line": 706,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--num-frames"
+      ],
+      "kind": "argparse",
+      "line": 741,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--auto-duration"
+      ],
+      "kind": "argparse",
+      "line": 752,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--num-frames"
+      ],
+      "kind": "argparse",
+      "line": 767,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--height"
+      ],
+      "kind": "argparse",
+      "line": 785,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--width"
+      ],
+      "kind": "argparse",
+      "line": 791,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--frame-rate"
+      ],
+      "kind": "argparse",
+      "line": 798,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--image"
+      ],
+      "kind": "argparse",
+      "line": 804,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--num-generated-keyframes"
+      ],
+      "kind": "argparse",
+      "line": 833,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--video-path"
+      ],
+      "kind": "argparse",
+      "line": 856,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--frame-rate"
+      ],
+      "kind": "argparse",
+      "line": 865,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--start-time"
+      ],
+      "kind": "argparse",
+      "line": 874,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--end-time"
+      ],
+      "kind": "argparse",
+      "line": 875,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--height"
+      ],
+      "kind": "argparse",
+      "line": 889,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--width"
+      ],
+      "kind": "argparse",
+      "line": 897,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--spatial-upsampler-path"
+      ],
+      "kind": "argparse",
+      "line": 903,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--reference-video"
+      ],
+      "kind": "argparse",
+      "line": 912,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--reference-strength"
+      ],
+      "kind": "argparse",
+      "line": 921,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--negative-prompt"
+      ],
+      "kind": "argparse",
+      "line": 937,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--video-cfg-guidance-scale"
+      ],
+      "kind": "argparse",
+      "line": 947,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--video-stg-guidance-scale"
+      ],
+      "kind": "argparse",
+      "line": 958,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--video-rescale-scale"
+      ],
+      "kind": "argparse",
+      "line": 969,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--video-stg-blocks"
+      ],
+      "kind": "argparse",
+      "line": 979,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--a2v-guidance-scale"
+      ],
+      "kind": "argparse",
+      "line": 986,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--video-skip-step"
+      ],
+      "kind": "argparse",
+      "line": 996,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--audio-cfg-guidance-scale"
+      ],
+      "kind": "argparse",
+      "line": 1007,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--audio-stg-guidance-scale"
+      ],
+      "kind": "argparse",
+      "line": 1018,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--audio-rescale-scale"
+      ],
+      "kind": "argparse",
+      "line": 1029,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--audio-stg-blocks"
+      ],
+      "kind": "argparse",
+      "line": 1039,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--v2a-guidance-scale"
+      ],
+      "kind": "argparse",
+      "line": 1046,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--audio-skip-step"
+      ],
+      "kind": "argparse",
+      "line": 1056,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--frame-rate"
+      ],
+      "kind": "argparse",
+      "line": 1077,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--negative-prompt"
+      ],
+      "kind": "argparse",
+      "line": 1083,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--audio-cfg-guidance-scale"
+      ],
+      "kind": "argparse",
+      "line": 1089,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--audio-stg-guidance-scale"
+      ],
+      "kind": "argparse",
+      "line": 1095,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--audio-rescale-scale"
+      ],
+      "kind": "argparse",
+      "line": 1101,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--audio-stg-blocks"
+      ],
+      "kind": "argparse",
+      "line": 1107,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--audio-skip-step"
+      ],
+      "kind": "argparse",
+      "line": 1114,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--distilled-lora"
+      ],
+      "kind": "argparse",
+      "line": 1140,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--spatial-upsampler-path"
+      ],
+      "kind": "argparse",
+      "line": 1156,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--distilled-lora-strength-stage-1"
+      ],
+      "kind": "argparse",
+      "line": 1173,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--distilled-lora-strength-stage-2"
+      ],
+      "kind": "argparse",
+      "line": 1179,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "--spatial-upsampler-path"
+      ],
+      "kind": "argparse",
+      "line": 1205,
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py"
+    },
+    {
+      "declared_names": [
+        "<input_path>"
+      ],
+      "kind": "typer-argument",
+      "line": 353,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--output",
+        "-o"
+      ],
+      "kind": "typer-option",
+      "line": 358,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--captioner-type",
+        "-c"
+      ],
+      "kind": "typer-option",
+      "line": 364,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--vllm-url"
+      ],
+      "kind": "typer-option",
+      "line": 371,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--vllm-model"
+      ],
+      "kind": "typer-option",
+      "line": 379,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--enable-thinking/--no-thinking"
+      ],
+      "kind": "typer-option",
+      "line": 384,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--max-tokens"
+      ],
+      "kind": "typer-option",
+      "line": 392,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--instruction",
+        "-i"
+      ],
+      "kind": "typer-option",
+      "line": 397,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--extensions",
+        "-e"
+      ],
+      "kind": "typer-option",
+      "line": 403,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--recursive",
+        "-r"
+      ],
+      "kind": "typer-option",
+      "line": 409,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--fps",
+        "-f"
+      ],
+      "kind": "typer-option",
+      "line": 415,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--override"
+      ],
+      "kind": "typer-option",
+      "line": 425,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--api-key"
+      ],
+      "kind": "typer-option",
+      "line": 430,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "--num-workers",
+        "-w"
+      ],
+      "kind": "typer-option",
+      "line": 436,
+      "path": "packages/ltx-trainer/scripts/caption_videos.py"
+    },
+    {
+      "declared_names": [
+        "<input_path>"
+      ],
+      "kind": "typer-argument",
+      "line": 255,
+      "path": "packages/ltx-trainer/scripts/compute_reference.py"
+    },
+    {
+      "declared_names": [
+        "--output",
+        "-o"
+      ],
+      "kind": "typer-option",
+      "line": 260,
+      "path": "packages/ltx-trainer/scripts/compute_reference.py"
+    },
+    {
+      "declared_names": [
+        "--override"
+      ],
+      "kind": "typer-option",
+      "line": 267,
+      "path": "packages/ltx-trainer/scripts/compute_reference.py"
+    },
+    {
+      "declared_names": [
+        "--batch-size"
+      ],
+      "kind": "typer-option",
+      "line": 272,
+      "path": "packages/ltx-trainer/scripts/compute_reference.py"
+    },
+    {
+      "declared_names": [
+        "<latents_dir>"
+      ],
+      "kind": "typer-argument",
+      "line": 314,
+      "path": "packages/ltx-trainer/scripts/decode_latents.py"
+    },
+    {
+      "declared_names": [
+        "<output_dir>"
+      ],
+      "kind": "typer-argument",
+      "line": 318,
+      "path": "packages/ltx-trainer/scripts/decode_latents.py"
+    },
+    {
+      "declared_names": [
+        "--model-path"
+      ],
+      "kind": "typer-option",
+      "line": 322,
+      "path": "packages/ltx-trainer/scripts/decode_latents.py"
+    },
+    {
+      "declared_names": [
+        "--video-vae-path"
+      ],
+      "kind": "typer-option",
+      "line": 326,
+      "path": "packages/ltx-trainer/scripts/decode_latents.py"
+    },
+    {
+      "declared_names": [
+        "--audio-vae-path"
+      ],
+      "kind": "typer-option",
+      "line": 330,
+      "path": "packages/ltx-trainer/scripts/decode_latents.py"
+    },
+    {
+      "declared_names": [
+        "--device"
+      ],
+      "kind": "typer-option",
+      "line": 334,
+      "path": "packages/ltx-trainer/scripts/decode_latents.py"
+    },
+    {
+      "declared_names": [
+        "--vae-tiling"
+      ],
+      "kind": "typer-option",
+      "line": 338,
+      "path": "packages/ltx-trainer/scripts/decode_latents.py"
+    },
+    {
+      "declared_names": [
+        "--seed"
+      ],
+      "kind": "typer-option",
+      "line": 342,
+      "path": "packages/ltx-trainer/scripts/decode_latents.py"
+    },
+    {
+      "declared_names": [
+        "--with-audio"
+      ],
+      "kind": "typer-option",
+      "line": 346,
+      "path": "packages/ltx-trainer/scripts/decode_latents.py"
+    },
+    {
+      "declared_names": [
+        "--audio-latents-dir"
+      ],
+      "kind": "typer-option",
+      "line": 350,
+      "path": "packages/ltx-trainer/scripts/decode_latents.py"
+    },
+    {
+      "declared_names": [
+        "<dataset_file>"
+      ],
+      "kind": "typer-argument",
+      "line": 400,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "--output-dir"
+      ],
+      "kind": "typer-option",
+      "line": 404,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "--model-path"
+      ],
+      "kind": "typer-option",
+      "line": 408,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "--text-encoder-path"
+      ],
+      "kind": "typer-option",
+      "line": 412,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "--caption-column"
+      ],
+      "kind": "typer-option",
+      "line": 416,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "--media-column"
+      ],
+      "kind": "typer-option",
+      "line": 420,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "--batch-size"
+      ],
+      "kind": "typer-option",
+      "line": 425,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "--device"
+      ],
+      "kind": "typer-option",
+      "line": 429,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "--lora-trigger"
+      ],
+      "kind": "typer-option",
+      "line": 433,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "--remove-llm-prefixes"
+      ],
+      "kind": "typer-option",
+      "line": 437,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "--load-text-encoder-in-8bit"
+      ],
+      "kind": "typer-option",
+      "line": 441,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "--overwrite"
+      ],
+      "kind": "typer-option",
+      "line": 445,
+      "path": "packages/ltx-trainer/scripts/process_captions.py"
+    },
+    {
+      "declared_names": [
+        "<dataset_path>"
+      ],
+      "kind": "typer-argument",
+      "line": 316,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--resolution-buckets"
+      ],
+      "kind": "typer-option",
+      "line": 320,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--model-path"
+      ],
+      "kind": "typer-option",
+      "line": 325,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--text-encoder-path"
+      ],
+      "kind": "typer-option",
+      "line": 329,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--video-vae-path"
+      ],
+      "kind": "typer-option",
+      "line": 333,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--audio-vae-path"
+      ],
+      "kind": "typer-option",
+      "line": 337,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--caption-column"
+      ],
+      "kind": "typer-option",
+      "line": 341,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--video-column"
+      ],
+      "kind": "typer-option",
+      "line": 345,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--batch-size"
+      ],
+      "kind": "typer-option",
+      "line": 349,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--device"
+      ],
+      "kind": "typer-option",
+      "line": 353,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--vae-tiling"
+      ],
+      "kind": "typer-option",
+      "line": 357,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--output-dir"
+      ],
+      "kind": "typer-option",
+      "line": 361,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--lora-trigger"
+      ],
+      "kind": "typer-option",
+      "line": 365,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--decode"
+      ],
+      "kind": "typer-option",
+      "line": 369,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--remove-llm-prefixes"
+      ],
+      "kind": "typer-option",
+      "line": 373,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--skip-audio"
+      ],
+      "kind": "typer-option",
+      "line": 377,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--audio-durations"
+      ],
+      "kind": "typer-option",
+      "line": 381,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--with-audio"
+      ],
+      "kind": "typer-option",
+      "line": 387,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--load-text-encoder-in-8bit"
+      ],
+      "kind": "typer-option",
+      "line": 392,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--reference-downscale-factor"
+      ],
+      "kind": "typer-option",
+      "line": 396,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--reference-temporal-scale-factor"
+      ],
+      "kind": "typer-option",
+      "line": 400,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "--overwrite"
+      ],
+      "kind": "typer-option",
+      "line": 405,
+      "path": "packages/ltx-trainer/scripts/process_dataset.py"
+    },
+    {
+      "declared_names": [
+        "<dataset_file>"
+      ],
+      "kind": "typer-argument",
+      "line": 1401,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--resolution-buckets"
+      ],
+      "kind": "typer-option",
+      "line": 1405,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--output-dir"
+      ],
+      "kind": "typer-option",
+      "line": 1409,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--model-path"
+      ],
+      "kind": "typer-option",
+      "line": 1413,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--video-vae-path"
+      ],
+      "kind": "typer-option",
+      "line": 1417,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--audio-vae-path"
+      ],
+      "kind": "typer-option",
+      "line": 1421,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--video-column"
+      ],
+      "kind": "typer-option",
+      "line": 1425,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--batch-size"
+      ],
+      "kind": "typer-option",
+      "line": 1429,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--device"
+      ],
+      "kind": "typer-option",
+      "line": 1433,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--vae-tiling"
+      ],
+      "kind": "typer-option",
+      "line": 1437,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--reshape-mode"
+      ],
+      "kind": "typer-option",
+      "line": 1441,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--with-audio"
+      ],
+      "kind": "typer-option",
+      "line": 1445,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--audio-output-dir"
+      ],
+      "kind": "typer-option",
+      "line": 1449,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--overwrite"
+      ],
+      "kind": "typer-option",
+      "line": 1453,
+      "path": "packages/ltx-trainer/scripts/process_videos.py"
+    },
+    {
+      "declared_names": [
+        "--model"
+      ],
+      "kind": "typer-option",
+      "line": 100,
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py"
+    },
+    {
+      "declared_names": [
+        "--host"
+      ],
+      "kind": "typer-option",
+      "line": 101,
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py"
+    },
+    {
+      "declared_names": [
+        "--port"
+      ],
+      "kind": "typer-option",
+      "line": 102,
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py"
+    },
+    {
+      "declared_names": [
+        "--quantization",
+        "-q"
+      ],
+      "kind": "typer-option",
+      "line": 103,
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py"
+    },
+    {
+      "declared_names": [
+        "--max-model-len"
+      ],
+      "kind": "typer-option",
+      "line": 114,
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py"
+    },
+    {
+      "declared_names": [
+        "--gpu-memory-utilization"
+      ],
+      "kind": "typer-option",
+      "line": 119,
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py"
+    },
+    {
+      "declared_names": [
+        "--hf-home"
+      ],
+      "kind": "typer-option",
+      "line": 124,
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py"
+    },
+    {
+      "declared_names": [
+        "--vllm-spec"
+      ],
+      "kind": "typer-option",
+      "line": 132,
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py"
+    },
+    {
+      "declared_names": [
+        "--print-cmd"
+      ],
+      "kind": "typer-option",
+      "line": 137,
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py"
+    },
+    {
+      "declared_names": [
+        "<extra_args>"
+      ],
+      "kind": "typer-argument",
+      "line": 142,
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py"
+    },
+    {
+      "declared_names": [
+        "<video_path>"
+      ],
+      "kind": "typer-argument",
+      "line": 311,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "<output_dir>"
+      ],
+      "kind": "typer-argument",
+      "line": 317,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--detector"
+      ],
+      "kind": "typer-option",
+      "line": 321,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--threshold"
+      ],
+      "kind": "typer-option",
+      "line": 325,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--max-scenes"
+      ],
+      "kind": "typer-option",
+      "line": 329,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--min-scene-length"
+      ],
+      "kind": "typer-option",
+      "line": 333,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--filter-shorter-than"
+      ],
+      "kind": "typer-option",
+      "line": 338,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--skip-start"
+      ],
+      "kind": "typer-option",
+      "line": 343,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--skip-end"
+      ],
+      "kind": "typer-option",
+      "line": 347,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "-d"
+      ],
+      "kind": "typer-option",
+      "line": 351,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--save-images"
+      ],
+      "kind": "typer-option",
+      "line": 357,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--stats-file"
+      ],
+      "kind": "typer-option",
+      "line": 361,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--luma-only"
+      ],
+      "kind": "typer-option",
+      "line": 365,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--adaptive-window"
+      ],
+      "kind": "typer-option",
+      "line": 369,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--fade-bias"
+      ],
+      "kind": "typer-option",
+      "line": 373,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--downscale"
+      ],
+      "kind": "typer-option",
+      "line": 377,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "--frame-skip"
+      ],
+      "kind": "typer-option",
+      "line": 381,
+      "path": "packages/ltx-trainer/scripts/split_scenes.py"
+    },
+    {
+      "declared_names": [
+        "<config_path>"
+      ],
+      "kind": "typer-argument",
+      "line": 36,
+      "path": "packages/ltx-trainer/scripts/train.py"
+    },
+    {
+      "declared_names": [
+        "--disable-progress-bars"
+      ],
+      "kind": "typer-option",
+      "line": 37,
+      "path": "packages/ltx-trainer/scripts/train.py"
+    }
+  ],
+  "counts": {
+    "cli_entrypoints": 26,
+    "cli_flag_declarations": 194,
+    "native_bindings": 15,
+    "native_kernels": 29,
+    "native_sources": 47,
+    "pipelines": 15,
+    "python_modules": 280,
+    "python_packages": 39
+  },
+  "explicit_deferred_features": [
+    {
+      "name": "multi-GPU pipelines and modules",
+      "reason": "Single-GPU port only."
+    },
+    {
+      "name": "DDP/FSDP/full fine-tuning",
+      "reason": "Source documents full fine-tuning as a multi-GPU FSDP workload."
+    },
+    {
+      "name": "CUDA IPC/NCCL/all-to-all",
+      "reason": "Multi-GPU transport is outside scope."
+    },
+    {
+      "name": "B200 SM100/SM10x CUTLASS DSL kernels",
+      "reason": "B200 is explicitly excluded; correctness fallbacks remain in scope."
+    }
+  ],
+  "native_bindings": [
+    {
+      "line": 70,
+      "name": "fp8_gemm_nt_sm90",
+      "path": "packages/ltx-kernels/csrc/blockwise/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 77,
+      "name": "fp8_gemm_nt_sm89",
+      "path": "packages/ltx-kernels/csrc/blockwise/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 66,
+      "name": "quantize_nvfp4",
+      "path": "packages/ltx-kernels/csrc/nvfp4/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 68,
+      "name": "dequantize_nvfp4",
+      "path": "packages/ltx-kernels/csrc/nvfp4/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 71,
+      "name": "scaled_mm_nvfp4",
+      "path": "packages/ltx-kernels/csrc/nvfp4/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 74,
+      "name": "mul_scalars",
+      "path": "packages/ltx-kernels/csrc/nvfp4/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 76,
+      "name": "amax_scale",
+      "path": "packages/ltx-kernels/csrc/nvfp4/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 78,
+      "name": "gemm_alpha_mode",
+      "path": "packages/ltx-kernels/csrc/nvfp4/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 79,
+      "name": "set_gemm_alpha_on_device",
+      "path": "packages/ltx-kernels/csrc/nvfp4/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 81,
+      "name": "set_gemm_autotune",
+      "path": "packages/ltx-kernels/csrc/nvfp4/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 83,
+      "name": "probe_gemm_support",
+      "path": "packages/ltx-kernels/csrc/nvfp4/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 23,
+      "name": "rms_norm_rope",
+      "path": "packages/ltx-kernels/csrc/ops/ops_api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 25,
+      "name": "fp6_pack",
+      "path": "packages/ltx-kernels/csrc/ops/ops_api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 27,
+      "name": "fp6_unpack",
+      "path": "packages/ltx-kernels/csrc/ops/ops_api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "line": 29,
+      "name": "rms_norm_split_rope",
+      "path": "packages/ltx-kernels/csrc/ops/ops_api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    }
+  ],
+  "native_kernels": [
+    {
+      "implementation": "triton",
+      "line": 14,
+      "name": "fused_add_round_kernel",
+      "path": "packages/ltx-core/src/ltx_core/loader/kernels.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "triton",
+      "line": 21,
+      "name": "_na3d_kernel",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/fallback_na/triton_na.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "triton",
+      "line": 90,
+      "name": "_fused_up_mul_kernel",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/swiglu.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "triton",
+      "line": 145,
+      "name": "_fused_gate_up_swiglu_kernel",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/swiglu.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 87,
+      "name": "send_recv_all2all",
+      "path": "packages/ltx-kernels/csrc/all2all/cuda/all2all_heads.cu",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 206,
+      "name": "gather_heads",
+      "path": "packages/ltx-kernels/csrc/all2all/cuda/all2all_heads.cu",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 71,
+      "name": "allgather",
+      "path": "packages/ltx-kernels/csrc/all2all/cuda/allgather.cu",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 42,
+      "name": "sm90_fp8_gemm_1d2d_impl",
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/impls/sm90_fp8_gemm_1d2d.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 48,
+      "name": "sm90_fp8_gemm_1d2d_bias_impl",
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/impls/sm90_fp8_gemm_1d2d_bias.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 27,
+      "name": "gemm_fp8_kernel",
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/geforce/gemm.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 112,
+      "name": "quantize_kernel",
+      "path": "packages/ltx-kernels/csrc/nvfp4/quantize.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 174,
+      "name": "quantize_tiled_kernel",
+      "path": "packages/ltx-kernels/csrc/nvfp4/quantize.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 244,
+      "name": "dequantize_kernel",
+      "path": "packages/ltx-kernels/csrc/nvfp4/quantize.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 274,
+      "name": "mul_scalars_kernel",
+      "path": "packages/ltx-kernels/csrc/nvfp4/quantize.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 297,
+      "name": "amax_scale_kernel",
+      "path": "packages/ltx-kernels/csrc/nvfp4/quantize.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 44,
+      "name": "fp6_pack_kernel",
+      "path": "packages/ltx-kernels/csrc/ops/fp6_pack.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 112,
+      "name": "fp6_unpack_kernel",
+      "path": "packages/ltx-kernels/csrc/ops/fp6_pack.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 50,
+      "name": "norm_rope_cvt_kernel",
+      "path": "packages/ltx-kernels/csrc/ops/rms_norm_rope_cuda.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cuda-cpp",
+      "line": 45,
+      "name": "_rms_norm_split_rope_kernel",
+      "path": "packages/ltx-kernels/csrc/ops/rms_norm_split_rope_cuda.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "triton",
+      "line": 14,
+      "name": "_quantize",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/triton_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "triton",
+      "line": 25,
+      "name": "_kernel",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/triton_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "triton",
+      "line": 53,
+      "name": "_block_quant_norm_kernel",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/triton_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "triton",
+      "line": 99,
+      "name": "_gelu",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/triton_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "triton",
+      "line": 103,
+      "name": "_block_quant_kernel",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/triton_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "triton",
+      "line": 195,
+      "name": "_quant_rms_sum_mult_kernel",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/triton_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "triton",
+      "line": 310,
+      "name": "_gated_attention_kernel",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/triton_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "triton",
+      "line": 388,
+      "name": "_blockwise_dequantize_kernel",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/triton_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "implementation": "cutlass-cute-dsl",
+      "line": 363,
+      "name": "_fna_kernel",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/block_fna_dsl.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "implementation": "cutlass-cute-dsl",
+      "line": 82,
+      "name": "_na_kernel",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/na_attn_dsl.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    }
+  ],
+  "native_sources": [
+    {
+      "path": "packages/ltx-kernels/csrc/all2all/all2all.cpp",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/all2all/all2all.hpp",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/all2all/cuda/all2all_heads.cu",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/all2all/cuda/allgather.cu",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/all2all/cuda/api.cuh",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/config.hpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/exceptions.hpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/common/cute_tie.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/common/epilogue_utils.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/common/reduction.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/common/scheduler.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/common/sm100_utils.cuh",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/common/sm90_utils.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/common/types.hpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/common/utils.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/impls/sm90_fp8_gemm_1d2d.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/deep_gemm/include/deep_gemm/impls/sm90_fp8_gemm_1d2d_bias.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/geforce/gemm.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/geforce/kernel_traits.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/geforce/mma_sm89_fp16.hpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/geforce/mma_traits_sm89_fp16.hpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/kernels/geforce/static_switch.h",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/runtime_utils.hpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/sm89_fp8_gemm_1d2d.hpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/sm90_fp8_gemm_1d2d_bias.hpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/static_switch.hpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/blockwise/utils.hpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/include/cuda/configs.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/include/cuda/exceptions.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/include/cuda/utils.cuh",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/include/event.hpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/nvfp4/api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/nvfp4/gemm.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/nvfp4/nvfp4.h",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/nvfp4/quantize.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/ops/fp6_bitpack.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/ops/fp6_pack.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/ops/include/fast_hadamard_transform.h",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/ops/include/fast_hadamard_transform_common.h",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/ops/include/fast_hadamard_transform_special.h",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/ops/include/static_switch.h",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/ops/ops_api.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/ops/rms_norm_rope.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/ops/rms_norm_rope_cuda.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/ops/rms_norm_split_rope.cpp",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "path": "packages/ltx-kernels/csrc/ops/rms_norm_split_rope_cuda.cu",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    }
+  ],
+  "pipelines": [
+    {
+      "module": "ltx_pipelines.a2vid_two_stage",
+      "name": "A2VidPipelineTwoStage",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/a2vid_two_stage.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.dfr_pipeline",
+      "name": "DFRPipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/dfr_pipeline.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.distilled",
+      "name": "DistilledPipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/distilled.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.distilled_mgpu",
+      "name": "distilled_mgpu",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/distilled_mgpu.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "module": "ltx_pipelines.dubit",
+      "name": "DubItPipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/dubit.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.hdr_ic_lora",
+      "name": "HDRICLoraPipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.ic_lora",
+      "name": "ICLoraPipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ic_lora.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.keyframe_interpolation",
+      "name": "KeyframeInterpolationPipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/keyframe_interpolation.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.retake",
+      "name": "RetakePipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/retake.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.t2a_one_stage",
+      "name": "T2AOneStagePipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/t2a_one_stage.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.ti2vid_one_stage",
+      "name": "TI2VidOneStagePipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_one_stage.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.ti2vid_two_stages",
+      "name": "TI2VidTwoStagesPipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.ti2vid_two_stages_hq",
+      "name": "TI2VidTwoStagesHQPipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_hq.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "module": "ltx_pipelines.ti2vid_two_stages_hq_mgpu",
+      "name": "ti2vid_two_stages_hq_mgpu",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_hq_mgpu.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "module": "ltx_pipelines.ti2vid_two_stages_mgpu",
+      "name": "ti2vid_two_stages_mgpu",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_mgpu.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    }
+  ],
+  "python_modules": [
+    {
+      "name": "ltx_core",
+      "path": "packages/ltx-core/src/ltx_core/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.allocator_trim_strategy",
+      "path": "packages/ltx-core/src/ltx_core/allocator_trim_strategy.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.batch_split",
+      "path": "packages/ltx-core/src/ltx_core/batch_split.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.block_streaming",
+      "path": "packages/ltx-core/src/ltx_core/block_streaming/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.block_streaming.block_fetcher",
+      "path": "packages/ltx-core/src/ltx_core/block_streaming/block_fetcher.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.block_streaming.builder",
+      "path": "packages/ltx-core/src/ltx_core/block_streaming/builder.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.block_streaming.disk",
+      "path": "packages/ltx-core/src/ltx_core/block_streaming/disk.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.block_streaming.pool",
+      "path": "packages/ltx-core/src/ltx_core/block_streaming/pool.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.block_streaming.provider",
+      "path": "packages/ltx-core/src/ltx_core/block_streaming/provider.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.block_streaming.source",
+      "path": "packages/ltx-core/src/ltx_core/block_streaming/source.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.block_streaming.stream_sync",
+      "path": "packages/ltx-core/src/ltx_core/block_streaming/stream_sync.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.block_streaming.utils",
+      "path": "packages/ltx-core/src/ltx_core/block_streaming/utils.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.block_streaming.wrapper",
+      "path": "packages/ltx-core/src/ltx_core/block_streaming/wrapper.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.color",
+      "path": "packages/ltx-core/src/ltx_core/color/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.color.audio_mux",
+      "path": "packages/ltx-core/src/ltx_core/color/audio_mux.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.color.hlg",
+      "path": "packages/ltx-core/src/ltx_core/color/hlg.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.color.primaries",
+      "path": "packages/ltx-core/src/ltx_core/color/primaries.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.color.yuv",
+      "path": "packages/ltx-core/src/ltx_core/color/yuv.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.components",
+      "path": "packages/ltx-core/src/ltx_core/components/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.components.diffusion_steps",
+      "path": "packages/ltx-core/src/ltx_core/components/diffusion_steps.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.components.guiders",
+      "path": "packages/ltx-core/src/ltx_core/components/guiders.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.components.noisers",
+      "path": "packages/ltx-core/src/ltx_core/components/noisers.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.components.patchifiers",
+      "path": "packages/ltx-core/src/ltx_core/components/patchifiers.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.components.protocols",
+      "path": "packages/ltx-core/src/ltx_core/components/protocols.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.components.schedulers",
+      "path": "packages/ltx-core/src/ltx_core/components/schedulers.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.exceptions",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/exceptions.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.item",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/item.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.mask_utils",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/mask_utils.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.types",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/types/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.types.attention_strength_wrapper",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/types/attention_strength_wrapper.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.types.keyframe_cond",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/types/keyframe_cond.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.types.keyframe_slots",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/types/keyframe_slots.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.types.latent_cond",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/types/latent_cond.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.types.mask_cond",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/types/mask_cond.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.types.noise_mask_cond",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/types/noise_mask_cond.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.types.reference_audio_cond",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/types/reference_audio_cond.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.types.reference_video_cond",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/types/reference_video_cond.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.devices",
+      "path": "packages/ltx-core/src/ltx_core/devices.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.duration_head",
+      "path": "packages/ltx-core/src/ltx_core/duration_head/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.duration_head.duration_head",
+      "path": "packages/ltx-core/src/ltx_core/duration_head/duration_head.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.duration_head.model_configurator",
+      "path": "packages/ltx-core/src/ltx_core/duration_head/model_configurator.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.guidance",
+      "path": "packages/ltx-core/src/ltx_core/guidance/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.guidance.perturbations",
+      "path": "packages/ltx-core/src/ltx_core/guidance/perturbations.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.hdr",
+      "path": "packages/ltx-core/src/ltx_core/hdr.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader",
+      "path": "packages/ltx-core/src/ltx_core/loader/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader.attention_ops",
+      "path": "packages/ltx-core/src/ltx_core/loader/attention_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader.fuse_loras",
+      "path": "packages/ltx-core/src/ltx_core/loader/fuse_loras.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader.helpers",
+      "path": "packages/ltx-core/src/ltx_core/loader/helpers.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader.kernels",
+      "path": "packages/ltx-core/src/ltx_core/loader/kernels.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader.module_ops",
+      "path": "packages/ltx-core/src/ltx_core/loader/module_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader.primitives",
+      "path": "packages/ltx-core/src/ltx_core/loader/primitives.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader.registry",
+      "path": "packages/ltx-core/src/ltx_core/loader/registry.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader.sd_ops",
+      "path": "packages/ltx-core/src/ltx_core/loader/sd_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader.sft_loader",
+      "path": "packages/ltx-core/src/ltx_core/loader/sft_loader.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader.single_gpu_model_builder",
+      "path": "packages/ltx-core/src/ltx_core/loader/single_gpu_model_builder.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.modality_tiling",
+      "path": "packages/ltx-core/src/ltx_core/modality_tiling.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model",
+      "path": "packages/ltx-core/src/ltx_core/model/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae.attention",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/attention.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae.audio_vae",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/audio_vae.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae.causal_conv_2d",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/causal_conv_2d.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae.causality_axis",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/causality_axis.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae.downsample",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/downsample.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae.model_configurator",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/model_configurator.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae.ops",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae.resnet",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/resnet.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae.upsample",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/upsample.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae.vocoder",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/vocoder.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.common",
+      "path": "packages/ltx-core/src/ltx_core/model/common/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.common.normalization",
+      "path": "packages/ltx-core/src/ltx_core/model/common/normalization.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.disposable",
+      "path": "packages/ltx-core/src/ltx_core/model/disposable.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.model_protocol",
+      "path": "packages/ltx-core/src/ltx_core/model/model_protocol.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.adaln",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/adaln.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.attention",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/attention.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.compiling",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/compiling.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.cudagraph_capture",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/cudagraph_capture.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.feed_forward",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/feed_forward.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.gelu_approx",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/gelu_approx.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.modality",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/modality.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.model",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/model.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.model_configurator",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/model_configurator.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.ops",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.rope",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/rope.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.text_projection",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/text_projection.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.timestep_embedding",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/timestep_embedding.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.transformer",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/transformer.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer.transformer_args",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/transformer_args.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.upsampler",
+      "path": "packages/ltx-core/src/ltx_core/model/upsampler/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.upsampler.blur_downsample",
+      "path": "packages/ltx-core/src/ltx_core/model/upsampler/blur_downsample.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.upsampler.model",
+      "path": "packages/ltx-core/src/ltx_core/model/upsampler/model.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.upsampler.model_configurator",
+      "path": "packages/ltx-core/src/ltx_core/model/upsampler/model_configurator.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.upsampler.pixel_shuffle",
+      "path": "packages/ltx-core/src/ltx_core/model/upsampler/pixel_shuffle.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.upsampler.res_block",
+      "path": "packages/ltx-core/src/ltx_core/model/upsampler/res_block.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.upsampler.spatial_rational_resampler",
+      "path": "packages/ltx-core/src/ltx_core/model/upsampler/spatial_rational_resampler.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.attention",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/attention.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.conv_video_decoder",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/conv_video_decoder.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.convolution",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/convolution.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.diffusion_tiling",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/diffusion_tiling.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.diffusion_video_decoder",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/diffusion_video_decoder.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.enums",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/enums.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.memory_efficient_decode",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/memory_efficient_decode.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.model_configurator",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/model_configurator.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.normalization",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/normalization.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.ops",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.resnet",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/resnet.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.sampling",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/sampling.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.apply",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/apply.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.attention",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/attention.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.blocks",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/blocks.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.chunked",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/chunked/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.chunked.attn",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/chunked/attn.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.chunked.block",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/chunked/block.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.chunked.context",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/chunked/context.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.chunked.mlp",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/chunked/mlp.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.combined",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/combined/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.combined.attn",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/combined/attn.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.combined.block",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/combined/block.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.combined.context",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/combined/context.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.combined.mlp",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/combined/mlp.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.compiling",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/compiling.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.config",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/config.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.det_attn_rope",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/det_attn_rope.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.dsl_kernels",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/dsl_kernels/__init__.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.dsl_kernels.apply_dsl",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/dsl_kernels/apply_dsl.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.dsl_kernels.attn",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/dsl_kernels/attn.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.dsl_kernels.block",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/dsl_kernels/block.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.dsl_kernels.chain",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/dsl_kernels/chain.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.fallback_na",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/fallback_na/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.fallback_na.eager",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/fallback_na/eager.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.fallback_na.triton_na",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/fallback_na/triton_na.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.layers",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/layers.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.qkv",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/qkv.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.rope",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/rope.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.rope_math",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/rope_math.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.swiglu",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/swiglu.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.video_vae",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/video_vae.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.multigpu",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/__init__.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.gemma",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/gemma/__init__.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.gemma.accelerate_wrapper",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/gemma/accelerate_wrapper.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.gemma.batch_parallel_wrapper",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/gemma/batch_parallel_wrapper.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.gemma.broadcast_wrapper",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/gemma/broadcast_wrapper.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.gemma.loader",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/gemma/loader.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.sharded_sd",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/sharded_sd.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.transformer",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/transformer/__init__.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.transformer.attention",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/transformer/attention.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.transformer.sequence_parallel",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/transformer/sequence_parallel.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.transformer.tiled_data_parallel",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/transformer/tiled_data_parallel.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.vae",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/vae/__init__.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.vae.distributed_decoder",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/vae/distributed_decoder.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.quantization",
+      "path": "packages/ltx-core/src/ltx_core/quantization/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.blockwise",
+      "path": "packages/ltx-core/src/ltx_core/quantization/blockwise/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.blockwise._impl",
+      "path": "packages/ltx-core/src/ltx_core/quantization/blockwise/_impl.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.fp8_cast",
+      "path": "packages/ltx-core/src/ltx_core/quantization/fp8_cast.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.fp8_scaled_mm",
+      "path": "packages/ltx-core/src/ltx_core/quantization/fp8_scaled_mm.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.nvfp4",
+      "path": "packages/ltx-core/src/ltx_core/quantization/nvfp4/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.nvfp4.convert",
+      "path": "packages/ltx-core/src/ltx_core/quantization/nvfp4/convert.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.nvfp4.fuse",
+      "path": "packages/ltx-core/src/ltx_core/quantization/nvfp4/fuse.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.nvfp4.linear",
+      "path": "packages/ltx-core/src/ltx_core/quantization/nvfp4/linear.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.nvfp4.prequant",
+      "path": "packages/ltx-core/src/ltx_core/quantization/nvfp4/prequant.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.nvfp4.types",
+      "path": "packages/ltx-core/src/ltx_core/quantization/nvfp4/types.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.policy",
+      "path": "packages/ltx-core/src/ltx_core/quantization/policy.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.text_encoders",
+      "path": "packages/ltx-core/src/ltx_core/text_encoders/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.text_encoders.gemma",
+      "path": "packages/ltx-core/src/ltx_core/text_encoders/gemma/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.text_encoders.gemma.embeddings_connector",
+      "path": "packages/ltx-core/src/ltx_core/text_encoders/gemma/embeddings_connector.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.text_encoders.gemma.embeddings_processor",
+      "path": "packages/ltx-core/src/ltx_core/text_encoders/gemma/embeddings_processor.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.text_encoders.gemma.encoders.base_encoder",
+      "path": "packages/ltx-core/src/ltx_core/text_encoders/gemma/encoders/base_encoder.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.text_encoders.gemma.encoders.encoder_configurator",
+      "path": "packages/ltx-core/src/ltx_core/text_encoders/gemma/encoders/encoder_configurator.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.text_encoders.gemma.feature_extractor",
+      "path": "packages/ltx-core/src/ltx_core/text_encoders/gemma/feature_extractor.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.text_encoders.gemma.gemma_assets",
+      "path": "packages/ltx-core/src/ltx_core/text_encoders/gemma/gemma_assets.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.text_encoders.gemma.tokenizer",
+      "path": "packages/ltx-core/src/ltx_core/text_encoders/gemma/tokenizer.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.tiling",
+      "path": "packages/ltx-core/src/ltx_core/tiling.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.tools",
+      "path": "packages/ltx-core/src/ltx_core/tools.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.types",
+      "path": "packages/ltx-core/src/ltx_core/types.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.utils",
+      "path": "packages/ltx-core/src/ltx_core/utils.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "packages.ltx-kernels.setup",
+      "path": "packages/ltx-kernels/setup.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels",
+      "path": "packages/ltx-kernels/src/ltx_kernels/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels.all_to_all",
+      "path": "packages/ltx-kernels/src/ltx_kernels/all_to_all.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_kernels.arch",
+      "path": "packages/ltx-kernels/src/ltx_kernels/arch.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels.blockwise",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels.blockwise.functional",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/functional.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels.blockwise.linear",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/linear.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels.blockwise.triton_ops",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/triton_ops.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels.nvfp4",
+      "path": "packages/ltx-kernels/src/ltx_kernels/nvfp4/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels.nvfp4.functional",
+      "path": "packages/ltx-kernels/src/ltx_kernels/nvfp4/functional.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels.vae",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/__init__.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_kernels.vae.availability",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/availability.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_kernels.vae.block_fna_dsl",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/block_fna_dsl.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_kernels.vae.fna_attn_core",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/fna_attn_core.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_kernels.vae.fna_gemm",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/fna_gemm.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_kernels.vae.fna_geometry",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/fna_geometry.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_kernels.vae.fna_smem",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/fna_smem.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_kernels.vae.fna_types",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/fna_types.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_kernels.vae.na_attn_dsl",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/na_attn_dsl.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_kernels.vae.softmax_bound",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/softmax_bound.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.a2vid_two_stage",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/a2vid_two_stage.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.dfr_layout",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/dfr_layout.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.dfr_pipeline",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/dfr_pipeline.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.distilled",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/distilled.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.distilled_mgpu",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/distilled_mgpu.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.dubit",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/dubit.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.hdr_ic_lora",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/hdr_ic_lora.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.ic_lora",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ic_lora.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.iclora_utils",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/iclora_utils.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.keyframe_interpolation",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/keyframe_interpolation.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.multigpu",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/__init__.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu._broadcast",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/_broadcast.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu.bp_gemma_builder",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/bp_gemma_builder.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu.controller",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/controller.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu.delegating_builder",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/delegating_builder.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu.fleet",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/fleet.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu.gemma_builders",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/gemma_builders.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu.nccl_groups",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/nccl_groups.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu.runner",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/runner.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu.sp_builder",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/sp_builder.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu.tdp_builder",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/tdp_builder.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu.vae_builders",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/vae_builders.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.multigpu.weight_tracker",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/weight_tracker.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.retake",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/retake.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.t2a_one_stage",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/t2a_one_stage.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.ti2vid_one_stage",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_one_stage.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.ti2vid_two_stages",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.ti2vid_two_stages_hq",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_hq.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.ti2vid_two_stages_hq_mgpu",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_hq_mgpu.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.ti2vid_two_stages_mgpu",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_mgpu.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.utils",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.args",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/args.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.blocks",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/blocks.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.constants",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/constants.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.denoisers",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/denoisers.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.gpu_model",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/gpu_model.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.helpers",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/helpers.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.media_io",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/media_io/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.media_io.color_config",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/media_io/color_config.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.media_io.decode",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/media_io/decode.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.media_io.encode",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/media_io/encode.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.media_io.exr",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/media_io/exr.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.media_io.range_map",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/media_io/range_map.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.media_io.resize",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/media_io/resize.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.model_paths",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/model_paths.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.quantization_factory",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/quantization_factory.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.res2s",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/res2s.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.samplers",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/samplers.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.types",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/types.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.scripts.caption_videos",
+      "path": "packages/ltx-trainer/scripts/caption_videos.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.scripts.compute_reference",
+      "path": "packages/ltx-trainer/scripts/compute_reference.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.scripts.decode_latents",
+      "path": "packages/ltx-trainer/scripts/decode_latents.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.scripts.process_captions",
+      "path": "packages/ltx-trainer/scripts/process_captions.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.scripts.process_dataset",
+      "path": "packages/ltx-trainer/scripts/process_dataset.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.scripts.process_videos",
+      "path": "packages/ltx-trainer/scripts/process_videos.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.scripts.serve_captioner",
+      "path": "packages/ltx-trainer/scripts/serve_captioner.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.scripts.split_scenes",
+      "path": "packages/ltx-trainer/scripts/split_scenes.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.scripts.train",
+      "path": "packages/ltx-trainer/scripts/train.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer",
+      "path": "packages/ltx-trainer/src/ltx_trainer/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.captioning",
+      "path": "packages/ltx-trainer/src/ltx_trainer/captioning.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.config",
+      "path": "packages/ltx-trainer/src/ltx_trainer/config.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.config_display",
+      "path": "packages/ltx-trainer/src/ltx_trainer/config_display.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.datasets",
+      "path": "packages/ltx-trainer/src/ltx_trainer/datasets.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.gemma_8bit",
+      "path": "packages/ltx-trainer/src/ltx_trainer/gemma_8bit.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.gpu_utils",
+      "path": "packages/ltx-trainer/src/ltx_trainer/gpu_utils.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.hf_hub_utils",
+      "path": "packages/ltx-trainer/src/ltx_trainer/hf_hub_utils.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.model_loader",
+      "path": "packages/ltx-trainer/src/ltx_trainer/model_loader.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.progress",
+      "path": "packages/ltx-trainer/src/ltx_trainer/progress.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.quantization",
+      "path": "packages/ltx-trainer/src/ltx_trainer/quantization.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.sigma_tracker",
+      "path": "packages/ltx-trainer/src/ltx_trainer/sigma_tracker.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.timestep_samplers",
+      "path": "packages/ltx-trainer/src/ltx_trainer/timestep_samplers.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.trainer",
+      "path": "packages/ltx-trainer/src/ltx_trainer/trainer.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.training_state",
+      "path": "packages/ltx-trainer/src/ltx_trainer/training_state.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.training_strategies",
+      "path": "packages/ltx-trainer/src/ltx_trainer/training_strategies/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.training_strategies.base_strategy",
+      "path": "packages/ltx-trainer/src/ltx_trainer/training_strategies/base_strategy.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.training_strategies.flexible",
+      "path": "packages/ltx-trainer/src/ltx_trainer/training_strategies/flexible.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.training_strategies.text_to_video",
+      "path": "packages/ltx-trainer/src/ltx_trainer/training_strategies/text_to_video.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.training_strategies.video_to_video",
+      "path": "packages/ltx-trainer/src/ltx_trainer/training_strategies/video_to_video.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.utils",
+      "path": "packages/ltx-trainer/src/ltx_trainer/utils.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.validation_runner",
+      "path": "packages/ltx-trainer/src/ltx_trainer/validation_runner.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.video_utils",
+      "path": "packages/ltx-trainer/src/ltx_trainer/video_utils.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    }
+  ],
+  "python_packages": [
+    {
+      "name": "ltx_core",
+      "path": "packages/ltx-core/src/ltx_core/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.block_streaming",
+      "path": "packages/ltx-core/src/ltx_core/block_streaming/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.color",
+      "path": "packages/ltx-core/src/ltx_core/color/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.components",
+      "path": "packages/ltx-core/src/ltx_core/components/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.conditioning.types",
+      "path": "packages/ltx-core/src/ltx_core/conditioning/types/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.duration_head",
+      "path": "packages/ltx-core/src/ltx_core/duration_head/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.guidance",
+      "path": "packages/ltx-core/src/ltx_core/guidance/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.loader",
+      "path": "packages/ltx-core/src/ltx_core/loader/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model",
+      "path": "packages/ltx-core/src/ltx_core/model/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.audio_vae",
+      "path": "packages/ltx-core/src/ltx_core/model/audio_vae/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.common",
+      "path": "packages/ltx-core/src/ltx_core/model/common/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.transformer",
+      "path": "packages/ltx-core/src/ltx_core/model/transformer/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.upsampler",
+      "path": "packages/ltx-core/src/ltx_core/model/upsampler/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.chunked",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/chunked/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.combined",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/combined/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.dsl_kernels",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/dsl_kernels/__init__.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.model.video_vae.transformer.fallback_na",
+      "path": "packages/ltx-core/src/ltx_core/model/video_vae/transformer/fallback_na/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.multigpu",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/__init__.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.gemma",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/gemma/__init__.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.transformer",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/transformer/__init__.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.multigpu.vae",
+      "path": "packages/ltx-core/src/ltx_core/multigpu/vae/__init__.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_core.quantization",
+      "path": "packages/ltx-core/src/ltx_core/quantization/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.blockwise",
+      "path": "packages/ltx-core/src/ltx_core/quantization/blockwise/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.quantization.nvfp4",
+      "path": "packages/ltx-core/src/ltx_core/quantization/nvfp4/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.text_encoders",
+      "path": "packages/ltx-core/src/ltx_core/text_encoders/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_core.text_encoders.gemma",
+      "path": "packages/ltx-core/src/ltx_core/text_encoders/gemma/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels",
+      "path": "packages/ltx-kernels/src/ltx_kernels/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels.blockwise",
+      "path": "packages/ltx-kernels/src/ltx_kernels/blockwise/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels.nvfp4",
+      "path": "packages/ltx-kernels/src/ltx_kernels/nvfp4/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_kernels.vae",
+      "path": "packages/ltx-kernels/src/ltx_kernels/vae/__init__.py",
+      "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.multigpu",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/multigpu/__init__.py",
+      "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+      "status": "deferred"
+    },
+    {
+      "name": "ltx_pipelines.utils",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_pipelines.utils.media_io",
+      "path": "packages/ltx-pipelines/src/ltx_pipelines/utils/media_io/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer",
+      "path": "packages/ltx-trainer/src/ltx_trainer/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    },
+    {
+      "name": "ltx_trainer.training_strategies",
+      "path": "packages/ltx-trainer/src/ltx_trainer/training_strategies/__init__.py",
+      "reason": "Required by the single-GPU C# port.",
+      "status": "in_scope"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "single-GPU LTX-2 C# port on Linux/CUDA; Python remains the numerical oracle",
+  "source_reference_commit": "400fd31054597515f47125691032c04b1c3ee24e"
+}
