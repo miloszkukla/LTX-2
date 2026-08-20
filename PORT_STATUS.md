@@ -8,13 +8,20 @@
 - Accepted M3 plan: `C_SHARP_PORT_PLAN.M3.md`, revision M3, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `ebbfd2b38a8eb5fd346ffe9b3e3833bab05277d4`.
 - Current M4 plan: `C_SHARP_PORT_PLAN.md`, revision M4, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M4.md`; the coordinator's M4 revision is content-identical to the accepted M1, M2, and M3 revisions.
 
-## M4 — handoff acknowledged, implementation not started
+## M4 — accepted checkpoint
 
-- Handoff acknowledged on 2026-08-20 UTC from accepted M3 checkpoint `ebbfd2b38a8eb5fd346ffe9b3e3833bab05277d4`; no M4 implementation was started before this documentation/status checkpoint.
+- Handoff acknowledged on 2026-08-20 UTC from accepted M3 checkpoint `ebbfd2b38a8eb5fd346ffe9b3e3833bab05277d4`; no M4 implementation was started before the pushed documentation/status checkpoint `4c52084cfbb4926391ae746d566b9dda6728393b`.
 - Plan input: `/root/C_SHARP_PORT_PLAN.M4.md`, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`; tracked as `C_SHARP_PORT_PLAN.md` with the accepted M0, M1, M2, and M3 plan copies retained as historical evidence.
-- Exact acceptance gate: every in-scope, non-B200 single-GPU native kernel has a tested correctness path; quantization and LoRA fuse/unfuse fixtures pass at FP32 `rtol=1e-4`, `atol=1e-5` and BF16/FP8 `rtol=2e-2`, `atol=5e-3` where applicable.
-- Required verification: `scripts/remote/verify-milestone.sh M4` on the existing 32 GB RTX 5090 worker. The implementation source checkpoint will be this handoff commit after it is pushed and will be recorded in the accepted M4 status and redacted heartbeat.
-- Known failures: none. Next action: begin M4 only after this documentation/status checkpoint is committed and pushed.
+- Verification: `scripts/remote/verify-milestone.sh M4` (exit 0). The Release solution build, M1 ABI/native and parity regressions, M2 storage/model-loading regressions, M3 core-model regressions, and the complete M4 CUDA/quantization/LoRA suite passed.
+- Starting/source checkpoint: `4c52084cfbb4926391ae746d566b9dda6728393b`; the final fork checkpoint SHA is recorded by the redacted heartbeat immediately after the atomic push because it cannot be embedded in its own commit.
+- Native scope: all 24 in-scope kernels from the accepted M0 inventory have GPU-tested correctness paths, and all 15 in-scope native bindings have managed test coverage. The five deferred entries remain exactly the three multi-GPU/all-to-all kernels and two B200-only DSL kernels recorded at M0. `libltx_cuda.so` is `sm_120` SASS-only with no PTX.
+- Scope completed: stochastic BF16 fused-add, 3D neighborhood attention, fused SwiGLU, SM89/SM90 FP8 GEMM semantics, NVFP4 quantize/dequantize/scaled matrix multiply and diagnostics, FP6 pack/unpack, adjacent and split RMSNorm-RoPE, rowwise INT8, blockwise FP8 quantize/dequantize/GELU/AdaNorm/RMS-FMA, gated attention, and public C# bindings. Architecture-tuned performance is non-gating; the RTX 5090 paths are portable correctness SASS implementations.
+- Quantization and LoRA: exact NVFP4 packed payload/block-scale and FP6 fixtures passed; blockwise FP8, rowwise INT8, scaled-matmul, normalization, and fused-op fixtures passed. NVFP4 LoRA fuse passed against the BF16-aggregation oracle and unfuse restored the exact original quantized snapshot; the accepted M2 BF16 LoRA fuse/unfuse regression also passed.
+- Worker: existing Vast instance `48162892`, single RTX 5090 32 GB, compute capability 12.0. The accepted ABI remains PyTorch `2.13.0+cu132`, CUDA `13.2`, TorchSharp `0.107.0`, and LTX native ABI `1.0`.
+- Fixed fixture: `m4-cuda-quantization-lora-v1`, seed `20260820`, fixture-set SHA-256 `420f7a7f17e69898f0f4b43a01ebb2d2ddedf847f1393a651445738e7e2745b0`; tracked manifest SHA-256 `fda7db0808a76368ca396a961456ed8dd2719914104646cd5be28eb6b33a4f1b`.
+- Numerical results: FP32 passed at `rtol=1e-4`, `atol=1e-5`; BF16/FP8 passed at `rtol=2e-2`, `atol=5e-3`. The M4 suite passed 24 kernel, 15 binding, 4 quantization, and 2 LoRA checks.
+- Redacted evidence: `artifacts/M4/abi-smoke.json`, `artifacts/M4/foundation-parity.json`, `artifacts/M4/storage.json`, `artifacts/M4/core-model.json`, `artifacts/M4/cuda-quantization-lora.json`, and `artifacts/M4/summary.json`; 101 checks passed, 0 failed, 0 skipped including all prerequisite regressions.
+- Known failures: none. Next milestone: M5 is not started.
 
 ## M3 — accepted checkpoint
 

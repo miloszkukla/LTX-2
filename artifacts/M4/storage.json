@@ -1,0 +1,65 @@
+{
+  "dependencies": {
+    "numpy": "2.3.2",
+    "packaging": "25.0",
+    "safetensors": "0.6.2",
+    "torchsharp": "0.107.0"
+  },
+  "fixture_revision": "m2-storage-model-loading-v1",
+  "fixture_set_sha256": "4a8dc2680c3adf8acb78f5ff7a4ac60001eedeb9c3638848551f334c601448bf",
+  "fixture_sha256": {
+    "checkpoint-00001-of-00002.safetensors": "b4db6b884445aa359e967d15b7389204a50bf3b2680ba1a760036a1abb1e4599",
+    "checkpoint-00002-of-00002.safetensors": "7e0676dc2bdf8436af2625f9b2f133f57de0c27c79ce5de68b030712e4015685",
+    "lora.safetensors": "00f9c0da4bb8e0d8bb6dda5aa1fedc4c7effe3ad25ccfbea0c1c8d248e2ad88d",
+    "manifest.json": "439a015c5d759980a9469ee582ff42a9d382566bfa6ed57659d9619bd6d93a60",
+    "storage-mixed.safetensors": "7504662f77349d1e0f48f98e9cc51ddf563f31334499b3cda3c5051fb53f4ffe"
+  },
+  "generated_at_utc": "2026-08-20T03:17:31.909471Z",
+  "numerical_tolerances": {
+    "bf16": {
+      "atol": 0.005,
+      "result": "pass",
+      "rtol": 0.02
+    },
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "oracle": {
+    "cuda_version": "13.2",
+    "framework": "pytorch",
+    "framework_version": "2.13.0+cu132",
+    "safetensors_version": "0.6.2",
+    "seed": 20260820
+  },
+  "output": "M2 storage fixtures: 13 passed, 0 failed; FP32 rtol=0.0001, atol=1e-05; BF16 rtol=0.02, atol=0.005; revision=m2-storage-model-loading-v1",
+  "python_output": {
+    "checks": 3,
+    "message": "Python safetensors accepted all C# round trips with exact layouts, payloads, and metadata.",
+    "result": "pass"
+  },
+  "result": "pass",
+  "round_trip": {
+    "lora": "exact_dtype_shape_payload_metadata",
+    "safetensors": "exact_dtype_shape_payload_metadata"
+  },
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "test_totals": {
+    "failed": 0,
+    "passed": 16,
+    "skipped": 0
+  },
+  "tests": {
+    "checkpoint_shards": "pass",
+    "csharp_storage_and_loader_fixtures": "13_pass",
+    "lora_fuse_unfuse": "pass",
+    "lora_key_mapping": "pass",
+    "lora_round_trip": "exact",
+    "metadata_json": "pass",
+    "python_roundtrip_interop": "3_pass",
+    "safetensors_round_trip": "exact"
+  }
+}

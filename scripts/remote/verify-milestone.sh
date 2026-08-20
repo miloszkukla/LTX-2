@@ -10,6 +10,172 @@ fi
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 cd "$repo_root"
 
+if [[ $milestone == M4 ]]; then
+    failure_heartbeat() {
+        scripts/remote/publish-heartbeat.sh M4 blocked acceptance_gate_failed || true
+    }
+    trap failure_heartbeat ERR
+
+    expected_m0_plan_sha=d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6
+    expected_current_plan_sha=7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea
+    actual_m0_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M0.md | awk '{print $1}')
+    actual_m1_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M1.md | awk '{print $1}')
+    actual_m2_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M2.md | awk '{print $1}')
+    actual_m3_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M3.md | awk '{print $1}')
+    actual_m4_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.md | awk '{print $1}')
+    if [[ $actual_m0_plan_sha != "$expected_m0_plan_sha" || \
+          $actual_m1_plan_sha != "$expected_current_plan_sha" || \
+          $actual_m2_plan_sha != "$expected_current_plan_sha" || \
+          $actual_m3_plan_sha != "$expected_current_plan_sha" || \
+          $actual_m4_plan_sha != "$expected_current_plan_sha" ]]; then
+        echo "M0/M1/M2/M3/M4 plan preservation gate failed" >&2
+        exit 1
+    fi
+
+    python3 - <<'PY'
+import json
+from pathlib import Path
+
+summary = json.loads(Path("artifacts/M3/summary.json").read_text())
+if summary.get("milestone") != "M3" or summary.get("state") != "accepted":
+    raise SystemExit("M3 accepted prerequisite is missing")
+PY
+
+    artifact_dir="$repo_root/artifacts/M4"
+    mkdir -p "$artifact_dir"
+    dotnet build Ltx.sln --configuration Release --nologo
+    scripts/remote/run-m1-smoke.sh "$artifact_dir/abi-smoke.json"
+    scripts/remote/run-m1-parity.sh "$artifact_dir/foundation-parity.json"
+    scripts/remote/run-m2-storage.sh "$artifact_dir/storage.json"
+    scripts/remote/run-m3-core.sh "$artifact_dir/core-model.json"
+    scripts/remote/run-m4-cuda.sh "$artifact_dir/cuda-quantization-lora.json"
+    git diff --check
+
+    python3 - <<'PY'
+import json
+from pathlib import Path
+
+root = Path("artifacts/M4")
+smoke = json.loads((root / "abi-smoke.json").read_text())
+foundation = json.loads((root / "foundation-parity.json").read_text())
+storage = json.loads((root / "storage.json").read_text())
+core = json.loads((root / "core-model.json").read_text())
+m4 = json.loads((root / "cuda-quantization-lora.json").read_text())
+if any(result.get("result") != "pass" for result in (smoke, foundation, storage, core, m4)):
+    raise SystemExit("M4 result artifact is not passing")
+if foundation.get("test_totals") != {"passed": 2, "failed": 0, "skipped": 0}:
+    raise SystemExit("M4 foundation regression totals mismatch")
+if storage.get("test_totals") != {"passed": 16, "failed": 0, "skipped": 0}:
+    raise SystemExit("M4 storage regression totals mismatch")
+if core.get("test_totals") != {"passed": 34, "failed": 0, "skipped": 0}:
+    raise SystemExit("M4 core-model regression totals mismatch")
+if m4.get("test_totals") != {"passed": 45, "failed": 0, "skipped": 0}:
+    raise SystemExit("M4 CUDA/quantization/LoRA totals mismatch")
+if m4.get("suite_totals") != {
+    "native_kernels": 24,
+    "native_bindings": 15,
+    "quantization": 4,
+    "lora": 2,
+}:
+    raise SystemExit("M4 required suite totals mismatch")
+kernel_inventory = m4.get("kernel_inventory", {})
+if kernel_inventory.get("in_scope") != 24 or kernel_inventory.get("tested") != 24:
+    raise SystemExit("M4 does not test every in-scope native kernel")
+if len(kernel_inventory.get("deferred", [])) != 5:
+    raise SystemExit("M4 deferred kernel inventory mismatch")
+binding_inventory = m4.get("native_binding_inventory", {})
+if binding_inventory.get("in_scope") != 15 or binding_inventory.get("tested") != 15:
+    raise SystemExit("M4 does not test every in-scope native binding")
+if m4.get("fixture_revision") != "m4-cuda-quantization-lora-v1":
+    raise SystemExit("M4 fixture revision mismatch")
+if m4.get("numerical_tolerances") != {
+    "fp32": {"rtol": 1e-4, "atol": 1e-5, "result": "pass"},
+    "bf16_fp8": {"rtol": 2e-2, "atol": 5e-3, "result": "pass"},
+}:
+    raise SystemExit("M4 numerical tolerance mismatch")
+if m4.get("lora") != {
+    "nvfp4_fuse": "pass",
+    "nvfp4_unfuse": "exact_original_snapshot_pass",
+    "bf16_regression": "covered_by_M2_storage",
+}:
+    raise SystemExit("M4 LoRA fuse/unfuse gate mismatch")
+PY
+
+    python3 - <<'PY'
+import hashlib
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+root = Path("artifacts/M4")
+smoke = json.loads((root / "abi-smoke.json").read_text())
+foundation = json.loads((root / "foundation-parity.json").read_text())
+storage = json.loads((root / "storage.json").read_text())
+core = json.loads((root / "core-model.json").read_text())
+m4 = json.loads((root / "cuda-quantization-lora.json").read_text())
+preflight = json.loads(Path("artifacts/M0/preflight.json").read_text())
+
+checksums = {
+    path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+    for path in sorted(root.glob("*.json"))
+    if path.name != "summary.json"
+}
+summary = {
+    "schema_version": 1,
+    "milestone": "M4",
+    "state": "accepted",
+    "generated_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+    "source_reference_sha": subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], text=True
+    ).strip(),
+    "plan_revision": "M4",
+    "plan_sha256": "7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea",
+    "verification_command": "scripts/remote/verify-milestone.sh M4",
+    "commands": [
+        {"command": "dotnet build Ltx.sln --configuration Release --nologo", "exit_code": 0},
+        {"command": "scripts/remote/run-m1-smoke.sh", "exit_code": 0},
+        {"command": "scripts/remote/run-m1-parity.sh", "exit_code": 0},
+        {"command": "scripts/remote/run-m2-storage.sh", "exit_code": 0},
+        {"command": "scripts/remote/run-m3-core.sh", "exit_code": 0},
+        {"command": "scripts/remote/run-m4-cuda.sh", "exit_code": 0},
+    ],
+    "toolchain": preflight["toolchain"],
+    "gpu": preflight["gpu"],
+    "abi": smoke["abi"],
+    "test_totals": {"passed": 101, "failed": 0, "skipped": 0},
+    "tests": {
+        **smoke["tests"],
+        "foundation_parity": "2_pass",
+        "storage_regression": "16_pass",
+        "core_model_regression": "34_pass",
+        "native_kernel_correctness": "24_pass",
+        "native_bindings": "15_pass",
+        "quantization": "4_pass",
+        "lora_fuse_unfuse": "2_pass",
+    },
+    "suite_totals": m4["suite_totals"],
+    "kernel_inventory": m4["kernel_inventory"],
+    "native_binding_inventory": m4["native_binding_inventory"],
+    "quantization": m4["quantization"],
+    "lora": m4["lora"],
+    "fixture_revision": m4["fixture_revision"],
+    "fixture_set_sha256": m4["fixture_set_sha256"],
+    "fixture_sha256": m4["fixture_sha256"],
+    "dependencies": {**storage["dependencies"], **core["dependencies"], **m4["dependencies"]},
+    "numerical_tolerances": m4["numerical_tolerances"],
+    "artifact_sha256": checksums,
+    "secrets_recorded": False,
+}
+(root / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+PY
+
+    trap - ERR
+    scripts/remote/publish-heartbeat.sh M4 verified none
+    echo "M4 accepted"
+    exit 0
+fi
+
 if [[ $milestone == M3 ]]; then
     failure_heartbeat() {
         scripts/remote/publish-heartbeat.sh M3 blocked acceptance_gate_failed || true

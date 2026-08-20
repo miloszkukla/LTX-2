@@ -1,0 +1,226 @@
+{
+  "abi": {
+    "cuda": "13.2",
+    "cxx11_abi": 1,
+    "ltx": "1.0",
+    "pytorch": "2.13.0",
+    "torchsharp_managed": "0.107.0",
+    "torchsharp_revision": "8f4def03b641b6753f18076aa5438f8eaaef2d30"
+  },
+  "artifact_sha256": {
+    "abi-smoke.json": "b86af90e1d8de08c0a0dcfb07437ab4bbdf388b64261ff3ee228144e375ac28a",
+    "core-model.json": "fe01974c0f39644e10997482451134effefc899a4898b2af525a10f2a4d8b337",
+    "cuda-quantization-lora.json": "c10fa7a26157099d8881b8d9e6283304e0eeb98a42c7460c460e4b7694b3e905",
+    "foundation-parity.json": "03ebfa44cd0cbff9adf2712a53a732fd98cf2f183864af3a0767a1f5bd5af100",
+    "storage.json": "83cad428cfbbea7fd57b4d0bba458fbe50f1c6c884e16894c1bc4269bfcb56d7"
+  },
+  "commands": [
+    {
+      "command": "dotnet build Ltx.sln --configuration Release --nologo",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-smoke.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-parity.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m2-storage.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m3-core.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m4-cuda.sh",
+      "exit_code": 0
+    }
+  ],
+  "dependencies": {
+    "cuda": "13.2",
+    "numpy": "2.3.2",
+    "packaging": "25.0",
+    "safetensors": "0.6.2",
+    "torch": "2.13.0+cu132",
+    "torchsharp": "0.107.0"
+  },
+  "fixture_revision": "m4-cuda-quantization-lora-v1",
+  "fixture_set_sha256": "420f7a7f17e69898f0f4b43a01ebb2d2ddedf847f1393a651445738e7e2745b0",
+  "fixture_sha256": {
+    "manifest.json": "fda7db0808a76368ca396a961456ed8dd2719914104646cd5be28eb6b33a4f1b"
+  },
+  "generated_at_utc": "2026-08-20T03:17:50.959505Z",
+  "gpu": {
+    "compute_capability": "12.0",
+    "driver": "580.95.05",
+    "driver_policy": "CUDA 13.x minor-version compatibility; SASS-only native build; no PTX JIT",
+    "memory_total_mib": 32607,
+    "memory_used_mib": 2,
+    "name": "NVIDIA GeForce RTX 5090",
+    "sass_architecture": "sm_120",
+    "temperature_c": 35
+  },
+  "kernel_inventory": {
+    "correctness": {
+      "_block_quant_kernel": "gpu_fixture_pass",
+      "_block_quant_norm_kernel": "gpu_fixture_pass",
+      "_blockwise_dequantize_kernel": "gpu_fixture_pass",
+      "_fused_gate_up_swiglu_kernel": "gpu_fixture_pass",
+      "_fused_up_mul_kernel": "gpu_fixture_pass",
+      "_gated_attention_kernel": "gpu_fixture_pass",
+      "_gelu": "gpu_fixture_pass",
+      "_kernel": "gpu_fixture_pass",
+      "_na3d_kernel": "gpu_fixture_pass",
+      "_quant_rms_sum_mult_kernel": "gpu_fixture_pass",
+      "_quantize": "gpu_fixture_pass",
+      "_rms_norm_split_rope_kernel": "gpu_fixture_pass",
+      "amax_scale_kernel": "gpu_fixture_pass",
+      "dequantize_kernel": "gpu_fixture_pass",
+      "fp6_pack_kernel": "gpu_fixture_pass",
+      "fp6_unpack_kernel": "gpu_fixture_pass",
+      "fused_add_round_kernel": "gpu_fixture_pass",
+      "gemm_fp8_kernel": "gpu_fixture_pass",
+      "mul_scalars_kernel": "gpu_fixture_pass",
+      "norm_rope_cvt_kernel": "gpu_fixture_pass",
+      "quantize_kernel": "gpu_fixture_pass",
+      "quantize_tiled_kernel": "gpu_fixture_pass",
+      "sm90_fp8_gemm_1d2d_bias_impl": "gpu_fixture_pass",
+      "sm90_fp8_gemm_1d2d_impl": "gpu_fixture_pass"
+    },
+    "deferred": [
+      {
+        "implementation": "cuda-cpp",
+        "line": 87,
+        "name": "send_recv_all2all",
+        "path": "packages/ltx-kernels/csrc/all2all/cuda/all2all_heads.cu",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cuda-cpp",
+        "line": 206,
+        "name": "gather_heads",
+        "path": "packages/ltx-kernels/csrc/all2all/cuda/all2all_heads.cu",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cuda-cpp",
+        "line": 71,
+        "name": "allgather",
+        "path": "packages/ltx-kernels/csrc/all2all/cuda/allgather.cu",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cutlass-cute-dsl",
+        "line": 363,
+        "name": "_fna_kernel",
+        "path": "packages/ltx-kernels/src/ltx_kernels/vae/block_fna_dsl.py",
+        "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cutlass-cute-dsl",
+        "line": 82,
+        "name": "_na_kernel",
+        "path": "packages/ltx-kernels/src/ltx_kernels/vae/na_attn_dsl.py",
+        "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+        "status": "deferred"
+      }
+    ],
+    "in_scope": 24,
+    "tested": 24,
+    "total": 29
+  },
+  "lora": {
+    "bf16_regression": "covered_by_M2_storage",
+    "nvfp4_fuse": "pass",
+    "nvfp4_unfuse": "exact_original_snapshot_pass"
+  },
+  "milestone": "M4",
+  "native_binding_inventory": {
+    "correctness": {
+      "amax_scale": "managed_binding_pass",
+      "dequantize_nvfp4": "managed_binding_pass",
+      "fp6_pack": "managed_binding_pass",
+      "fp6_unpack": "managed_binding_pass",
+      "fp8_gemm_nt_sm89": "managed_binding_pass",
+      "fp8_gemm_nt_sm90": "managed_binding_pass",
+      "gemm_alpha_mode": "managed_binding_pass",
+      "mul_scalars": "managed_binding_pass",
+      "probe_gemm_support": "managed_binding_pass",
+      "quantize_nvfp4": "managed_binding_pass",
+      "rms_norm_rope": "managed_binding_pass",
+      "rms_norm_split_rope": "managed_binding_pass",
+      "scaled_mm_nvfp4": "managed_binding_pass",
+      "set_gemm_alpha_on_device": "managed_binding_pass",
+      "set_gemm_autotune": "managed_binding_pass"
+    },
+    "in_scope": 15,
+    "tested": 15
+  },
+  "numerical_tolerances": {
+    "bf16_fp8": {
+      "atol": 0.005,
+      "result": "pass",
+      "rtol": 0.02
+    },
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "plan_revision": "M4",
+  "plan_sha256": "7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea",
+  "quantization": {
+    "blockwise_fp8": "quant_dequant_gelu_norm_rms_fma_pass",
+    "fp6_pack_unpack": "exact_pass",
+    "nvfp4": "packed_scales_dequant_scaled_mm_pass",
+    "rowwise_int8": "pass"
+  },
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_reference_sha": "4c52084cfbb4926391ae746d566b9dda6728393b",
+  "state": "accepted",
+  "suite_totals": {
+    "lora": 2,
+    "native_bindings": 15,
+    "native_kernels": 24,
+    "quantization": 4
+  },
+  "test_totals": {
+    "failed": 0,
+    "passed": 101,
+    "skipped": 0
+  },
+  "tests": {
+    "core_model_regression": "34_pass",
+    "foundation_parity": "2_pass",
+    "lora_fuse_unfuse": "2_pass",
+    "ltx_native_cuda": "pass",
+    "native_bindings": "15_pass",
+    "native_kernel_correctness": "24_pass",
+    "quantization": "4_pass",
+    "sass_only": "pass",
+    "storage_regression": "16_pass",
+    "torchsharp_abi_probe": "pass",
+    "torchsharp_cuda_tensor": "pass"
+  },
+  "toolchain": {
+    "cmake": "cmake version 3.28.3",
+    "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "cuda_release": "13.2",
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "ninja": "1.11.1",
+    "python": "Python 3.12.3",
+    "uv": "uv 0.12.5 (x86_64-unknown-linux-gnu)"
+  },
+  "verification_command": "scripts/remote/verify-milestone.sh M4"
+}
