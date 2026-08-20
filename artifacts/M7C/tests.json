@@ -1,0 +1,93 @@
+{
+  "decoder_preview": {
+    "ffprobe": {
+      "streams": [
+        {
+          "avg_frame_rate": "24/1",
+          "bit_rate": "50084736",
+          "bits_per_raw_sample": "8",
+          "chroma_location": "left",
+          "closed_captions": 0,
+          "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+          "codec_name": "h264",
+          "codec_tag": "0x31637661",
+          "codec_tag_string": "avc1",
+          "codec_type": "video",
+          "coded_height": 1024,
+          "coded_width": 1536,
+          "disposition": {
+            "attached_pic": 0,
+            "captions": 0,
+            "clean_effects": 0,
+            "comment": 0,
+            "default": 1,
+            "dependent": 0,
+            "descriptions": 0,
+            "dub": 0,
+            "forced": 0,
+            "hearing_impaired": 0,
+            "karaoke": 0,
+            "lyrics": 0,
+            "metadata": 0,
+            "non_diegetic": 0,
+            "original": 0,
+            "still_image": 0,
+            "timed_thumbnails": 0,
+            "visual_impaired": 0
+          },
+          "duration": "0.041667",
+          "duration_ts": 512,
+          "extradata_size": 39,
+          "field_order": "progressive",
+          "film_grain": 0,
+          "has_b_frames": 0,
+          "height": 1024,
+          "id": "0x1",
+          "index": 0,
+          "is_avc": "true",
+          "level": 40,
+          "nal_length_size": "4",
+          "nb_frames": "1",
+          "pix_fmt": "yuv420p",
+          "profile": "Constrained Baseline",
+          "r_frame_rate": "24/1",
+          "refs": 1,
+          "start_pts": 0,
+          "start_time": "0.000000",
+          "tags": {
+            "encoder": "Lavc libx264",
+            "handler_name": "VideoHandler",
+            "language": "und",
+            "vendor_id": "[0][0][0][0]"
+          },
+          "time_base": "1/12288",
+          "width": 1536
+        }
+      ]
+    },
+    "path": "/workspace/LTX-2/build/M7C/diagnostics/csharp-decode-python-latent-regression.mp4",
+    "sha256": "57834fa4ce3cc31608cce9a1ff0fe8b286ee4c91c7370f5894faeff3fe500299"
+  },
+  "output": {
+    "decoder": "M7C C# tiled decode: pass; latent_mean=0.00731001468; latent_std=0.993687451; decoded_mean=0.078591913; decoded_std=0.432390541",
+    "runtime": "M7A real checkpoint runtime: 6 passed, 0 failed in 66.5s",
+    "transformer": "M7C production transformer: video cosine=0.99997896, rmse=0.00753690628; audio cosine=0.999985337, rmse=0.0065009268",
+    "upsampler": "C# learned spatial upsampler: pass"
+  },
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "suites": {
+    "abi_smoke": 5,
+    "checkpoint_runtime": 6,
+    "full_resolution_tiled_decoder": 1,
+    "learned_spatial_upsampler": 1,
+    "media_pipelines": 52,
+    "production_geometry_transformer": 1
+  },
+  "test_totals": {
+    "failed": 0,
+    "passed": 66,
+    "skipped": 0
+  }
+}

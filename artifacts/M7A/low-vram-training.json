@@ -1,0 +1,83 @@
+{
+  "dependencies": {
+    "cuda": "13.2",
+    "safetensors": "0.6.2",
+    "torch": "2.13.0+cu132",
+    "torchsharp": "0.107.0"
+  },
+  "fixture_revision": "m6-low-vram-training-v1",
+  "fixture_set_sha256": "e420c4ae7c248686d2be462aaed9db830db7f7936b6e1704cdda688e9782a471",
+  "fixture_sha256": {
+    "manifest.json": "2e95a76187d0f3339e928c7f8a853d7b47eac9fd1336ebc2a0b15bfb1b199cb0"
+  },
+  "generated_at_utc": "2026-08-20T11:00:12.306551Z",
+  "low_vram_profile": {
+    "activation_chunk_size": 3,
+    "alpha": 2.0,
+    "base_quantization": "int8-rowwise",
+    "base_weight_residence": "cpu_int8",
+    "batch_size": 1,
+    "beta1": 0.9,
+    "beta2": 0.999,
+    "epsilon": 1e-08,
+    "gpu_peak_memory_mib": 4,
+    "gpu_total_memory_mib": 81920,
+    "gradient_checkpointing": true,
+    "learning_rate": 0.001,
+    "max_gradient_norm": 1.0,
+    "mixed_precision": "bf16",
+    "optimizer": "cpu-offloaded-adamw8bit",
+    "optimizer_state_residence": "cpu_int8",
+    "rank": 2,
+    "sigma": 0.37,
+    "visible_cuda_devices": 1,
+    "weight_decay": 0.01
+  },
+  "numerical_tolerances": {
+    "bf16": {
+      "atol": 0.005,
+      "result": "pass",
+      "rtol": 0.02
+    },
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "oracle": {
+    "cuda_version": "13.2",
+    "framework": "pytorch",
+    "framework_version": "2.13.0+cu132",
+    "seed": 20260820
+  },
+  "output": "M6 low-VRAM training fixtures: 21 passed, 0 failed; preprocessing=5, training=11, low_vram=5; loss=1.09406793, gradient_norm=0.0490528084, optimizer_state_bytes=80",
+  "preprocessing": {
+    "dataset_pairing": "strict_sample_and_metadata_validation_pass",
+    "format": "safetensors",
+    "overwrite_guard": "pass",
+    "text_conditions": "projection_and_attention_mask_pass",
+    "video_latents": "projection_and_geometry_pass"
+  },
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "suite_totals": {
+    "low_vram": 5,
+    "preprocessing": 5,
+    "training": 11
+  },
+  "test_totals": {
+    "failed": 0,
+    "passed": 21,
+    "skipped": 0
+  },
+  "training": {
+    "lora_a_gradient": "deterministic_bf16_pass",
+    "lora_b_gradient": "deterministic_bf16_pass",
+    "loss": 1.0940678119659424,
+    "mode": "single_gpu_lora_one_step",
+    "objective": "flow_matching_velocity_masked_mse",
+    "optimizer_step": "cpu_offloaded_adamw8bit_pass"
+  }
+}

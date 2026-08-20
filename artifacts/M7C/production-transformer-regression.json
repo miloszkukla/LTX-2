@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "fixture_revision": "m7c-python-two-stage-latents-v1",
+  "execution": "native_csharp_streamed_production_geometry_transformer",
+  "python_runtime_calls": 0,
+  "block0": {
+    "video_input": {
+      "elements": 48758784,
+      "max_absolute_error": 0.125,
+      "rmse": 0.002425578,
+      "cosine": 0.9999964,
+      "exact_fraction": 0.7049774
+    },
+    "audio_input": {
+      "elements": 514048,
+      "max_absolute_error": 0,
+      "rmse": 0,
+      "cosine": 1,
+      "exact_fraction": 1
+    },
+    "attn1_to_q": {
+      "elements": 48758784,
+      "max_absolute_error": 0.0625,
+      "rmse": 0.0025149737,
+      "cosine": 0.9999985,
+      "exact_fraction": 0.5066389
+    },
+    "attn1_to_k": {
+      "elements": 48758784,
+      "max_absolute_error": 0.125,
+      "rmse": 0.0034352604,
+      "cosine": 0.99999917,
+      "exact_fraction": 0.5334129
+    },
+    "attn1_q_norm": {
+      "elements": 48758784,
+      "max_absolute_error": 0.0625,
+      "rmse": 0.0011243573,
+      "cosine": 0.9999982,
+      "exact_fraction": 0.5208069
+    },
+    "attn1_k_norm": {
+      "elements": 48758784,
+      "max_absolute_error": 0.0625,
+      "rmse": 0.00086969236,
+      "cosine": 0.999999,
+      "exact_fraction": 0.55153215
+    },
+    "attn1_to_v": {
+      "elements": 48758784,
+      "max_absolute_error": 0.125,
+      "rmse": 0.0076591684,
+      "cosine": 0.9999963,
+      "exact_fraction": 0.5289463
+    },
+    "attn1_q_rope": {
+      "elements": 48758784,
+      "max_absolute_error": 0.125,
+      "rmse": 0.0016971567,
+      "cosine": 0.9999959,
+      "exact_fraction": 0.4553615
+    },
+    "attn1_k_rope": {
+      "elements": 48758784,
+      "max_absolute_error": 0.09375,
+      "rmse": 0.0015834086,
+      "cosine": 0.9999966,
+      "exact_fraction": 0.4702821
+    },
+    "attn1_attended": {
+      "elements": 48758784,
+      "max_absolute_error": 0.05078125,
+      "rmse": 0.0016397715,
+      "cosine": 0.9999596,
+      "exact_fraction": 0.1365611
+    },
+    "attn1": {
+      "elements": 48758784,
+      "max_absolute_error": 0.15625,
+      "rmse": 0.011384361,
+      "cosine": 0.9999783,
+      "exact_fraction": 0.24571499
+    },
+    "attn2": {
+      "elements": 48758784,
+      "max_absolute_error": 0.03125,
+      "rmse": 0.000319783,
+      "cosine": 0.99999076,
+      "exact_fraction": 0.75623184
+    },
+    "audio_attn1": {
+      "elements": 514048,
+      "max_absolute_error": 0.25,
+      "rmse": 0.00381626,
+      "cosine": 0.99999887,
+      "exact_fraction": 0.6592283
+    },
+    "audio_attn2": {
+      "elements": 514048,
+      "max_absolute_error": 0.015625,
+      "rmse": 0.00037870492,
+      "cosine": 0.9999992,
+      "exact_fraction": 0.85118705
+    },
+    "audio_to_video_attn": {
+      "elements": 48758784,
+      "max_absolute_error": 0.0007324219,
+      "rmse": 1.9260553E-05,
+      "cosine": 0.99999845,
+      "exact_fraction": 0.8584939
+    },
+    "video_to_audio_attn": {
+      "elements": 514048,
+      "max_absolute_error": 0.0625,
+      "rmse": 0.0028833628,
+      "cosine": 0.9999953,
+      "exact_fraction": 0.4212778
+    },
+    "ff": {
+      "elements": 48758784,
+      "max_absolute_error": 0.25,
+      "rmse": 0.0047478806,
+      "cosine": 0.999987,
+      "exact_fraction": 0.3311109
+    },
+    "audio_ff": {
+      "elements": 514048,
+      "max_absolute_error": 0.5,
+      "rmse": 0.0110902125,
+      "cosine": 0.9999987,
+      "exact_fraction": 0.72285664
+    },
+    "video_output": {
+      "elements": 48758784,
+      "max_absolute_error": 3,
+      "rmse": 0.0074867485,
+      "cosine": 0.9999943,
+      "exact_fraction": 0.56556576
+    },
+    "audio_output": {
+      "elements": 514048,
+      "max_absolute_error": 3,
+      "rmse": 0.017904304,
+      "cosine": 0.99999815,
+      "exact_fraction": 0.83762217
+    }
+  },
+  "video": {
+    "elements": 1523712,
+    "max_absolute_error": 0.1105957,
+    "rmse": 0.0075369063,
+    "cosine": 0.99997896,
+    "exact_fraction": 0.26211974
+  },
+  "audio": {
+    "elements": 32128,
+    "max_absolute_error": 0.03125,
+    "rmse": 0.006500927,
+    "cosine": 0.99998534,
+    "exact_fraction": 0.31206423
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "failed_attempts_retained_on_host": {
+    "mux_240_frame_failure": "/workspace/LTX-2/build/M7C/csharp-mux-failure-4",
+    "offload_abi_failures": [
+      "/workspace/LTX-2/build/M7C/csharp-offload-failure-1",
+      "/workspace/LTX-2/build/M7C/csharp-offload-failure-2",
+      "/workspace/LTX-2/build/M7C/csharp-offload-failure-3"
+    ],
+    "resident_oom": "/workspace/LTX-2/build/M7C/csharp-resident-failure",
+    "uniform_content_failure": "/workspace/LTX-2/build/M7C/csharp-content-failure-5"
+  },
+  "python_substitution_for_csharp": false,
+  "repairs": [
+    "interleave RoPE axes exactly like Python generate_freqs",
+    "use native at::linear and at::add through the maintained TorchSharp bridge",
+    "match X0Model BF16 conversion plus EulerDiffusionStep semantics",
+    "implement learned x2 spatial latent upsampler",
+    "add exact auto-tiling for the convolutional video VAE decoder",
+    "mux an explicit 241 video frames without -shortest truncation"
+  ],
+  "result": "pass",
+  "root_cause": "RoPE frequency axes were transposed after already reaching the reference frequency-axis layout",
+  "schema_version": 1,
+  "secrets_recorded": false
+}

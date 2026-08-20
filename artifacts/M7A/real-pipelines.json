@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "result": "pass",
+  "checkpoint_model_version": "2.3.0",
+  "execution": "native_csharp_torchsharp_cuda_full_checkpoint",
+  "python_runtime_calls": 0,
+  "modes": [
+    {
+      "module": "ltx_pipelines.a2vid_two_stage",
+      "pipeline": "A2VidPipelineTwoStage",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "d06a06eaf30856553a320cd4fd289ea0e5f4facba344c5b11abf82a6cdb1ce57"
+      ],
+      "result": "pass"
+    },
+    {
+      "module": "ltx_pipelines.dfr_pipeline",
+      "pipeline": "DFRPipeline",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "20ed21ae52b081bf5ce40043c542b38e065f2a17d5dc01482e6e99e988bba050"
+      ],
+      "result": "pass"
+    },
+    {
+      "module": "ltx_pipelines.distilled",
+      "pipeline": "DistilledPipeline",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "ed55b49138c54ae02b6aa7477b4351cc2ca822e8bd674f7611fbe1ec3d29841b"
+      ],
+      "result": "pass"
+    },
+    {
+      "module": "ltx_pipelines.dubit",
+      "pipeline": "DubItPipeline",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "4aa7320f44ec1800278dcf3a472dbb20eac8a4cd340d27ce3fbe89a9ea30b0ed"
+      ],
+      "result": "pass"
+    },
+    {
+      "module": "ltx_pipelines.hdr_ic_lora",
+      "pipeline": "HDRICLoraPipeline",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "716e289c264af13d21430bed217e505057c9ce2177e6a95e056a05d5269da996"
+      ],
+      "result": "pass"
+    },
+    {
+      "module": "ltx_pipelines.ic_lora",
+      "pipeline": "ICLoraPipeline",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "fd5f85878dde805665e8ac788fd55d6428ec71714b54a27fe0ca99112caa5adf"
+      ],
+      "result": "pass"
+    },
+    {
+      "module": "ltx_pipelines.keyframe_interpolation",
+      "pipeline": "KeyframeInterpolationPipeline",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "8eda052cdad118f707eac6713ce71d394efab70b3645d3303ec8f4d690cce922"
+      ],
+      "result": "pass"
+    },
+    {
+      "module": "ltx_pipelines.retake",
+      "pipeline": "RetakePipeline",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "3fc51b91605934ca50beb713c7f235ed98ec645212626f43a528a1fd9890d41f"
+      ],
+      "result": "pass"
+    },
+    {
+      "module": "ltx_pipelines.t2a_one_stage",
+      "pipeline": "T2AOneStagePipeline",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "dd66f93d54907222bdda9ce34bf1e48623844e15c49572a4f694509fcb5461ee"
+      ],
+      "result": "pass"
+    },
+    {
+      "module": "ltx_pipelines.ti2vid_one_stage",
+      "pipeline": "TI2VidOneStagePipeline",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "072255d63cd62838663f6e92c4608b6805d0a72f48a9cd3080d6a8423a1a0fdc"
+      ],
+      "result": "pass"
+    },
+    {
+      "module": "ltx_pipelines.ti2vid_two_stages",
+      "pipeline": "TI2VidTwoStagesPipeline",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "a9b5b61e867be0697600b2a7b60d1aa74a510f80cb47edac0dba6cf1a343faac"
+      ],
+      "result": "pass"
+    },
+    {
+      "module": "ltx_pipelines.ti2vid_two_stages_hq",
+      "pipeline": "TI2VidTwoStagesHQPipeline",
+      "execution": "native_csharp_full_checkpoint",
+      "output_count": 1,
+      "output_sha256": [
+        "81b662defac3cc2fea1a304e803c8947c13d87317396bb9ed073dfba0cb30cbe"
+      ],
+      "result": "pass"
+    }
+  ],
+  "test_totals": {
+    "passed": 12,
+    "failed": 0,
+    "skipped": 0
+  },
+  "elapsed_seconds": 40.2437531,
+  "secrets_recorded": false
+}

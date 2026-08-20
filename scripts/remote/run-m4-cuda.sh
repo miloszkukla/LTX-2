@@ -23,7 +23,10 @@ if [[ $tracked_files != "$generated_files" ]]; then
     exit 1
 fi
 while IFS= read -r name; do
-    if ! cmp -s "$fixture/$name" "$fixture_temp/$name"; then
+    if [[ $name == manifest.json ]]; then
+        "$repo_root/.venv/bin/python" scripts/parity/compare-cross-gpu-fixtures.py \
+            "$fixture/$name" "$fixture_temp/$name"
+    elif ! cmp -s "$fixture/$name" "$fixture_temp/$name"; then
         echo "tracked M4 fixture '$name' does not match the pinned Python oracle" >&2
         exit 1
     fi

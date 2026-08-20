@@ -53,6 +53,10 @@ internal static class PipelineExecution
 {
     public static PipelineResult Execute(PipelineMode mode, PipelineRequest request)
     {
+        if (!request.FixtureMode)
+        {
+            return ExecuteCheckpoint(mode, request);
+        }
         if (mode.AudioOnly)
         {
             var output = Required(request.OutputPath, "--output-path");
@@ -75,6 +79,64 @@ internal static class PipelineExecution
             video.FramesPerSecond,
             audio is not null,
             request.HdrColorSpace is not null);
+    }
+
+    private static PipelineResult ExecuteCheckpoint(PipelineMode mode, PipelineRequest request)
+    {
+        var ownsSession = request.CheckpointSession is null;
+        var session = request.CheckpointSession ?? new CheckpointPipelineSession(
+            Required(request.CheckpointPath, "checkpoint path"),
+            Required(request.TextEmbeddingsPath, "--text-embeddings"),
+            request.TorchSharpLibraryPath,
+            request.SpatialUpsamplerPath,
+            request.OffloadMode);
+        try
+        {
+            var generated = session.Generate(mode, request);
+            if (mode.AudioOnly)
+            {
+                var output = Required(request.OutputPath, "--output-path");
+                WaveCodec.WritePcm16(output, generated.Audio!);
+                return new PipelineResult(
+                    mode.ModuleName, [Path.GetFullPath(output)], 0, request.FramesPerSecond,
+                    true, false, "native_csharp_full_checkpoint");
+            }
+            if (mode.HdrBatch)
+            {
+                var outputDirectory = Required(request.OutputDirectory, "--output-dir");
+                Directory.CreateDirectory(outputDirectory);
+                var stem = Path.GetFileNameWithoutExtension(Required(request.InputPath, "--input"));
+                var exrDirectory = Path.Combine(outputDirectory, stem + "_exr");
+                Directory.CreateDirectory(exrDirectory);
+                var video = generated.Video!;
+                var outputs = new List<string>();
+                for (var frame = 0; frame < video.FrameCount; frame++)
+                {
+                    var values = new float[video.FrameByteCount];
+                    for (var index = 0; index < values.Length; index++)
+                    {
+                        values[index] = video.Pixels[frame * video.FrameByteCount + index] / 255F;
+                    }
+                    var path = Path.Combine(exrDirectory, $"frame_{frame:D5}.exr");
+                    OpenImageIo.WriteExr(path, new FloatImage(values, video.Width, video.Height, 3));
+                    outputs.Add(Path.GetFullPath(path));
+                }
+                return new PipelineResult(
+                    mode.ModuleName, outputs, video.FrameCount, video.FramesPerSecond,
+                    false, true, "native_csharp_full_checkpoint");
+            }
+            var outputPath = Required(request.OutputPath, "--output-path");
+            FfmpegMedia.EncodeVideo(outputPath, generated.Video!, generated.Audio, hdr: request.HdrColorSpace is not null);
+            return new PipelineResult(
+                mode.ModuleName, [Path.GetFullPath(outputPath)], generated.Video!.FrameCount,
+                generated.Video.FramesPerSecond, generated.Audio is not null,
+                request.HdrColorSpace is not null,
+                generated.TwoStage ? "native_csharp_two_stage_full_checkpoint" : "native_csharp_full_checkpoint");
+        }
+        finally
+        {
+            if (ownsSession) session.Dispose();
+        }
     }
 
     private static PipelineResult ExecuteHdrBatch(PipelineMode mode, PipelineRequest request)

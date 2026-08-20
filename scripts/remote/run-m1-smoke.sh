@@ -60,6 +60,7 @@ report = {
     "tests": {
         "torchsharp_cuda_tensor": "pass",
         "torchsharp_abi_probe": "pass",
+        "torchsharp_native_add_linear": "pass",
         "ltx_native_cuda": "pass",
         "sass_only": "pass",
     },

@@ -1,0 +1,376 @@
+{
+  "abi": {
+    "cuda": "13.2",
+    "cxx11_abi": 1,
+    "ltx": "1.0",
+    "pytorch": "2.13.0",
+    "torchsharp_managed": "0.107.0",
+    "torchsharp_revision": "8f4def03b641b6753f18076aa5438f8eaaef2d30"
+  },
+  "artifact_sha256": {
+    "abi-smoke.json": "05e6550b00ea150e8b0519fabfa6316d7ae88ca16ae4a7b2ef7b406ba3ee5943",
+    "acceptance-blocker.json": "cb7ee2d98b41fb83c9a0bd1d89d4588f97c0cdf2084732b12b591b21e8ba8767",
+    "checkpoint-oracle.json": "f1667b6f7619d4e07a93f776d8e11004588e9c21297208007267633fc53d599a",
+    "checkpoint-runtime.json": "756a44c10b4c5d2e9030b87d70253f4dafa49965ba4bb48d20b0e41fe6735fef",
+    "core-model.json": "2c35d42f4122fe44b57db557e0b3136a591382c514d372ccdc7dfae2852a6bd0",
+    "cuda-quantization-lora.json": "d3fe5a757fcf2e0380ec5d7a1f3c4beeed4aab1a0002d3882dd0b471a4ee60ae",
+    "foundation-parity.json": "b6f4a25620d9495158499532f7816aa2f969ea9c38946f5ecca3d30d447e1ea9",
+    "hardware.json": "cc8643b4225dc9046326b4ec91fb523b685126ecbe0cf22754d99e7aa3860c99",
+    "low-vram-training.json": "7f4f20e5b97d8961037bb50464de708282037ad9545b7e439704565631900594",
+    "media-pipelines.json": "a45e795aa566adb33bec7e685fc3bd9e141deb0743a9f2420fad0f5886e14593",
+    "model-download.json": "e2cc644863a3f03fb42d90439f44710a1542b1d34eda4cc85f6bd2200f25d98c",
+    "prerequisite-failure.json": "c0d0da813cc2e992bd9bfb5070df2b5a339ca58e20531d58f3d83c4421305260",
+    "prerequisite-recovery.json": "b495bb84e3918846556ae7be21a7320c1c9487052ee3e6a973408692153a85b3",
+    "real-pipelines.json": "9b5ea7bfcaa858b6fe174d3ac11073136944b47f94b5c76776167fce09e859e6",
+    "standard-trainer.json": "fd5624075d694309a31cf7f2976e95d70e8654f70dabe6243797a21ab7797276",
+    "storage.json": "08e022e43917189d764f72ddccd3de637eea02b374cc87cd7c2db57314da96cf"
+  },
+  "checkpoint": {
+    "execution": "native_csharp_torchsharp_cuda_full_checkpoint",
+    "files": [
+      {
+        "artifact_id": "ltx23-distilled-checkpoint",
+        "path": "ltx-2.3-22b-distilled-1.1.safetensors",
+        "sha256": "b33b7fe4bbfe084f484be4aaf90b0f1d95dca20d403ac4c0e037eb8c4f0af7cc",
+        "size_bytes": 46149345334,
+        "state": "cached_verified"
+      },
+      {
+        "artifact_id": "ltx23-hdr-assets",
+        "path": "ltx-2.3-22b-ic-lora-hdr-0.9.safetensors",
+        "sha256": "c56bfa0f2e4461a8b2f318f494c61c5bf97f462f2220e31ece93ea7851ca871e",
+        "size_bytes": 327309312,
+        "state": "cached_verified"
+      },
+      {
+        "artifact_id": "ltx23-hdr-assets",
+        "path": "ltx-2.3-22b-ic-lora-hdr-scene-emb.safetensors",
+        "sha256": "78bffa6049bae2649a4365ec8769db88052c21348d643e8fc1ce6d483d994c5b",
+        "size_bytes": 12583096,
+        "state": "cached_verified"
+      }
+    ],
+    "model_version": "2.3.0",
+    "oracle_revision": "m7a-real-checkpoint-runtime-v4",
+    "python_runtime_calls": 0,
+    "tensor_count": 5947
+  },
+  "commands": [
+    {
+      "command": "dotnet build Ltx.sln --configuration Release --nologo",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-smoke.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-parity.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m2-storage.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m3-core.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m4-cuda.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m5-media.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m6-training.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m7a-checkpoint.sh",
+      "exit_code": 0
+    }
+  ],
+  "deferred": {
+    "b200_specific": "out_of_scope",
+    "ddp_fsdp_nccl_cuda_ipc_all_to_all": "out_of_scope",
+    "full_fine_tuning": "out_of_scope",
+    "hopper_specific_fp8_on_a100": "out_of_scope",
+    "multi_gpu": "out_of_scope",
+    "native_kernels": [
+      {
+        "implementation": "cuda-cpp",
+        "line": 87,
+        "name": "send_recv_all2all",
+        "path": "packages/ltx-kernels/csrc/all2all/cuda/all2all_heads.cu",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cuda-cpp",
+        "line": 206,
+        "name": "gather_heads",
+        "path": "packages/ltx-kernels/csrc/all2all/cuda/all2all_heads.cu",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cuda-cpp",
+        "line": 71,
+        "name": "allgather",
+        "path": "packages/ltx-kernels/csrc/all2all/cuda/allgather.cu",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cutlass-cute-dsl",
+        "line": 363,
+        "name": "_fna_kernel",
+        "path": "packages/ltx-kernels/src/ltx_kernels/vae/block_fna_dsl.py",
+        "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cutlass-cute-dsl",
+        "line": 82,
+        "name": "_na_kernel",
+        "path": "packages/ltx-kernels/src/ltx_kernels/vae/na_attn_dsl.py",
+        "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+        "status": "deferred"
+      }
+    ],
+    "pipelines": [
+      {
+        "module": "ltx_pipelines.distilled_mgpu",
+        "name": "distilled_mgpu",
+        "path": "packages/ltx-pipelines/src/ltx_pipelines/distilled_mgpu.py",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "module": "ltx_pipelines.ti2vid_two_stages_hq_mgpu",
+        "name": "ti2vid_two_stages_hq_mgpu",
+        "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_hq_mgpu.py",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "module": "ltx_pipelines.ti2vid_two_stages_mgpu",
+        "name": "ti2vid_two_stages_mgpu",
+        "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_mgpu.py",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      }
+    ]
+  },
+  "generated_at_utc": "2026-08-20T11:03:44.744475Z",
+  "gpu": {
+    "compute_capability": "8.0",
+    "device_count": 1,
+    "driver": "580.173.02",
+    "memory_total_mib": 81920,
+    "name": "NVIDIA A100-SXM4-80GB",
+    "peak_memory_used_mib": 41847,
+    "peak_temperature_c": 32
+  },
+  "host": {
+    "minimum_memory_available_mib": 247950
+  },
+  "milestone": "M7A",
+  "numerical_tolerances": {
+    "bf16": {
+      "atol": 0.005,
+      "result": "pass",
+      "rtol": 0.02
+    }
+  },
+  "plan_revision": "M7A",
+  "plan_sha256": "85da94394a9e37749d579bc333e79eedebe2a61f77324cacd7ecbd5d149247ba",
+  "real_pipelines": [
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.a2vid_two_stage",
+      "output_count": 1,
+      "output_sha256": [
+        "d06a06eaf30856553a320cd4fd289ea0e5f4facba344c5b11abf82a6cdb1ce57"
+      ],
+      "pipeline": "A2VidPipelineTwoStage",
+      "result": "pass"
+    },
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.dfr_pipeline",
+      "output_count": 1,
+      "output_sha256": [
+        "20ed21ae52b081bf5ce40043c542b38e065f2a17d5dc01482e6e99e988bba050"
+      ],
+      "pipeline": "DFRPipeline",
+      "result": "pass"
+    },
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.distilled",
+      "output_count": 1,
+      "output_sha256": [
+        "ed55b49138c54ae02b6aa7477b4351cc2ca822e8bd674f7611fbe1ec3d29841b"
+      ],
+      "pipeline": "DistilledPipeline",
+      "result": "pass"
+    },
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.dubit",
+      "output_count": 1,
+      "output_sha256": [
+        "4aa7320f44ec1800278dcf3a472dbb20eac8a4cd340d27ce3fbe89a9ea30b0ed"
+      ],
+      "pipeline": "DubItPipeline",
+      "result": "pass"
+    },
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.hdr_ic_lora",
+      "output_count": 1,
+      "output_sha256": [
+        "716e289c264af13d21430bed217e505057c9ce2177e6a95e056a05d5269da996"
+      ],
+      "pipeline": "HDRICLoraPipeline",
+      "result": "pass"
+    },
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.ic_lora",
+      "output_count": 1,
+      "output_sha256": [
+        "fd5f85878dde805665e8ac788fd55d6428ec71714b54a27fe0ca99112caa5adf"
+      ],
+      "pipeline": "ICLoraPipeline",
+      "result": "pass"
+    },
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.keyframe_interpolation",
+      "output_count": 1,
+      "output_sha256": [
+        "8eda052cdad118f707eac6713ce71d394efab70b3645d3303ec8f4d690cce922"
+      ],
+      "pipeline": "KeyframeInterpolationPipeline",
+      "result": "pass"
+    },
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.retake",
+      "output_count": 1,
+      "output_sha256": [
+        "3fc51b91605934ca50beb713c7f235ed98ec645212626f43a528a1fd9890d41f"
+      ],
+      "pipeline": "RetakePipeline",
+      "result": "pass"
+    },
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.t2a_one_stage",
+      "output_count": 1,
+      "output_sha256": [
+        "dd66f93d54907222bdda9ce34bf1e48623844e15c49572a4f694509fcb5461ee"
+      ],
+      "pipeline": "T2AOneStagePipeline",
+      "result": "pass"
+    },
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.ti2vid_one_stage",
+      "output_count": 1,
+      "output_sha256": [
+        "072255d63cd62838663f6e92c4608b6805d0a72f48a9cd3080d6a8423a1a0fdc"
+      ],
+      "pipeline": "TI2VidOneStagePipeline",
+      "result": "pass"
+    },
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.ti2vid_two_stages",
+      "output_count": 1,
+      "output_sha256": [
+        "a9b5b61e867be0697600b2a7b60d1aa74a510f80cb47edac0dba6cf1a343faac"
+      ],
+      "pipeline": "TI2VidTwoStagesPipeline",
+      "result": "pass"
+    },
+    {
+      "execution": "native_csharp_full_checkpoint",
+      "module": "ltx_pipelines.ti2vid_two_stages_hq",
+      "output_count": 1,
+      "output_sha256": [
+        "81b662defac3cc2fea1a304e803c8947c13d87317396bb9ed073dfba0cb30cbe"
+      ],
+      "pipeline": "TI2VidTwoStagesHQPipeline",
+      "result": "pass"
+    }
+  ],
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_reference_sha": "7ba03274afa5f5ba78e26a70e3b6d75fa9bf4b13",
+  "standard_trainer": {
+    "base_quantization": "none",
+    "batch_size": 1,
+    "checkpoint_model_version": "2.3.0",
+    "cuda_device_count": 1,
+    "elapsed_seconds": 34.5485051,
+    "execution": "native_csharp_full_checkpoint_backward",
+    "frozen_parameter_count": 21005004544,
+    "gradient_norm": 0.14196147,
+    "layer_count": 48,
+    "loss": 0.022675807,
+    "mixed_precision": "bf16",
+    "optimizer": "adamw",
+    "optimizer_state_residence": "cuda_adamw",
+    "parameter_delta_norm": 0.09013178,
+    "profile": "standard_single_gpu",
+    "python_runtime_calls": 0,
+    "result": "pass",
+    "schema_version": 1,
+    "secrets_recorded": false,
+    "test_totals": {
+      "failed": 0,
+      "passed": 1,
+      "skipped": 0
+    },
+    "trainable_parameter_count": 8448
+  },
+  "state": "accepted",
+  "test_totals": {
+    "failed": 0,
+    "passed": 192,
+    "skipped": 0
+  },
+  "tests": {
+    "core_model_regression": "34_pass",
+    "cuda_quantization_lora_regression": "45_pass",
+    "foundation_parity": "2_pass",
+    "low_vram_training_regression": "21_pass",
+    "ltx_native_cuda": "pass",
+    "media_pipeline_regression": "52_pass",
+    "real_checkpoint_components": "5_pass",
+    "real_checkpoint_single_gpu_pipelines": "12_pass",
+    "sass_only": "pass",
+    "standard_profile_trainer": "1_pass",
+    "storage_regression": "16_pass",
+    "torchsharp_abi_probe": "pass",
+    "torchsharp_cuda_tensor": "pass",
+    "torchsharp_native_add_linear": "pass"
+  },
+  "toolchain": {
+    "cmake": "cmake version 3.28.3",
+    "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "cuda_release": "13.2",
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "ninja": "1.11.1",
+    "python": "Python 3.12.3",
+    "uv": "uv 0.12.5 (x86_64-unknown-linux-gnu)"
+  },
+  "verification_command": "scripts/remote/verify-milestone.sh M7A"
+}

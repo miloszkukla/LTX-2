@@ -53,6 +53,7 @@ public static class PipelineCli
                 fps = result.FramesPerSecond,
                 has_audio = result.HasAudio,
                 hdr = result.IsHdr,
+                execution = result.Execution,
             }));
             return 0;
         }
@@ -124,7 +125,29 @@ public static class PipelineCli
             EndTime = options.Double("--end-time", 0),
             HdrColorSpace = hdr,
             SkipPreview = options.Has("--skip-mp4"),
+            FixtureMode = options.Has("--fixture-mode"),
+            CheckpointPath = options.Optional("--distilled-checkpoint-path") ??
+                options.Optional("--checkpoint-path") ?? options.Optional("--transformer-path"),
+            SpatialUpsamplerPath = options.Optional("--spatial-upsampler-path"),
+            OffloadMode = options.Optional("--offload-mode") ?? "none",
+            TextEmbeddingsPath = options.Optional("--text-embeddings"),
+            TorchSharpLibraryPath = Environment.GetEnvironmentVariable("LTX_TORCHSHARP_LIBRARY"),
+            LatentDiagnosticsPath = options.Optional("--latent-diagnostics"),
+            InferenceSteps = options.Integer("--num-inference-steps", 8),
         };
+        if (!request.FixtureMode && request.TextEmbeddingsPath is null)
+        {
+            throw new CliUsageException("missing --text-embeddings for native checkpoint inference");
+        }
+        if (!request.FixtureMode && mode.ModuleName == "ltx_pipelines.ti2vid_two_stages" &&
+            request.SpatialUpsamplerPath is null)
+        {
+            throw new CliUsageException("missing --spatial-upsampler-path for native two-stage inference");
+        }
+        if (request.OffloadMode is not ("none" or "disk"))
+        {
+            throw new CliUsageException("--offload-mode must be 'none' or 'disk' for native C# inference");
+        }
         ValidateRequired(mode, request);
         return request;
     }
@@ -241,6 +264,7 @@ public static class PipelineCli
             "--checkpoint-path", "--transformer-path", "--text-encoder-path", "--video-vae-path", "--audio-vae-path",
             "--vocoder-path", "--gemma-root", "--prompt-enhancer-gemma-root", "--duration-head-path",
             "--offload-mode", "--quantization", "--diffvae-optimization", "--max-batch-size", "--num-inference-steps",
+            "--latent-diagnostics",
             "--num-generated-keyframes", "--video-cfg-guidance-scale", "--video-stg-guidance-scale",
             "--video-rescale-scale", "--a2v-guidance-scale", "--video-skip-step", "--audio-cfg-guidance-scale",
             "--audio-stg-guidance-scale", "--audio-rescale-scale", "--v2a-guidance-scale", "--audio-skip-step",

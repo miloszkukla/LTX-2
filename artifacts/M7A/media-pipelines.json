@@ -1,0 +1,217 @@
+{
+  "cli_behavior": {
+    "error_behavior": {
+      "exr_requires_hdr": "exit_2",
+      "missing_audio": "exit_2",
+      "missing_output": "exit_2",
+      "retake_interval": "exit_2",
+      "runtime_missing_file": "exit_1",
+      "unknown_mode": "exit_2"
+    },
+    "help_behavior": {
+      "ltx_pipelines.a2vid_two_stage": "exit_0",
+      "ltx_pipelines.dfr_pipeline": "exit_0",
+      "ltx_pipelines.distilled": "exit_0",
+      "ltx_pipelines.dubit": "exit_0",
+      "ltx_pipelines.hdr_ic_lora": "exit_0",
+      "ltx_pipelines.ic_lora": "exit_0",
+      "ltx_pipelines.keyframe_interpolation": "exit_0",
+      "ltx_pipelines.retake": "exit_0",
+      "ltx_pipelines.t2a_one_stage": "exit_0",
+      "ltx_pipelines.ti2vid_one_stage": "exit_0",
+      "ltx_pipelines.ti2vid_two_stages": "exit_0",
+      "ltx_pipelines.ti2vid_two_stages_hq": "exit_0"
+    },
+    "mode_success": {
+      "ltx_pipelines.a2vid_two_stage": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.dfr_pipeline": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.distilled": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.dubit": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.hdr_ic_lora": {
+        "exr_frames": 9,
+        "kind": "hdr_exr_preview",
+        "preview": "input.mov"
+      },
+      "ltx_pipelines.ic_lora": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.keyframe_interpolation": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.retake": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.t2a_one_stage": {
+        "kind": "audio",
+        "sample_rate": 16000,
+        "samples": 18000
+      },
+      "ltx_pipelines.ti2vid_one_stage": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.ti2vid_two_stages": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.ti2vid_two_stages_hq": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      }
+    },
+    "result": "pass",
+    "schema_version": 1,
+    "secrets_recorded": false,
+    "suite_totals": {
+      "cli_errors": 6,
+      "cli_help": 12,
+      "cli_modes": 12
+    },
+    "test_totals": {
+      "failed": 0,
+      "passed": 30,
+      "skipped": 0
+    }
+  },
+  "dependencies": {
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "native_oiio_bridge_sha256": "4a0ee655931e029a981592e5fd9368be1db984fdad09fe64db904f1a4a1e8212",
+    "openimageio": "2.4.17.0"
+  },
+  "fixture_revision": "m5-media-pipelines-v1",
+  "fixture_set_sha256": "f3c19f034acbac41c238f3fb2a15363bd95a7b3a008dde02ce1b35a3c01011e7",
+  "fixture_sha256": {
+    "input.exr": "ce05bfd7c93990bd2c04b06b9329c36b582a80d78e25bf4fc2d1da9f93001bca",
+    "input.mp4": "5b001adbed04ea9c553673a5b80282df515d67548c61d98a096f4f8996d8de85",
+    "input.png": "04c701f2a098616320e3dd8cae89cbffbdba3829323b1d3cd6bec7db2ce9387b",
+    "input.wav": "08e7b7c5e940143b76896d6b78f4d71d76aeb2dfa4d69b8fb42f3d4a38050b62",
+    "input_exr/frame_00000.exr": "ce05bfd7c93990bd2c04b06b9329c36b582a80d78e25bf4fc2d1da9f93001bca",
+    "input_exr/frame_00001.exr": "0b6cbbebf41990c2fe893924ea6902eba4e786ab7e578fe35855bd7ffc1ea5c6",
+    "input_exr/frame_00002.exr": "1e2081be8a6d33c9cac6dbaaaa7c1b2fee9ef940078ce1d9c96ee77b6a0a9219",
+    "input_exr/frame_00003.exr": "86c4b27c57315212c151000c48067d6f4d7ebdb23a4cb2744501b18ddde8af95",
+    "input_exr/frame_00004.exr": "04dcceee3d6d2de0740eefdbd04cef7151a7df9504b711bf35d793d171eb639f",
+    "input_exr/frame_00005.exr": "7d416fcfb42c4faf8398a64666d5228d32a2132edf404aacaba23cc0614ef219",
+    "input_exr/frame_00006.exr": "db3b062340a6a064f028e81ad9dcf194c497750d2edfbd923a10a45ed2a6d882",
+    "input_exr/frame_00007.exr": "1665f0b06b0a1b53bb73cbcadcc0aea2d5eee7cda6daea487d898d37d3ef6c53",
+    "input_exr/frame_00008.exr": "eafc408e7b057e15c933a01ee3293b341ddbc891696bac064ed591e2eb0f2775",
+    "manifest.json": "47a02c81895340ff6755c91c0116ccc14933737ffde4f70ae7aef3e55c8c6a92"
+  },
+  "generated_at_utc": "2026-08-20T10:59:52.539510Z",
+  "media": {
+    "audio": "pcm_wave_and_container_audio_pass",
+    "exr": "openimageio_native_read_write_sequence_pass",
+    "hdr": "rec2020_hlg_tags_and_tonemap_pass",
+    "hdr_ic_lora_output": "nine_exr_frames_and_prores_mov_pass",
+    "images": "png_decode_pass",
+    "video": "ffmpeg_mp4_decode_encode_pass"
+  },
+  "numerical_tolerances": {
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "oracle": {
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "implementation": "python-standard-library-xorshift32",
+    "openimageio": "2.4.17.0"
+  },
+  "output": {
+    "cli": "M5 CLI fixtures: 30 passed, 0 failed; modes=12, help=12, errors=6",
+    "managed": "M5 media/pipeline fixtures: 22 passed, 0 failed; media=10, pipelines=12"
+  },
+  "pipeline_inventory": {
+    "correctness": {
+      "ltx_pipelines.a2vid_two_stage": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.dfr_pipeline": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.distilled": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.dubit": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.hdr_ic_lora": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.ic_lora": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.keyframe_interpolation": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.retake": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.t2a_one_stage": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.ti2vid_one_stage": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.ti2vid_two_stages": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.ti2vid_two_stages_hq": "seeded_fixture_and_cli_pass"
+    },
+    "deferred": [
+      {
+        "module": "ltx_pipelines.distilled_mgpu",
+        "name": "distilled_mgpu",
+        "path": "packages/ltx-pipelines/src/ltx_pipelines/distilled_mgpu.py",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "module": "ltx_pipelines.ti2vid_two_stages_hq_mgpu",
+        "name": "ti2vid_two_stages_hq_mgpu",
+        "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_hq_mgpu.py",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "module": "ltx_pipelines.ti2vid_two_stages_mgpu",
+        "name": "ti2vid_two_stages_mgpu",
+        "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_mgpu.py",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      }
+    ],
+    "in_scope": 12,
+    "tested": 12,
+    "total": 15
+  },
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "suite_totals": {
+    "cli_errors": 6,
+    "cli_help": 12,
+    "cli_modes": 12,
+    "media": 10,
+    "pipelines": 12
+  },
+  "test_totals": {
+    "failed": 0,
+    "passed": 52,
+    "skipped": 0
+  }
+}

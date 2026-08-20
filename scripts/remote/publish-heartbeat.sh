@@ -4,7 +4,7 @@ set -Eeuo pipefail
 milestone=${1:?usage: publish-heartbeat.sh MILESTONE PHASE [FAILURE_CODE]}
 phase=${2:?usage: publish-heartbeat.sh MILESTONE PHASE [FAILURE_CODE]}
 failure=${3:-none}
-if [[ ! $milestone =~ ^M([0-6]|7A|7B|8)$ || ! $phase =~ ^[A-Za-z0-9_.:-]{1,80}$ || ! $failure =~ ^[A-Za-z0-9_.:-]{1,160}$ ]]; then
+if [[ ! $milestone =~ ^M([0-6]|7A|7B|7C|8)$ || ! $phase =~ ^[A-Za-z0-9_.:-]{1,80}$ || ! $failure =~ ^[A-Za-z0-9_.:-]{1,160}$ ]]; then
     echo "heartbeat fields must be short redacted identifiers" >&2
     exit 2
 fi
@@ -59,15 +59,15 @@ heartbeat = {
 Path(os.environ["HEARTBEAT_FILE"]).write_text(json.dumps(heartbeat, indent=2, sort_keys=True) + "\n")
 PY
 
-ssh_command='ssh -i /root/.ssh/ltx_csharp_deploy -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new'
-if [[ ! -f /root/.ssh/ltx_csharp_deploy ]]; then
+ssh_command='ssh -i /root/.ssh/ltx_csharp_m7a_deploy -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new'
+if [[ ! -f /root/.ssh/ltx_csharp_m7a_deploy ]]; then
     echo "ephemeral deploy key is missing" >&2
     exit 1
 fi
 
 blob=$(git -C "$repo_root" hash-object -w "$heartbeat_file")
 tree=$(printf '100644 blob %s\theartbeat.json\n' "$blob" | git -C "$repo_root" mktree)
-parent=$(GIT_SSH_COMMAND="$ssh_command" git -C "$repo_root" ls-remote origin refs/heads/codex/ltx-csharp-status | awk '{print $1}')
+parent=$(GIT_SSH_COMMAND="$ssh_command" git -C "$repo_root" ls-remote origin refs/heads/codex/ltx-csharp-m7a-status | awk '{print $1}')
 commit_args=("$tree")
 if [[ -n $parent ]]; then
     commit_args+=("-p" "$parent")
@@ -81,5 +81,5 @@ status_commit=$(
         git -C "$repo_root" commit-tree "${commit_args[@]}"
 )
 GIT_SSH_COMMAND="$ssh_command" git -C "$repo_root" push --force origin \
-    "$status_commit:refs/heads/codex/ltx-csharp-status" >/dev/null
+    "$status_commit:refs/heads/codex/ltx-csharp-m7a-status" >/dev/null
 echo "redacted heartbeat published"

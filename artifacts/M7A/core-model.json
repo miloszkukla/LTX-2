@@ -1,0 +1,57 @@
+{
+  "dependencies": {
+    "safetensors": "0.6.2",
+    "torch": "2.13.0+cu132",
+    "torchsharp": "0.107.0"
+  },
+  "fixture_revision": "m3-core-model-execution-v1",
+  "fixture_set_sha256": "6964b807c01b0b15a191031432eaf54b4a6945d3cfa96b27cdddda47a204c1cd",
+  "fixture_sha256": {
+    "manifest.json": "69ab62a76df5cc52dacb493ad39a436dd2c72cf65c20c872ebca9bcb02419bc1",
+    "offload.safetensors": "204445739b5df36eba2fb49e812d30f7ba9fb30ddb27d2d3a3b6f0ff76563370"
+  },
+  "generated_at_utc": "2026-08-20T10:59:27.535832Z",
+  "numerical_tolerances": {
+    "bf16": {
+      "atol": 0.005,
+      "result": "pass",
+      "rtol": 0.02
+    },
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "oracle": {
+    "cuda_version": "13.2",
+    "device": "NVIDIA GeForce RTX 5090",
+    "framework": "pytorch",
+    "framework_version": "2.13.0+cu132",
+    "safetensors_version": "0.6.2",
+    "seed": 20260820
+  },
+  "output": "M3 core fixtures: 34 passed, 0 failed; audio_vocoder=9, conditioning=4, offload=6, transformer=7, vae=8; revision=m3-core-model-execution-v1",
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "suite_totals": {
+    "audio_vocoder": 9,
+    "conditioning": 4,
+    "offload": 6,
+    "transformer": 7,
+    "vae": 8
+  },
+  "test_totals": {
+    "failed": 0,
+    "passed": 34,
+    "skipped": 0
+  },
+  "tests": {
+    "audio_vocoder": "seeded_fp32_bf16_pass",
+    "conditioning": "seeded_fp32_pass",
+    "offload": "none_cpu_disk_seeded_fp32_bf16_pass",
+    "transformer": "seeded_fp32_bf16_pass",
+    "vae": "seeded_fp32_bf16_pass"
+  }
+}

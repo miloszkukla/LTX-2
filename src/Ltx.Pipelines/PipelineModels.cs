@@ -21,6 +21,15 @@ public sealed record PipelineRequest
     public double EndTime { get; init; }
     public HdrColorSpace? HdrColorSpace { get; init; }
     public bool SkipPreview { get; init; }
+    public bool FixtureMode { get; init; }
+    public string? CheckpointPath { get; init; }
+    public string? SpatialUpsamplerPath { get; init; }
+    public string OffloadMode { get; init; } = "none";
+    public string? TextEmbeddingsPath { get; init; }
+    public string? TorchSharpLibraryPath { get; init; }
+    public string? LatentDiagnosticsPath { get; init; }
+    public int InferenceSteps { get; init; } = 1;
+    public CheckpointPipelineSession? CheckpointSession { get; init; }
 }
 
 public sealed record PipelineResult(
@@ -29,7 +38,8 @@ public sealed record PipelineResult(
     int FrameCount,
     double FramesPerSecond,
     bool HasAudio,
-    bool IsHdr);
+    bool IsHdr,
+    string Execution = "fixture_seeded");
 
 public sealed record PipelineMode(
     string ModuleName,

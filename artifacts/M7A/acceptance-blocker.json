@@ -1,0 +1,110 @@
+{
+  "commands": [
+    {
+      "command": "scripts/remote/bootstrap-host.sh --report build/M7A/bootstrap-packages.json",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "dotnet build Ltx.sln --configuration Release --nologo",
+      "exit_code": 0,
+      "result": "0_warnings_0_errors"
+    },
+    {
+      "command": "scripts/remote/run-m1-smoke.sh and scripts/remote/run-m1-parity.sh",
+      "exit_code": 0,
+      "result": "6_pass_0_fail"
+    },
+    {
+      "command": "scripts/remote/run-m2-storage.sh",
+      "exit_code": 0,
+      "result": "16_pass_0_fail"
+    },
+    {
+      "command": "scripts/remote/run-m3-core.sh",
+      "exit_code": 1,
+      "result": "accepted_fixture_oracle_manifest_not_byte_reproducible_across_gpu_architectures"
+    },
+    {
+      "command": "scripts/remote/verify-milestone.sh M7A",
+      "exit_code": 2,
+      "result": "milestone_argument_rejected"
+    }
+  ],
+  "deferred_features": {
+    "b200_only_native_kernels": [
+      "_fna_kernel",
+      "_na_kernel"
+    ],
+    "full_fine_tuning": "out_of_scope_multi_gpu_fsdp_workload",
+    "hopper_specific_native_fp8": "out_of_scope_on_a100_worker",
+    "multi_gpu_native_kernels": [
+      "send_recv_all2all",
+      "gather_heads",
+      "allgather"
+    ],
+    "multi_gpu_pipelines": [
+      "ltx_pipelines.distilled_mgpu",
+      "ltx_pipelines.ti2vid_two_stages_hq_mgpu",
+      "ltx_pipelines.ti2vid_two_stages_mgpu"
+    ]
+  },
+  "failure": {
+    "code": "accepted_m6_missing_m7a_real_checkpoint_runtime",
+    "fallback_permitted": false,
+    "fallback_reason": "Calling the retained Python implementation, validating only checkpoint metadata or sampled tensors, continuing with seeded procedural media, or omitting any in-scope single-GPU pipeline would reduce the approved M7A acceptance gate.",
+    "required_recovery": "Implement checkpoint-backed C# execution for all 12 in-scope single-GPU pipelines, implement the standard-profile C# trainer path, add an M7A acceptance entry point, and make every earlier suite reproducible on the validation GPU before restarting M7A.",
+    "stage": "acceptance_gate_preflight"
+  },
+  "generated_at_utc": "2026-08-20T05:32:51Z",
+  "gpu": {
+    "compute_capability": "8.0",
+    "host_memory_total_gib": 294,
+    "memory_total_mib": 81920,
+    "name": "NVIDIA A100-SXM4-80GB",
+    "visible_cuda_devices": 1
+  },
+  "milestone": "M7A",
+  "model_access": {
+    "failed_file_probe_count": 0,
+    "required_file_count": 21,
+    "state": "recovered",
+    "successful_byte_range_probe_count": 21
+  },
+  "model_bytes_downloaded": false,
+  "plan_revision": "M7A",
+  "plan_sha256": "85da94394a9e37749d579bc333e79eedebe2a61f77324cacd7ecbd5d149247ba",
+  "regression_results": {
+    "m1_abi_and_foundation": {
+      "failed": 0,
+      "passed": 6,
+      "result": "pass",
+      "sass_architecture": "sm_80"
+    },
+    "m2_storage": {
+      "failed": 0,
+      "passed": 16,
+      "result": "pass"
+    },
+    "m3_core": {
+      "result": "blocked_before_csharp_runner",
+      "tracked_oracle_device": "NVIDIA GeForce RTX 5090",
+      "validation_oracle_device": "NVIDIA A100-SXM4-80GB"
+    },
+    "m4_cuda_quantization_lora": "not_run_after_required_m3_failure",
+    "m5_media_pipelines": "not_run_after_required_m3_failure",
+    "m6_low_vram_training": "not_run_after_required_m3_failure"
+  },
+  "runtime_inventory": {
+    "acceptance_entrypoint": "scripts/remote/verify-milestone.sh accepts only M0 through M7 and has no M7A branch",
+    "pipeline_request_checkpoint_fields": 0,
+    "pipeline_runtime": "all 12 in-scope C# pipeline classes route through PipelineExecution and SeededMedia rather than a checkpoint-backed model",
+    "standard_profile_trainer": "absent; Ltx.Trainer exposes only M6 preprocessing and low-VRAM single-GPU LoRA training"
+  },
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_branch": "codex/ltx-csharp-m7a",
+  "source_reference_sha": "fb6c9b630d0bacfb0e1431fc21684d71b9f99277",
+  "starting_m6_sha": "87ddf3078caf1d41290ee514b6c3c61e06448160",
+  "state": "blocked"
+}

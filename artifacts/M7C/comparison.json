@@ -1,0 +1,36 @@
+{
+  "artifacts": {
+    "contact_sheet_jpg": {
+      "path": "/workspace/LTX-2/build/M7C/comparison-final/m7c-contact-sheet.jpg",
+      "sha256": "aa78f94e16c87743188d91bcb705cbc0d7e87ad4023399f7d5eab6eb2755bb6f",
+      "size_bytes": 236542
+    },
+    "side_by_side_mp4": {
+      "path": "/workspace/LTX-2/build/M7C/comparison-final/m7c-csharp-vs-python-side-by-side.mp4",
+      "sha256": "ab6258f332e5ed861603a58f3f0245c5b571088565ea41588db08fa69314678f",
+      "size_bytes": 6918928
+    }
+  },
+  "audio_apsnr_db": {
+    "channel_0": 171.886,
+    "channel_1": 171.886
+  },
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "video_metrics": {
+    "psnr_db": {
+      "average": 23.818049,
+      "u": 34.023154,
+      "v": 33.500916,
+      "y": 22.206588
+    },
+    "ssim": {
+      "all": 0.869215,
+      "u": 0.935704,
+      "v": 0.934696,
+      "y": 0.836223
+    }
+  },
+  "visual_review": "coherent_matching_beach_scene_across_five_sampled_times"
+}

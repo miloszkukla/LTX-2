@@ -1,0 +1,18 @@
+{
+  "generated_at_utc": "2026-08-20T11:03:44.655226Z",
+  "gpu": {
+    "compute_capability": "8.0",
+    "device_count": 1,
+    "driver": "580.173.02",
+    "memory_total_mib": 81920,
+    "name": "NVIDIA A100-SXM4-80GB",
+    "peak_memory_used_mib": 41847,
+    "peak_temperature_c": 32
+  },
+  "host": {
+    "minimum_memory_available_mib": 247950
+  },
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false
+}

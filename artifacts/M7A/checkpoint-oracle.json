@@ -1,0 +1,756 @@
+{
+  "fixture_revision": "m7a-real-checkpoint-runtime-v4",
+  "schema_version": 1,
+  "tensor_shapes": {
+    "audio_context": [
+      1,
+      1024,
+      2048
+    ],
+    "audio_decoder_latent": [
+      1,
+      8,
+      2,
+      16
+    ],
+    "audio_latent": [
+      1,
+      1,
+      128
+    ],
+    "audio_positions": [
+      1,
+      1,
+      1,
+      2
+    ],
+    "audio_velocity": [
+      1,
+      1,
+      128
+    ],
+    "decoded_audio": [
+      1,
+      2,
+      5,
+      64
+    ],
+    "decoded_video": [
+      1,
+      3,
+      1,
+      32,
+      32
+    ],
+    "decoded_waveform": [
+      1,
+      2,
+      2400
+    ],
+    "sigma": [
+      1
+    ],
+    "timesteps": [
+      1,
+      1
+    ],
+    "transformer_audio_block_0": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_1": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_10": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_11": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_12": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_13": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_14": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_15": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_16": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_17": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_18": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_19": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_2": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_20": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_21": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_22": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_23": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_24": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_25": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_26": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_27": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_28": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_29": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_3": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_30": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_31": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_32": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_33": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_34": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_35": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_36": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_37": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_38": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_39": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_4": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_40": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_41": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_42": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_43": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_44": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_45": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_46": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_47": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_5": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_6": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_7": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_8": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_block_9": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_embedded_timestep": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_prepared": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_audio_prompt_timestep": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_audio_timestep": [
+      1,
+      1,
+      18432
+    ],
+    "transformer_block_0_attn1": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_attn1.input": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_attn1.to_gate_logits": [
+      1,
+      1,
+      32
+    ],
+    "transformer_block_0_attn1.to_out": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_attn1.to_v": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_attn2": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_attn2.attended": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_attn2.context": [
+      1,
+      1024,
+      4096
+    ],
+    "transformer_block_0_attn2.input": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_attn2.k_norm": [
+      1,
+      1024,
+      4096
+    ],
+    "transformer_block_0_attn2.q_norm": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_attn2.to_gate_logits": [
+      1,
+      1,
+      32
+    ],
+    "transformer_block_0_attn2.to_k": [
+      1,
+      1024,
+      4096
+    ],
+    "transformer_block_0_attn2.to_out": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_attn2.to_q": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_attn2.to_v": [
+      1,
+      1024,
+      4096
+    ],
+    "transformer_block_0_audio_attn1": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_block_0_audio_attn2": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_block_0_audio_ff": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_block_0_audio_to_video_attn": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_ff": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_block_0_video_to_audio_attn": [
+      1,
+      1,
+      2048
+    ],
+    "transformer_video_adaln_embed_silu": [
+      1,
+      4096
+    ],
+    "transformer_video_adaln_embedded": [
+      1,
+      4096
+    ],
+    "transformer_video_adaln_linear_1": [
+      1,
+      4096
+    ],
+    "transformer_video_adaln_modulation": [
+      1,
+      36864
+    ],
+    "transformer_video_adaln_silu": [
+      1,
+      4096
+    ],
+    "transformer_video_adaln_time_projection": [
+      1,
+      256
+    ],
+    "transformer_video_block_0": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_1": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_10": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_11": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_12": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_13": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_14": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_15": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_16": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_17": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_18": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_19": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_2": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_20": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_21": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_22": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_23": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_24": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_25": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_26": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_27": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_28": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_29": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_3": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_30": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_31": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_32": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_33": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_34": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_35": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_36": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_37": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_38": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_39": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_4": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_40": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_41": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_42": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_43": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_44": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_45": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_46": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_47": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_5": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_6": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_7": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_8": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_block_9": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_embedded_timestep": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_output_norm": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_output_projection_input": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_prepared": [
+      1,
+      1,
+      4096
+    ],
+    "transformer_video_prompt_timestep": [
+      1,
+      1,
+      8192
+    ],
+    "transformer_video_timestep": [
+      1,
+      1,
+      36864
+    ],
+    "video_context": [
+      1,
+      1024,
+      4096
+    ],
+    "video_decoder_latent": [
+      1,
+      128,
+      1,
+      1,
+      1
+    ],
+    "video_latent": [
+      1,
+      1,
+      128
+    ],
+    "video_positions": [
+      1,
+      3,
+      1,
+      2
+    ],
+    "video_velocity": [
+      1,
+      1,
+      128
+    ]
+  },
+  "tolerances": {
+    "bf16": {
+      "atol": 0.005,
+      "rtol": 0.02
+    }
+  }
+}

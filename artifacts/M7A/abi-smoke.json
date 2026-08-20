@@ -1,0 +1,29 @@
+{
+  "abi": {
+    "cuda": "13.2",
+    "cxx11_abi": 1,
+    "ltx": "1.0",
+    "pytorch": "2.13.0",
+    "torchsharp_managed": "0.107.0",
+    "torchsharp_revision": "8f4def03b641b6753f18076aa5438f8eaaef2d30"
+  },
+  "generated_at_utc": "2026-08-20T10:58:44.784115Z",
+  "gpu": {
+    "sass_architecture": "sm_80"
+  },
+  "libraries": {
+    "libLibTorchSharp_sha256": "60f4f0e45e7c9507352db76fc6318914cf4cff1ec1c4e4f35f868d8c0d219179",
+    "libltx_cuda_sha256": "1ce7aab9837c98c146defe2649e9e1a0bc0945ea689ff48587c5a328863e2a0b"
+  },
+  "output": "LTX_ABI=1.0 TorchSharp=0.107.0 PyTorch=2.13.0 CUDA=13.2 GPU=sm_80 native=pass",
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "tests": {
+    "ltx_native_cuda": "pass",
+    "sass_only": "pass",
+    "torchsharp_abi_probe": "pass",
+    "torchsharp_cuda_tensor": "pass",
+    "torchsharp_native_add_linear": "pass"
+  }
+}
