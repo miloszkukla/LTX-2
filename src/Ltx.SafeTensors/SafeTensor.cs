@@ -10,7 +10,13 @@ public sealed class SafeTensor
     private readonly byte[] data;
 
     public SafeTensor(SafeTensorDType dtype, IEnumerable<long> shape, ReadOnlySpan<byte> data)
+        : this(dtype, shape, data.ToArray(), takeOwnership: true)
     {
+    }
+
+    internal SafeTensor(SafeTensorDType dtype, IEnumerable<long> shape, byte[] data, bool takeOwnership)
+    {
+        ArgumentNullException.ThrowIfNull(data);
         DType = dtype;
         Shape = shape.ToArray();
         ValidateShape(Shape);
@@ -24,7 +30,7 @@ public sealed class SafeTensor
                 nameof(data));
         }
 
-        this.data = data.ToArray();
+        this.data = takeOwnership ? data : data.ToArray();
     }
 
     public SafeTensorDType DType { get; }

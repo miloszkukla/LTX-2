@@ -28,16 +28,28 @@ TorchSharpRuntime.Initialize(args[2]);
 var passed = 0;
 var mixedPath = Path.Combine(fixtureDirectory, "storage-mixed.safetensors");
 var mixed = SafeTensorFile.Load(mixedPath);
+var mixedIndex = SafeTensorIndex.Open(mixedPath);
 AssertMetadata("mixed metadata", mixed.Metadata, manifest.Metadata);
+AssertMetadata("indexed mixed metadata", mixedIndex.Metadata, manifest.Metadata);
 passed++;
 
 AssertKeys("mixed keys", mixed.Tensors.Keys, manifest.MixedTensors.Keys);
+AssertKeys("indexed mixed keys", mixedIndex.Tensors.Keys, manifest.MixedTensors.Keys);
 foreach (var (name, expected) in manifest.MixedTensors)
 {
     var actual = mixed.Tensors[name];
-    if (!actual.Shape.SequenceEqual(expected.Shape))
+    var descriptor = mixedIndex.Tensors[name];
+    if (!actual.Shape.SequenceEqual(expected.Shape) || !descriptor.Shape.SequenceEqual(expected.Shape) ||
+        descriptor.ByteLength != actual.Data.Length)
     {
         throw new InvalidDataException($"{name}: shape mismatch.");
+    }
+
+    var indexed = mixedIndex.ReadTensor(name);
+    if (indexed.DType != actual.DType || !indexed.Shape.SequenceEqual(actual.Shape) ||
+        !indexed.Data.Span.SequenceEqual(actual.Data.Span))
+    {
+        throw new InvalidDataException($"{name}: indexed payload mismatch.");
     }
 }
 passed++;
