@@ -1,5 +1,18 @@
 # C# port status
 
+## Plan revision history
+
+- M0 bootstrap plan: `C_SHARP_PORT_PLAN.M0.md`, SHA-256 `d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6`. This is the byte-for-byte plan accepted at M0 and remains immutable historical evidence.
+- Current M1 plan: `C_SHARP_PORT_PLAN.md`, revision M1, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M1.md`.
+
+## M1 — handoff acknowledged
+
+- Handoff acknowledged on 2026-08-20 UTC from accepted M0 checkpoint `28ad7ad1e6e1594e5f3b8ce1a29d7065fb90bacb`; no M1 implementation was started before this documentation/status checkpoint.
+- Scope: C# foundation and ABI only, on `codex/ltx-csharp` and the existing single RTX 5090 32 GB worker.
+- Acceptance gate: `Ltx.sln` Release build, LTX TorchSharp/native CUDA smoke test, and parity-fixture runner must pass through `scripts/remote/verify-milestone.sh M1`.
+- State: plan/status checkpoint awaiting commit and push; implementation and M1 verification are pending.
+- Redacted heartbeat: M1 `plan_handoff`; no failure recorded.
+
 ## M0 — accepted checkpoint
 
 - Verification: `scripts/remote/verify-milestone.sh M0` (exit 0).
