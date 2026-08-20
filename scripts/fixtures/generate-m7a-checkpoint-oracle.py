@@ -16,7 +16,9 @@ from safetensors.torch import save_file
 from ltx_core.loader import SingleGPUModelBuilder
 from ltx_core.model.audio_vae import (
     AUDIO_VAE_DECODER_COMFY_KEYS_FILTER,
+    VOCODER_COMFY_KEYS_FILTER,
     AudioDecoderConfigurator,
+    VocoderConfigurator,
 )
 from ltx_core.model.transformer import LTXModelConfigurator, LTXV_MODEL_COMFY_RENAMING_MAP
 from ltx_core.model.transformer.attention import PytorchAttention
@@ -217,16 +219,28 @@ def main() -> None:
         decoded_audio = audio_decoder(audio_latent_4d)
     tensors["audio_decoder_latent"] = cpu(audio_latent_4d)
     tensors["decoded_audio"] = cpu(decoded_audio)
+    del audio_decoder, audio_latent_4d
+    gc.collect()
+    torch.cuda.empty_cache()
+
+    vocoder = SingleGPUModelBuilder(
+        model_class_configurator=VocoderConfigurator,
+        model_path=args.checkpoint,
+        model_sd_ops=VOCODER_COMFY_KEYS_FILTER,
+    ).build(device=device, dtype=dtype).eval()
+    with torch.inference_mode():
+        decoded_waveform = vocoder(decoded_audio)
+    tensors["decoded_waveform"] = cpu(decoded_waveform)
 
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     metadata = {
         "schema_version": "1",
-        "fixture_revision": "m7a-real-checkpoint-runtime-v3",
+        "fixture_revision": "m7a-real-checkpoint-runtime-v4",
         "framework": torch.__version__,
         "checkpoint_model_version": "2.3.0",
         "seed": "20260820",
-        "scope": "full_48_layer_av_transformer_conv_video_vae_audio_vae",
+        "scope": "full_48_layer_av_transformer_conv_video_vae_audio_vae_vocoder_bwe",
         "attention_backend": "pytorch_sdpa_math",
     }
     save_file(tensors, output, metadata=metadata)

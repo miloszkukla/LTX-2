@@ -25,7 +25,7 @@ if (!cuda.is_available() || cuda.device_count() != 1)
 
 var stopwatch = Stopwatch.StartNew();
 var oracle = SafeTensorIndex.Open(oraclePath);
-if (oracle.Metadata.GetValueOrDefault("fixture_revision") != "m7a-real-checkpoint-runtime-v3" ||
+if (oracle.Metadata.GetValueOrDefault("fixture_revision") != "m7a-real-checkpoint-runtime-v4" ||
     oracle.Metadata.GetValueOrDefault("attention_backend") != "pytorch_sdpa_math")
 {
     throw new InvalidDataException("M7A oracle revision mismatch.");
@@ -106,6 +106,19 @@ using (var scope = NewDisposeScope())
     if (decoder.SampleRate != 16000 || decoder.MelBins != 64)
     {
         throw new InvalidDataException("Audio decoder metadata auto-detection mismatch.");
+    }
+    passed++;
+}
+store.ClearCache();
+
+using (var scope = NewDisposeScope())
+{
+    var vocoder = new CheckpointVocoder(store, CUDA);
+    using var actual = vocoder.Decode(Load("decoded_audio"));
+    Compare("vocoder_with_bandwidth_extension", actual, Load("decoded_waveform"));
+    if (vocoder.OutputSampleRate != 48_000)
+    {
+        throw new InvalidDataException("Vocoder output sample-rate metadata auto-detection mismatch.");
     }
     passed++;
 }

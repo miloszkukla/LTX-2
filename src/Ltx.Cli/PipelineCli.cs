@@ -53,6 +53,7 @@ public static class PipelineCli
                 fps = result.FramesPerSecond,
                 has_audio = result.HasAudio,
                 hdr = result.IsHdr,
+                execution = result.Execution,
             }));
             return 0;
         }
@@ -124,7 +125,17 @@ public static class PipelineCli
             EndTime = options.Double("--end-time", 0),
             HdrColorSpace = hdr,
             SkipPreview = options.Has("--skip-mp4"),
+            FixtureMode = options.Has("--fixture-mode"),
+            CheckpointPath = options.Optional("--distilled-checkpoint-path") ??
+                options.Optional("--checkpoint-path") ?? options.Optional("--transformer-path"),
+            TextEmbeddingsPath = options.Optional("--text-embeddings"),
+            TorchSharpLibraryPath = Environment.GetEnvironmentVariable("LTX_TORCHSHARP_LIBRARY"),
+            InferenceSteps = options.Integer("--num-inference-steps", 8),
         };
+        if (!request.FixtureMode && request.TextEmbeddingsPath is null)
+        {
+            throw new CliUsageException("missing --text-embeddings for native checkpoint inference");
+        }
         ValidateRequired(mode, request);
         return request;
     }
