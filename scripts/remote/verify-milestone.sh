@@ -10,6 +10,180 @@ fi
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 cd "$repo_root"
 
+if [[ $milestone == M5 ]]; then
+    failure_heartbeat() {
+        scripts/remote/publish-heartbeat.sh M5 blocked acceptance_gate_failed || true
+    }
+    trap failure_heartbeat ERR
+
+    expected_m0_plan_sha=d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6
+    expected_accepted_plan_sha=7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea
+    expected_m5_plan_sha=c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2
+    actual_m0_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M0.md | awk '{print $1}')
+    actual_m1_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M1.md | awk '{print $1}')
+    actual_m2_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M2.md | awk '{print $1}')
+    actual_m3_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M3.md | awk '{print $1}')
+    actual_m4_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M4.md | awk '{print $1}')
+    actual_m5_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.md | awk '{print $1}')
+    if [[ $actual_m0_plan_sha != "$expected_m0_plan_sha" || \
+          $actual_m1_plan_sha != "$expected_accepted_plan_sha" || \
+          $actual_m2_plan_sha != "$expected_accepted_plan_sha" || \
+          $actual_m3_plan_sha != "$expected_accepted_plan_sha" || \
+          $actual_m4_plan_sha != "$expected_accepted_plan_sha" || \
+          $actual_m5_plan_sha != "$expected_m5_plan_sha" ]]; then
+        echo "M0/M1/M2/M3/M4/M5 plan preservation gate failed" >&2
+        exit 1
+    fi
+
+    python3 - <<'PY'
+import json
+from pathlib import Path
+
+summary = json.loads(Path("artifacts/M4/summary.json").read_text())
+if summary.get("milestone") != "M4" or summary.get("state") != "accepted":
+    raise SystemExit("M4 accepted prerequisite is missing")
+PY
+
+    artifact_dir="$repo_root/artifacts/M5"
+    mkdir -p "$artifact_dir"
+    dotnet build Ltx.sln --configuration Release --nologo
+    scripts/remote/run-m1-smoke.sh "$artifact_dir/abi-smoke.json"
+    scripts/remote/run-m1-parity.sh "$artifact_dir/foundation-parity.json"
+    scripts/remote/run-m2-storage.sh "$artifact_dir/storage.json"
+    scripts/remote/run-m3-core.sh "$artifact_dir/core-model.json"
+    scripts/remote/run-m4-cuda.sh "$artifact_dir/cuda-quantization-lora.json"
+    scripts/remote/run-m5-media.sh "$artifact_dir/media-pipelines.json"
+    git diff --check
+
+    python3 - <<'PY'
+import json
+from pathlib import Path
+
+root = Path("artifacts/M5")
+smoke = json.loads((root / "abi-smoke.json").read_text())
+foundation = json.loads((root / "foundation-parity.json").read_text())
+storage = json.loads((root / "storage.json").read_text())
+core = json.loads((root / "core-model.json").read_text())
+m4 = json.loads((root / "cuda-quantization-lora.json").read_text())
+m5 = json.loads((root / "media-pipelines.json").read_text())
+if any(result.get("result") != "pass" for result in (smoke, foundation, storage, core, m4, m5)):
+    raise SystemExit("M5 result artifact is not passing")
+if foundation.get("test_totals") != {"passed": 2, "failed": 0, "skipped": 0}:
+    raise SystemExit("M5 foundation regression totals mismatch")
+if storage.get("test_totals") != {"passed": 16, "failed": 0, "skipped": 0}:
+    raise SystemExit("M5 storage regression totals mismatch")
+if core.get("test_totals") != {"passed": 34, "failed": 0, "skipped": 0}:
+    raise SystemExit("M5 core-model regression totals mismatch")
+if m4.get("test_totals") != {"passed": 45, "failed": 0, "skipped": 0}:
+    raise SystemExit("M5 CUDA/quantization/LoRA regression totals mismatch")
+if m5.get("test_totals") != {"passed": 51, "failed": 0, "skipped": 0}:
+    raise SystemExit("M5 media/pipeline totals mismatch")
+if m5.get("suite_totals") != {
+    "media": 9,
+    "pipelines": 12,
+    "cli_modes": 12,
+    "cli_help": 12,
+    "cli_errors": 6,
+}:
+    raise SystemExit("M5 required suite totals mismatch")
+inventory = m5.get("pipeline_inventory", {})
+if inventory.get("total") != 15 or inventory.get("in_scope") != 12 or inventory.get("tested") != 12:
+    raise SystemExit("M5 does not test every in-scope single-GPU pipeline")
+deferred = inventory.get("deferred", [])
+if len(deferred) != 3 or any("_mgpu" not in item.get("module", "") for item in deferred):
+    raise SystemExit("M5 deferred pipeline inventory mismatch")
+if m5.get("fixture_revision") != "m5-media-pipelines-v1":
+    raise SystemExit("M5 fixture revision mismatch")
+if m5.get("numerical_tolerances") != {
+    "fp32": {"rtol": 1e-4, "atol": 1e-5, "result": "pass"},
+}:
+    raise SystemExit("M5 numerical tolerance mismatch")
+cli = m5.get("cli_behavior", {})
+if len(cli.get("mode_success", {})) != 12 or len(cli.get("help_behavior", {})) != 12 or \
+        len(cli.get("error_behavior", {})) != 6:
+    raise SystemExit("M5 CLI exit/output behavior coverage mismatch")
+media = m5.get("media", {})
+if media.get("hdr_ic_lora_output") != "nine_exr_frames_and_prores_mov_pass" or \
+        media.get("exr") != "openimageio_native_read_write_sequence_pass":
+    raise SystemExit("M5 HDR/EXR output behavior mismatch")
+PY
+
+    python3 - <<'PY'
+import hashlib
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+root = Path("artifacts/M5")
+smoke = json.loads((root / "abi-smoke.json").read_text())
+foundation = json.loads((root / "foundation-parity.json").read_text())
+storage = json.loads((root / "storage.json").read_text())
+core = json.loads((root / "core-model.json").read_text())
+m4 = json.loads((root / "cuda-quantization-lora.json").read_text())
+m5 = json.loads((root / "media-pipelines.json").read_text())
+preflight = json.loads(Path("artifacts/M0/preflight.json").read_text())
+
+checksums = {
+    path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+    for path in sorted(root.glob("*.json"))
+    if path.name != "summary.json"
+}
+summary = {
+    "schema_version": 1,
+    "milestone": "M5",
+    "state": "accepted",
+    "generated_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+    "source_reference_sha": subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], text=True
+    ).strip(),
+    "plan_revision": "M5",
+    "plan_sha256": "c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2",
+    "verification_command": "scripts/remote/verify-milestone.sh M5",
+    "commands": [
+        {"command": "dotnet build Ltx.sln --configuration Release --nologo", "exit_code": 0},
+        {"command": "scripts/remote/run-m1-smoke.sh", "exit_code": 0},
+        {"command": "scripts/remote/run-m1-parity.sh", "exit_code": 0},
+        {"command": "scripts/remote/run-m2-storage.sh", "exit_code": 0},
+        {"command": "scripts/remote/run-m3-core.sh", "exit_code": 0},
+        {"command": "scripts/remote/run-m4-cuda.sh", "exit_code": 0},
+        {"command": "scripts/remote/run-m5-media.sh", "exit_code": 0},
+    ],
+    "toolchain": preflight["toolchain"],
+    "gpu": preflight["gpu"],
+    "abi": smoke["abi"],
+    "test_totals": {"passed": 152, "failed": 0, "skipped": 0},
+    "tests": {
+        **smoke["tests"],
+        "foundation_parity": "2_pass",
+        "storage_regression": "16_pass",
+        "core_model_regression": "34_pass",
+        "cuda_quantization_lora_regression": "45_pass",
+        "media": "9_pass",
+        "single_gpu_pipelines": "12_pass",
+        "cli_success_help_errors": "30_pass",
+    },
+    "suite_totals": m5["suite_totals"],
+    "pipeline_inventory": m5["pipeline_inventory"],
+    "cli_behavior": m5["cli_behavior"],
+    "media": m5["media"],
+    "fixture_revision": m5["fixture_revision"],
+    "fixture_set_sha256": m5["fixture_set_sha256"],
+    "fixture_sha256": m5["fixture_sha256"],
+    "dependencies": {**storage["dependencies"], **core["dependencies"], **m4["dependencies"], **m5["dependencies"]},
+    "numerical_tolerances": m5["numerical_tolerances"],
+    "artifact_sha256": checksums,
+    "secrets_recorded": False,
+}
+(root / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+PY
+
+    trap - ERR
+    scripts/remote/publish-heartbeat.sh M5 verified none
+    echo "M5 accepted"
+    exit 0
+fi
+
 if [[ $milestone == M4 ]]; then
     failure_heartbeat() {
         scripts/remote/publish-heartbeat.sh M4 blocked acceptance_gate_failed || true

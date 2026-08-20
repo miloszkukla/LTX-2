@@ -9,14 +9,19 @@
 - Accepted M4 plan: `C_SHARP_PORT_PLAN.M4.md`, revision M4, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `f23816de4e48905904d72bce02924a88dad9705a`; the coordinator's M4 revision was content-identical to the accepted M1, M2, and M3 revisions.
 - Current M5 plan: `C_SHARP_PORT_PLAN.md`, revision M5, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M5.md` and adds the approved M7A/M7B/M8 delivery and teardown workflow.
 
-## M5 — handoff acknowledged, implementation not started
+## M5 — accepted checkpoint
 
-- Handoff acknowledged on 2026-08-20 UTC from accepted M4 checkpoint `f23816de4e48905904d72bce02924a88dad9705a`; no M5 implementation was started before this documentation/status checkpoint.
+- Handoff acknowledged on 2026-08-20 UTC from accepted M4 checkpoint `f23816de4e48905904d72bce02924a88dad9705a`; no M5 implementation was started before the pushed documentation/status checkpoint `6185d477520bda9480797f82804f090647629112`.
 - Plan input: `/root/C_SHARP_PORT_PLAN.M5.md`, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`; tracked as `C_SHARP_PORT_PLAN.md` with accepted M0, M1, M2, M3, and M4 plan copies retained as historical evidence.
-- Accepted prerequisite: `artifacts/M4/summary.json` records milestone M4 as accepted with 101 passing checks, 0 failed, and 0 skipped; `origin/codex/ltx-csharp` is at the same accepted M4 checkpoint and the worktree was clean at handoff.
-- Worker: existing Vast instance `48162892`, single RTX 5090 32 GB, compute capability 12.0. The accepted ABI remains PyTorch `2.13.0+cu132`, CUDA `13.2`, TorchSharp `0.107.0`, and LTX native ABI `1.0`.
-- Acceptance target: `scripts/remote/verify-milestone.sh M5` must exit 0 after every in-scope non-`*_mgpu` CLI mode from `artifacts/M0/source-surface.json` passes small seeded video/audio/HDR/EXR fixtures with documented exit and output behavior preserved.
-- Known failures: none. Next action: implement M5 media and pipelines only.
+- Verification: `scripts/remote/verify-milestone.sh M5` (exit 0). The Release solution build, all M1–M4 prerequisite regressions, native media bridge, deterministic media/pipeline runner, exact M0 inventory gate, and process-level CLI behavior suite passed.
+- Starting/source checkpoint: `6185d477520bda9480797f82804f090647629112`; the final fork checkpoint SHA is recorded by the redacted heartbeat immediately after the atomic push because it cannot be embedded in its own commit.
+- Pipeline/CLI scope: all 12 in-scope single-GPU modes from the accepted M0 inventory have C# pipeline types, Python-module and command aliases, deterministic seeded execution, help output, success output, and invalid-argument/runtime exit behavior coverage. The only deferred pipeline entries remain exactly `distilled_mgpu`, `ti2vid_two_stages_mgpu`, and `ti2vid_two_stages_hq_mgpu`.
+- Media scope: FFmpeg-backed MP4 video and container-audio probe/decode/encode, PCM WAVE I/O, PNG still decode, scene-linear EXR read/write and sequences through the native OpenImageIO bridge, ACEScg/ACEScct/linear HDR conversion, HLG tagging, SDR tone mapping, and HDR IC-LoRA EXR plus ProRes MOV output passed.
+- Worker: existing Vast instance `48162892`, single RTX 5090 32 GB, compute capability 12.0. The accepted ABI remains PyTorch `2.13.0+cu132`, CUDA `13.2`, TorchSharp `0.107.0`, and LTX native ABI `1.0`; media dependencies are FFmpeg `6.1.1` and OpenImageIO `2.4.17.0`.
+- Fixed fixture: `m5-media-pipelines-v1`, seed `20260820`, fixture-set SHA-256 `f3c19f034acbac41c238f3fb2a15363bd95a7b3a008dde02ce1b35a3c01011e7`; tracked manifest SHA-256 `47a02c81895340ff6755c91c0116ccc14933737ffde4f70ae7aef3e55c8c6a92`.
+- Numerical and behavior results: FP32 passed at `rtol=1e-4`, `atol=1e-5`. The M5 suite passed 9 media, 12 pipeline, 12 CLI success, 12 CLI help, and 6 CLI error checks; documented invalid arguments exit 2, runtime media failures exit 1, and successes exit 0 with validated outputs.
+- Redacted evidence: `artifacts/M5/abi-smoke.json`, `artifacts/M5/foundation-parity.json`, `artifacts/M5/storage.json`, `artifacts/M5/core-model.json`, `artifacts/M5/cuda-quantization-lora.json`, `artifacts/M5/media-pipelines.json`, and `artifacts/M5/summary.json`; 152 checks passed, 0 failed, 0 skipped including every prerequisite regression.
+- Known failures: none. Next milestone: M6 is not started.
 
 ## M4 — accepted checkpoint
 

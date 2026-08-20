@@ -1,1 +1,3 @@
-Console.WriteLine("LTX C# CLI foundation (M1); pipeline commands arrive in M5.");
+using Ltx.Cli;
+
+return PipelineCli.Run(args, Console.Out, Console.Error);

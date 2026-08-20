@@ -57,6 +57,8 @@ wandb/
 !artifacts/M3/*.json
 !artifacts/M4/
 !artifacts/M4/*.json
+!artifacts/M5/
+!artifacts/M5/*.json
 !tests/fixtures/
 !tests/fixtures/M1/
 !tests/fixtures/M1/*.json
@@ -68,6 +70,14 @@ wandb/
 !tests/fixtures/M3/*.safetensors
 !tests/fixtures/M4/
 !tests/fixtures/M4/*.json
+!tests/fixtures/M5/
+!tests/fixtures/M5/*.json
+!tests/fixtures/M5/*.exr
+!tests/fixtures/M5/*.mp4
+!tests/fixtures/M5/*.png
+!tests/fixtures/M5/*.wav
+!tests/fixtures/M5/input_exr/
+!tests/fixtures/M5/input_exr/*.exr
 
 # .NET build products
 **/bin/

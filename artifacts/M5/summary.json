@@ -1,0 +1,298 @@
+{
+  "abi": {
+    "cuda": "13.2",
+    "cxx11_abi": 1,
+    "ltx": "1.0",
+    "pytorch": "2.13.0",
+    "torchsharp_managed": "0.107.0",
+    "torchsharp_revision": "8f4def03b641b6753f18076aa5438f8eaaef2d30"
+  },
+  "artifact_sha256": {
+    "abi-smoke.json": "fbac5a10b5d8ec8ef998d3aa91105907c16ae7fb948f3118437ad347f3fa9681",
+    "core-model.json": "e460250fdc2fd176829d3c375f94219bfaa42531e4896f3ff2a71c7cdb91893f",
+    "cuda-quantization-lora.json": "babef6cb63b3200ebca760de3d5545285d1b30f61744f8078d64bb0d90edb7b5",
+    "foundation-parity.json": "23452f17c44f4f0a656d14e08510c8ffb91b25611a138f2574f919e4d70cd8c3",
+    "media-pipelines.json": "9aa01ed67eeba400451d6b756f9aa0abf27fafbf798ab1b47e6954cb4d504cd3",
+    "storage.json": "09fa3d4a26c9529c418b5363c2e42e298cf897e38da820f6bab93a0f0199ae82"
+  },
+  "cli_behavior": {
+    "error_behavior": {
+      "exr_requires_hdr": "exit_2",
+      "missing_audio": "exit_2",
+      "missing_output": "exit_2",
+      "retake_interval": "exit_2",
+      "runtime_missing_file": "exit_1",
+      "unknown_mode": "exit_2"
+    },
+    "help_behavior": {
+      "ltx_pipelines.a2vid_two_stage": "exit_0",
+      "ltx_pipelines.dfr_pipeline": "exit_0",
+      "ltx_pipelines.distilled": "exit_0",
+      "ltx_pipelines.dubit": "exit_0",
+      "ltx_pipelines.hdr_ic_lora": "exit_0",
+      "ltx_pipelines.ic_lora": "exit_0",
+      "ltx_pipelines.keyframe_interpolation": "exit_0",
+      "ltx_pipelines.retake": "exit_0",
+      "ltx_pipelines.t2a_one_stage": "exit_0",
+      "ltx_pipelines.ti2vid_one_stage": "exit_0",
+      "ltx_pipelines.ti2vid_two_stages": "exit_0",
+      "ltx_pipelines.ti2vid_two_stages_hq": "exit_0"
+    },
+    "mode_success": {
+      "ltx_pipelines.a2vid_two_stage": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.dfr_pipeline": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.distilled": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.dubit": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.hdr_ic_lora": {
+        "exr_frames": 9,
+        "kind": "hdr_exr_preview",
+        "preview": "input.mov"
+      },
+      "ltx_pipelines.ic_lora": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.keyframe_interpolation": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.retake": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.t2a_one_stage": {
+        "kind": "audio",
+        "sample_rate": 16000,
+        "samples": 18000
+      },
+      "ltx_pipelines.ti2vid_one_stage": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.ti2vid_two_stages": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      },
+      "ltx_pipelines.ti2vid_two_stages_hq": {
+        "frames": 9,
+        "height": 64,
+        "kind": "video_audio",
+        "width": 64
+      }
+    },
+    "result": "pass",
+    "schema_version": 1,
+    "secrets_recorded": false,
+    "suite_totals": {
+      "cli_errors": 6,
+      "cli_help": 12,
+      "cli_modes": 12
+    },
+    "test_totals": {
+      "failed": 0,
+      "passed": 30,
+      "skipped": 0
+    }
+  },
+  "commands": [
+    {
+      "command": "dotnet build Ltx.sln --configuration Release --nologo",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-smoke.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-parity.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m2-storage.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m3-core.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m4-cuda.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m5-media.sh",
+      "exit_code": 0
+    }
+  ],
+  "dependencies": {
+    "cuda": "13.2",
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "native_oiio_bridge_sha256": "4a0ee655931e029a981592e5fd9368be1db984fdad09fe64db904f1a4a1e8212",
+    "numpy": "2.3.2",
+    "openimageio": "2.4.17.0",
+    "packaging": "25.0",
+    "safetensors": "0.6.2",
+    "torch": "2.13.0+cu132",
+    "torchsharp": "0.107.0"
+  },
+  "fixture_revision": "m5-media-pipelines-v1",
+  "fixture_set_sha256": "f3c19f034acbac41c238f3fb2a15363bd95a7b3a008dde02ce1b35a3c01011e7",
+  "fixture_sha256": {
+    "input.exr": "ce05bfd7c93990bd2c04b06b9329c36b582a80d78e25bf4fc2d1da9f93001bca",
+    "input.mp4": "5b001adbed04ea9c553673a5b80282df515d67548c61d98a096f4f8996d8de85",
+    "input.png": "04c701f2a098616320e3dd8cae89cbffbdba3829323b1d3cd6bec7db2ce9387b",
+    "input.wav": "08e7b7c5e940143b76896d6b78f4d71d76aeb2dfa4d69b8fb42f3d4a38050b62",
+    "input_exr/frame_00000.exr": "ce05bfd7c93990bd2c04b06b9329c36b582a80d78e25bf4fc2d1da9f93001bca",
+    "input_exr/frame_00001.exr": "0b6cbbebf41990c2fe893924ea6902eba4e786ab7e578fe35855bd7ffc1ea5c6",
+    "input_exr/frame_00002.exr": "1e2081be8a6d33c9cac6dbaaaa7c1b2fee9ef940078ce1d9c96ee77b6a0a9219",
+    "input_exr/frame_00003.exr": "86c4b27c57315212c151000c48067d6f4d7ebdb23a4cb2744501b18ddde8af95",
+    "input_exr/frame_00004.exr": "04dcceee3d6d2de0740eefdbd04cef7151a7df9504b711bf35d793d171eb639f",
+    "input_exr/frame_00005.exr": "7d416fcfb42c4faf8398a64666d5228d32a2132edf404aacaba23cc0614ef219",
+    "input_exr/frame_00006.exr": "db3b062340a6a064f028e81ad9dcf194c497750d2edfbd923a10a45ed2a6d882",
+    "input_exr/frame_00007.exr": "1665f0b06b0a1b53bb73cbcadcc0aea2d5eee7cda6daea487d898d37d3ef6c53",
+    "input_exr/frame_00008.exr": "eafc408e7b057e15c933a01ee3293b341ddbc891696bac064ed591e2eb0f2775",
+    "manifest.json": "47a02c81895340ff6755c91c0116ccc14933737ffde4f70ae7aef3e55c8c6a92"
+  },
+  "generated_at_utc": "2026-08-20T03:46:39.800887Z",
+  "gpu": {
+    "compute_capability": "12.0",
+    "driver": "580.95.05",
+    "driver_policy": "CUDA 13.x minor-version compatibility; SASS-only native build; no PTX JIT",
+    "memory_total_mib": 32607,
+    "memory_used_mib": 2,
+    "name": "NVIDIA GeForce RTX 5090",
+    "sass_architecture": "sm_120",
+    "temperature_c": 35
+  },
+  "media": {
+    "audio": "pcm_wave_and_container_audio_pass",
+    "exr": "openimageio_native_read_write_sequence_pass",
+    "hdr": "rec2020_hlg_tags_and_tonemap_pass",
+    "hdr_ic_lora_output": "nine_exr_frames_and_prores_mov_pass",
+    "images": "png_decode_pass",
+    "video": "ffmpeg_mp4_decode_encode_pass"
+  },
+  "milestone": "M5",
+  "numerical_tolerances": {
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "pipeline_inventory": {
+    "correctness": {
+      "ltx_pipelines.a2vid_two_stage": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.dfr_pipeline": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.distilled": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.dubit": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.hdr_ic_lora": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.ic_lora": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.keyframe_interpolation": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.retake": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.t2a_one_stage": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.ti2vid_one_stage": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.ti2vid_two_stages": "seeded_fixture_and_cli_pass",
+      "ltx_pipelines.ti2vid_two_stages_hq": "seeded_fixture_and_cli_pass"
+    },
+    "deferred": [
+      {
+        "module": "ltx_pipelines.distilled_mgpu",
+        "name": "distilled_mgpu",
+        "path": "packages/ltx-pipelines/src/ltx_pipelines/distilled_mgpu.py",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "module": "ltx_pipelines.ti2vid_two_stages_hq_mgpu",
+        "name": "ti2vid_two_stages_hq_mgpu",
+        "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_hq_mgpu.py",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "module": "ltx_pipelines.ti2vid_two_stages_mgpu",
+        "name": "ti2vid_two_stages_mgpu",
+        "path": "packages/ltx-pipelines/src/ltx_pipelines/ti2vid_two_stages_mgpu.py",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      }
+    ],
+    "in_scope": 12,
+    "tested": 12,
+    "total": 15
+  },
+  "plan_revision": "M5",
+  "plan_sha256": "c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_reference_sha": "6185d477520bda9480797f82804f090647629112",
+  "state": "accepted",
+  "suite_totals": {
+    "cli_errors": 6,
+    "cli_help": 12,
+    "cli_modes": 12,
+    "media": 9,
+    "pipelines": 12
+  },
+  "test_totals": {
+    "failed": 0,
+    "passed": 152,
+    "skipped": 0
+  },
+  "tests": {
+    "cli_success_help_errors": "30_pass",
+    "core_model_regression": "34_pass",
+    "cuda_quantization_lora_regression": "45_pass",
+    "foundation_parity": "2_pass",
+    "ltx_native_cuda": "pass",
+    "media": "9_pass",
+    "sass_only": "pass",
+    "single_gpu_pipelines": "12_pass",
+    "storage_regression": "16_pass",
+    "torchsharp_abi_probe": "pass",
+    "torchsharp_cuda_tensor": "pass"
+  },
+  "toolchain": {
+    "cmake": "cmake version 3.28.3",
+    "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "cuda_release": "13.2",
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "ninja": "1.11.1",
+    "python": "Python 3.12.3",
+    "uv": "uv 0.12.5 (x86_64-unknown-linux-gnu)"
+  },
+  "verification_command": "scripts/remote/verify-milestone.sh M5"
+}

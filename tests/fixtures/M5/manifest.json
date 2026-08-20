@@ -1,0 +1,245 @@
+{
+  "audio": {
+    "first_samples": [
+      0.08392333984375,
+      0.099273681640625,
+      0.1138916015625,
+      0.12762451171875,
+      0.14044189453125,
+      0.1522216796875,
+      0.162841796875,
+      0.1722412109375
+    ],
+    "sample_count": 18000,
+    "sample_rate": 16000
+  },
+  "fixture_revision": "m5-media-pipelines-v1",
+  "fixture_sha256": {
+    "input.exr": "ce05bfd7c93990bd2c04b06b9329c36b582a80d78e25bf4fc2d1da9f93001bca",
+    "input.mp4": "5b001adbed04ea9c553673a5b80282df515d67548c61d98a096f4f8996d8de85",
+    "input.png": "04c701f2a098616320e3dd8cae89cbffbdba3829323b1d3cd6bec7db2ce9387b",
+    "input.wav": "08e7b7c5e940143b76896d6b78f4d71d76aeb2dfa4d69b8fb42f3d4a38050b62",
+    "input_exr/frame_00000.exr": "ce05bfd7c93990bd2c04b06b9329c36b582a80d78e25bf4fc2d1da9f93001bca",
+    "input_exr/frame_00001.exr": "0b6cbbebf41990c2fe893924ea6902eba4e786ab7e578fe35855bd7ffc1ea5c6",
+    "input_exr/frame_00002.exr": "1e2081be8a6d33c9cac6dbaaaa7c1b2fee9ef940078ce1d9c96ee77b6a0a9219",
+    "input_exr/frame_00003.exr": "86c4b27c57315212c151000c48067d6f4d7ebdb23a4cb2744501b18ddde8af95",
+    "input_exr/frame_00004.exr": "04dcceee3d6d2de0740eefdbd04cef7151a7df9504b711bf35d793d171eb639f",
+    "input_exr/frame_00005.exr": "7d416fcfb42c4faf8398a64666d5228d32a2132edf404aacaba23cc0614ef219",
+    "input_exr/frame_00006.exr": "db3b062340a6a064f028e81ad9dcf194c497750d2edfbd923a10a45ed2a6d882",
+    "input_exr/frame_00007.exr": "1665f0b06b0a1b53bb73cbcadcc0aea2d5eee7cda6daea487d898d37d3ef6c53",
+    "input_exr/frame_00008.exr": "eafc408e7b057e15c933a01ee3293b341ddbc891696bac064ed591e2eb0f2775"
+  },
+  "oracle": {
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "implementation": "python-standard-library-xorshift32",
+    "openimageio": "2.4.17.0"
+  },
+  "pipeline_modes": [
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.09926900462286921,
+        0.11388024485890567,
+        0.12764202421851137,
+        0.1404516901900892,
+        0.1522136923109889,
+        0.16284029490201005,
+        0.17225223150950536
+      ],
+      "command": "a2vid-two-stage",
+      "module": "ltx_pipelines.a2vid_two_stage",
+      "pipeline": "A2VidPipelineTwoStage",
+      "preview_sha256": "2c6312002d8ac434a43c317004b1a404826082472233e3bc780c58ab8d4d18f6"
+    },
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.10042588482935531,
+        0.11606521944953706,
+        0.13069992659608134,
+        0.14420333241322167,
+        0.15645855526720148,
+        0.16735951744039745,
+        0.17681186330982265
+      ],
+      "command": "dfr-pipeline",
+      "module": "ltx_pipelines.dfr_pipeline",
+      "pipeline": "DFRPipeline",
+      "preview_sha256": "d4754417916433c2060b95a357b462fc56627d88e273a40afdad4af93750b7e7"
+    },
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.10157828932863332,
+        0.11822950343227197,
+        0.13370540608469336,
+        0.1478521523903572,
+        0.16052911050655233,
+        0.17161025965497861,
+        0.18098544288573187
+      ],
+      "command": "distilled",
+      "module": "ltx_pipelines.distilled",
+      "pipeline": "DistilledPipeline",
+      "preview_sha256": "76d32c60194d594425d824ac46775343e1274e7311c9becc38cdd3fba81a1bae"
+    },
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.10272616676118439,
+        0.1203727109865219,
+        0.13665725720610716,
+        0.151395548379504,
+        0.1644208230952442,
+        0.17558570244957278,
+        0.18476385761521286
+      ],
+      "command": "dubit",
+      "module": "ltx_pipelines.dubit",
+      "pipeline": "DubItPipeline",
+      "preview_sha256": "f52c881bf7a48f2263abe516e52404bc6473371d179b230c73075229caa39107"
+    },
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.10386946596924862,
+        0.1224944600489319,
+        0.13955429599207142,
+        0.1548309938098266,
+        0.16812935734492282,
+        0.17927946836692452,
+        0.18813885768185767
+      ],
+      "command": "hdr-ic-lora",
+      "module": "ltx_pipelines.hdr_ic_lora",
+      "pipeline": "HDRICLoraPipeline",
+      "preview_sha256": "c3f873b28679cb5338b39dd4be3a61bd7cff1647d8a730a859eee39d1645e674"
+    },
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.10500813599910522,
+        0.12459437238148957,
+        0.1423953604592052,
+        0.158156039083183,
+        0.17165058164299035,
+        0.1826856318195039,
+        0.19110307408757587
+      ],
+      "command": "ic-lora",
+      "module": "ltx_pipelines.ic_lora",
+      "pipeline": "ICLoraPipeline",
+      "preview_sha256": "270eb4c19df35ba14e9b5f7bc8f1410fe025f1565b27541309fdfc07bed5541f"
+    },
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.10614212610334305,
+        0.12667207363895272,
+        0.14517931107506224,
+        0.16136831332077775,
+        0.1749805730555625,
+        0.1857987285954115,
+        0.19365003474211484
+      ],
+      "command": "keyframe-interpolation",
+      "module": "ltx_pipelines.keyframe_interpolation",
+      "pipeline": "KeyframeInterpolationPipeline",
+      "preview_sha256": "7e6395609d34e84b44a16ac3e560851f9bcb00ffa22fdbd93495559828ef7c3a"
+    },
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.1072713857431225,
+        0.12872719343558262,
+        0.14790503121518986,
+        0.16446552605368525,
+        0.17811562169793974,
+        0.18861376462413837,
+        0.19577417859426602
+      ],
+      "command": "retake",
+      "module": "ltx_pipelines.retake",
+      "pipeline": "RetakePipeline",
+      "preview_sha256": "a7dd255273b5d4e9775f183675cf81f3ce01470f27bb8afcea6a35bda17c5f7e"
+    },
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.10839586459042792,
+        0.1307593654111717,
+        0.15057142761099981,
+        0.16744546885603764,
+        0.18105223486772448,
+        0.19112622398811932,
+        0.19747086777390158
+      ],
+      "command": "t2a-one-stage",
+      "module": "ltx_pipelines.t2a_one_stage",
+      "pipeline": "T2AOneStagePipeline",
+      "preview_sha256": "2e2b2bb4a1bc11d5c4cdbd08d02810e85833390c7264b737a2b80cd9213db5fe"
+    },
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.10951551253031043,
+        0.13276822729635337,
+        0.1531774307882711,
+        0.17030601691971328,
+        0.18378714093597925,
+        0.1933320761672267,
+        0.19873639771833174
+      ],
+      "command": "ti2vid-one-stage",
+      "module": "ltx_pipelines.ti2vid_one_stage",
+      "pipeline": "TI2VidOneStagePipeline",
+      "preview_sha256": "822a66f61de74941769020fe021941c36286866c02dcbec60127661aa6abc165"
+    },
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.1106302796631215,
+        0.13475342097718296,
+        0.15572199549610927,
+        0.17304513056940257,
+        0.18631729299209066,
+        0.19522778250458353,
+        0.19956800526087207
+      ],
+      "command": "ti2vid-two-stages",
+      "module": "ltx_pipelines.ti2vid_two_stages",
+      "pipeline": "TI2VidTwoStagesPipeline",
+      "preview_sha256": "84a3ed9a06c5eb680bae13ab47c4a8c4c58aa2419678cc379bec6b7acb6869ad"
+    },
+    {
+      "audio_first_samples": [
+        0.08391729236050521,
+        0.11174011630673684,
+        0.1367145925589774,
+        0.15820410112618954,
+        0.1756608567169709,
+        0.18863987223827902,
+        0.19681030188332313,
+        0.1999638746639606
+      ],
+      "command": "ti2vid-two-stages-hq",
+      "module": "ltx_pipelines.ti2vid_two_stages_hq",
+      "pipeline": "TI2VidTwoStagesHQPipeline",
+      "preview_sha256": "284d7b6dab691e4da255868bb650b01011766dde5f51d5357fc143f45eb7d922"
+    }
+  ],
+  "schema_version": 1,
+  "seed": 20260820,
+  "shape": {
+    "fps": 8,
+    "frames": 9,
+    "height": 64,
+    "width": 64
+  },
+  "tolerances": {
+    "fp32": {
+      "atol": 1e-05,
+      "rtol": 0.0001
+    }
+  }
+}
