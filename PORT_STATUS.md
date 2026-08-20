@@ -8,7 +8,18 @@
 - Accepted M3 plan: `C_SHARP_PORT_PLAN.M3.md`, revision M3, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `ebbfd2b38a8eb5fd346ffe9b3e3833bab05277d4`.
 - Accepted M4 plan: `C_SHARP_PORT_PLAN.M4.md`, revision M4, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `f23816de4e48905904d72bce02924a88dad9705a`; the coordinator's M4 revision was content-identical to the accepted M1, M2, and M3 revisions.
 - Accepted M5 plan: `C_SHARP_PORT_PLAN.M5.md`, revision M5, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. This preserves the byte-for-byte plan accepted with checkpoint `829c61c8d3b9733ae9b813bdf7b0dc892e978a7e` and includes the approved M7A/M7B/M8 delivery and teardown workflow.
-- Current M6 plan: `C_SHARP_PORT_PLAN.md`, revision M6, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M6.md`; the coordinator's M6 revision is content-identical to the accepted M5 revision.
+- Accepted M6 plan: revision M6, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. Its byte-for-byte contents remain preserved by accepted checkpoint `87ddf3078caf1d41290ee514b6c3c61e06448160`; the coordinator's M6 revision was content-identical to the accepted M5 revision.
+- Current M7A plan: `C_SHARP_PORT_PLAN.md`, revision M7A, SHA-256 `85da94394a9e37749d579bc333e79eedebe2a61f77324cacd7ecbd5d149247ba`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M7A.md` and adds the approved isolated M7A source/status branches and M8 integration requirement while retaining all accepted earlier milestone gates.
+
+## M7A — documentation/status checkpoint
+
+- Handoff acknowledged on 2026-08-20 UTC from accepted M6 checkpoint `87ddf3078caf1d41290ee514b6c3c61e06448160`; no M7A validation was started before this documentation/status checkpoint.
+- Isolation: `codex/ltx-csharp-m7a` was created and pushed from the exact accepted M6 SHA. M7B concurrently owns `codex/ltx-csharp`; M7A will not modify or push that branch.
+- Plan input: `/root/C_SHARP_PORT_PLAN.M7A.md`, SHA-256 `85da94394a9e37749d579bc333e79eedebe2a61f77324cacd7ecbd5d149247ba`; tracked byte-for-byte as `C_SHARP_PORT_PLAN.md`. All accepted M0–M6 plan and milestone evidence remains preserved in the tracked historical copies, accepted commits, and sections below.
+- Worker: one NVIDIA A100-SXM4-80GB (80 GiB, compute capability 8.0) with 294 GiB host RAM and a 200 GiB workspace disk. This satisfies the approved standard-profile validation tier; Hopper-specific native FP8 coverage is explicitly outside this A100 run.
+- Acceptance command: `scripts/remote/verify-milestone.sh M7A` after every M1–M6 suite, real-checkpoint single-GPU pipeline parity, the standard-profile trainer smoke test, and explicit deferred-scope reporting are implemented and passing.
+- Heartbeat isolation: only `codex/ltx-csharp-m7a-status` may be force-updated by this worker. `codex/ltx-csharp-status` remains exclusively owned by the concurrent M7B worker.
+- Known failures: none at handoff. Next action: publish this checkpoint, enable the isolated heartbeat, and validate M7A prerequisites without reducing scope.
 
 ## M6 — accepted checkpoint
 
