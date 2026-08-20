@@ -36,6 +36,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ltx.RealPipelineTests", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ltx.StandardTrainerTests", "tests/Ltx.StandardTrainerTests/Ltx.StandardTrainerTests.csproj", "{10A48C53-45F0-4484-BE01-04A6ED20A011}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ltx.UpsamplerTests", "tests/Ltx.UpsamplerTests/Ltx.UpsamplerTests.csproj", "{10A48C53-45F0-4484-BE01-04A6ED20A012}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ltx.VideoDecoderTests", "tests/Ltx.VideoDecoderTests/Ltx.VideoDecoderTests.csproj", "{10A48C53-45F0-4484-BE01-04A6ED20A013}"
+EndProject
 Global
   GlobalSection(SolutionConfigurationPlatforms) = preSolution
     Debug|Any CPU = Debug|Any CPU
@@ -110,5 +114,13 @@ Global
     {10A48C53-45F0-4484-BE01-04A6ED20A011}.Debug|Any CPU.Build.0 = Debug|Any CPU
     {10A48C53-45F0-4484-BE01-04A6ED20A011}.Release|Any CPU.ActiveCfg = Release|Any CPU
     {10A48C53-45F0-4484-BE01-04A6ED20A011}.Release|Any CPU.Build.0 = Release|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A012}.Release|Any CPU.Build.0 = Release|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+    {10A48C53-45F0-4484-BE01-04A6ED20A013}.Release|Any CPU.Build.0 = Release|Any CPU
   EndGlobalSection
 EndGlobal

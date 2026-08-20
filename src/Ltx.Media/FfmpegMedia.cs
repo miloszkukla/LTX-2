@@ -175,10 +175,13 @@ public static class FfmpegMedia
             if (temporaryWave is not null)
             {
                 arguments.AddRange(proResPreview
-                    ? ["-c:a", "pcm_s16le", "-shortest"]
-                    : ["-c:a", "aac", "-b:a", "96k", "-shortest"]);
+                    ? ["-c:a", "pcm_s16le"]
+                    : ["-c:a", "aac", "-b:a", "96k"]);
             }
-            arguments.AddRange(["-map_metadata", "-1", "-fflags", "+bitexact", outputPath]);
+            arguments.AddRange([
+                "-frames:v", video.FrameCount.ToString(CultureInfo.InvariantCulture),
+                "-map_metadata", "-1", "-fflags", "+bitexact", outputPath,
+            ]);
 
             using var input = new MemoryStream(video.Pixels, writable: false);
             ToolProcess.Run("ffmpeg", arguments, input, output: null);

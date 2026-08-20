@@ -1,0 +1,80 @@
+{
+  "checkpoint": {
+    "model_version": "2.3.0",
+    "path": "/workspace/ltx-model-cache/M7A/ltx23-distilled-checkpoint/ltx-2.3-22b-distilled-1.1.safetensors",
+    "repository": "Lightricks/LTX-2.3",
+    "revision": "6b5a83e3045eaf8e46cfa0acce512412aa2b9cce",
+    "sha256": "b33b7fe4bbfe084f484be4aaf90b0f1d95dca20d403ac4c0e037eb8c4f0af7cc"
+  },
+  "download_manifest": {
+    "files": [
+      {
+        "artifact_id": "ltx23-spatial-upscaler",
+        "path": "ltx-2.3-spatial-upscaler-x2-1.1.safetensors",
+        "sha256": "5f416311fa8172b65af67530758964708d29a317b830d689a51143b7f91913ed",
+        "size_bytes": 995743560,
+        "state": "downloaded_verified"
+      },
+      {
+        "artifact_id": "ltx23-gemma3-assets",
+        "path": "model-00001-of-00005.safetensors",
+        "sha256": "e6fb899db428481aafb45a20130457df6e247e7cb03b7d9f01ee4bc2a9a08138",
+        "size_bytes": 4979902192,
+        "state": "downloaded_verified"
+      },
+      {
+        "artifact_id": "ltx23-gemma3-assets",
+        "path": "model-00002-of-00005.safetensors",
+        "sha256": "d251e7fe9799d529405ddb61705a44cd700bd30a8b66a8d44ae26ddf8365dbc6",
+        "size_bytes": 4931296592,
+        "state": "downloaded_verified"
+      },
+      {
+        "artifact_id": "ltx23-gemma3-assets",
+        "path": "model-00003-of-00005.safetensors",
+        "sha256": "0684ef801385f0669a0b3e4ab160c50877efdbfa40eb97788595985de2743e78",
+        "size_bytes": 4931296656,
+        "state": "cached_verified"
+      },
+      {
+        "artifact_id": "ltx23-gemma3-assets",
+        "path": "model-00004-of-00005.safetensors",
+        "sha256": "b4b964e6526f81ccfa625c900b72ce92d5e0fd2debb75998763038ad06b9c541",
+        "size_bytes": 4931296656,
+        "state": "cached_verified"
+      },
+      {
+        "artifact_id": "ltx23-gemma3-assets",
+        "path": "model-00005-of-00005.safetensors",
+        "sha256": "4ef2de8f93e165b4e02425769fc566000b0674256ef0c3a27b23a0d45eb12088",
+        "size_bytes": 4601000928,
+        "state": "cached_verified"
+      }
+    ],
+    "generated_at_utc": "2026-08-20T07:57:19.730829Z",
+    "result": "pass",
+    "schema_version": 1,
+    "secrets_recorded": false,
+    "token_source": "inherited_runtime_environment"
+  },
+  "prompt_context": {
+    "offload": "none",
+    "path": "/workspace/LTX-2/build/M7C/beach-volleyball-context.safetensors",
+    "peak_cuda_memory_allocated_bytes": 51065139712,
+    "preparation_elapsed_seconds": 13.478882007068023,
+    "sha256": "f4e7df3f9768932049c4ab3a2f733db0f39b9144e2ed6bfa46d01248f49fa495"
+  },
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "spatial_upsampler": {
+    "path": "/workspace/ltx-model-cache/M7C/ltx23-spatial-upscaler/ltx-2.3-spatial-upscaler-x2-1.1.safetensors",
+    "repository": "Lightricks/LTX-2.3",
+    "revision": "6b5a83e3045eaf8e46cfa0acce512412aa2b9cce",
+    "sha256": "5f416311fa8172b65af67530758964708d29a317b830d689a51143b7f91913ed"
+  },
+  "text_encoder": {
+    "repository": "google/gemma-3-12b-it-qat-q4_0-unquantized",
+    "revision": "68f7ee4fbd59087436ada77ed2d62f373fdd4482"
+  }
+}

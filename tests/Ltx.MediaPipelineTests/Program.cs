@@ -35,6 +35,21 @@ var decodedVideo = FfmpegMedia.DecodeVideo(Path.Combine(fixture, "input.mp4"));
 Assert(decodedVideo.Width == width && decodedVideo.Height == height && decodedVideo.FrameCount == frames, "video decode");
 mediaChecks++;
 
+var muxPath = Path.Combine(Path.GetTempPath(), $"ltx-mux-frame-count-{Guid.NewGuid():N}.mp4");
+try
+{
+    var muxVideo = new RgbVideo(new byte[32 * 32 * 3 * 9], 32, 32, 9, 8);
+    var shorterAudio = new AudioData(new float[8_000], 8_000);
+    FfmpegMedia.EncodeVideo(muxPath, muxVideo, shorterAudio);
+    var muxInfo = FfmpegMedia.ProbeVideo(muxPath);
+    Assert(muxInfo.FrameCount == muxVideo.FrameCount, "audio must not truncate muxed video frames");
+}
+finally
+{
+    if (File.Exists(muxPath)) File.Delete(muxPath);
+}
+mediaChecks++;
+
 var expectedAudio = root.GetProperty("audio");
 var wave = WaveCodec.ReadPcm16(Path.Combine(fixture, "input.wav"));
 Assert(wave.SampleRate == expectedAudio.GetProperty("sample_rate").GetInt32() &&

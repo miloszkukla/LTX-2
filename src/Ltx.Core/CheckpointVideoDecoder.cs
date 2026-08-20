@@ -46,7 +46,7 @@ public sealed class CheckpointVideoDecoder
             .reshape(1, config.LatentChannels, 1, 1, 1);
         var standardDeviations = Weight("vae.per_channel_statistics.std-of-means")
             .reshape(1, config.LatentChannels, 1, 1, 1);
-        x = x.mul(standardDeviations).add(means);
+        x = TorchSharpRuntime.Add(x.mul(standardDeviations), means);
         x = Convolution(x, "vae.decoder.conv_in.conv");
 
         for (var blockIndex = 0; blockIndex < config.Blocks.Count; blockIndex++)
@@ -88,13 +88,98 @@ public sealed class CheckpointVideoDecoder
         return x.to(outputDType).MoveToOuterDisposeScope();
     }
 
+    /// <summary>
+    /// Decodes with the same automatic Conv-VAE tiling geometry used by the Python pipelines:
+    /// an aspect-coupled 768 px long side with 64 px spatial overlap and 80 frames with
+    /// 24 frames of temporal overlap. Tiles are blended with complementary trapezoidal masks.
+    /// </summary>
+    public Tensor DecodeTiled(Tensor latent)
+    {
+        ArgumentNullException.ThrowIfNull(latent);
+        if (latent.dim() != 5 || latent.shape[1] != config.LatentChannels)
+        {
+            throw new ArgumentException(
+                $"Video latent must have shape (batch, {config.LatentChannels}, frames, height, width).",
+                nameof(latent));
+        }
+
+        using var scope = NewDisposeScope();
+        var temporalScale = config.TemporalScale;
+        var heightScale = config.HeightScale;
+        var widthScale = config.WidthScale;
+        var outputFrames = checked(1 + (latent.shape[2] - 1) * temporalScale);
+        var outputHeight = checked(latent.shape[3] * heightScale);
+        var outputWidth = checked(latent.shape[4] * widthScale);
+        var temporalTiles = SplitBySize(
+            checked((int)latent.shape[2]),
+            Math.Max(2, 80 / temporalScale),
+            24 / temporalScale,
+            causal: true);
+        var longSide = Math.Max(outputHeight, outputWidth);
+        var heightTile = ResolveSpatialTile(outputHeight, longSide, heightScale);
+        var widthTile = ResolveSpatialTile(outputWidth, longSide, widthScale);
+        var heightTiles = SplitBySize(checked((int)latent.shape[3]), heightTile, 64 / heightScale);
+        var widthTiles = SplitBySize(checked((int)latent.shape[4]), widthTile, 64 / widthScale);
+        var output = zeros(
+            [latent.shape[0], 3, outputFrames, outputHeight, outputWidth],
+            dtype: latent.dtype,
+            device: device);
+
+        foreach (var temporal in temporalTiles)
+        foreach (var height in heightTiles)
+        foreach (var width in widthTiles)
+        {
+            using var tileScope = NewDisposeScope();
+            using var latentTile = latent
+                .narrow(2, temporal.Start, temporal.Length)
+                .narrow(3, height.Start, height.Length)
+                .narrow(4, width.Start, width.Length);
+            using var decodedTile = Decode(latentTile);
+            var temporalOutput = MapTemporal(temporal, temporalScale);
+            var heightOutput = MapSpatial(height, heightScale);
+            var widthOutput = MapSpatial(width, widthScale);
+            if (decodedTile.shape[2] != temporalOutput.Length ||
+                decodedTile.shape[3] != heightOutput.Length ||
+                decodedTile.shape[4] != widthOutput.Length)
+            {
+                throw new InvalidDataException("A decoded Conv-VAE tile does not match its mapped output region.");
+            }
+
+            using var temporalMask = TrapezoidalMask(
+                temporalOutput.Length,
+                temporalOutput.LeftRamp,
+                temporalOutput.RightRamp,
+                leftStartsFromZero: true).reshape(1, 1, temporalOutput.Length, 1, 1);
+            using var heightMask = TrapezoidalMask(
+                heightOutput.Length,
+                heightOutput.LeftRamp,
+                heightOutput.RightRamp).reshape(1, 1, 1, heightOutput.Length, 1);
+            using var widthMask = TrapezoidalMask(
+                widthOutput.Length,
+                widthOutput.LeftRamp,
+                widthOutput.RightRamp).reshape(1, 1, 1, 1, widthOutput.Length);
+            using var weighted = decodedTile
+                .mul(temporalMask)
+                .mul(heightMask)
+                .mul(widthMask);
+            using var region = output
+                .narrow(2, temporalOutput.Start, temporalOutput.Length)
+                .narrow(3, heightOutput.Start, heightOutput.Length)
+                .narrow(4, widthOutput.Start, widthOutput.Length);
+            using var accumulated = TorchSharpRuntime.Add(region, weighted);
+            region.copy_(accumulated);
+        }
+
+        return output.MoveToOuterDisposeScope();
+    }
+
     private Tensor Residual(Tensor input, string prefix)
     {
         var x = Silu(VaeExecution.PixelNorm(input));
         x = Convolution(x, prefix + ".conv1.conv");
         x = Silu(VaeExecution.PixelNorm(x));
         x = Convolution(x, prefix + ".conv2.conv");
-        return input.add(x);
+        return TorchSharpRuntime.Add(input, x);
     }
 
     private Tensor Convolution(Tensor input, string prefix)
@@ -149,7 +234,98 @@ public sealed class CheckpointVideoDecoder
 
     private static Tensor Silu(Tensor input) => input.mul(input.sigmoid());
 
+    private static int ResolveSpatialTile(long axis, long longSide, int scale)
+    {
+        var axisLatent = axis / scale;
+        var longLatent = longSide / scale;
+        var requestedLatent = 768 / scale;
+        var overlapLatent = 64 / scale;
+        var rounded = checked((int)Math.Round(
+            requestedLatent * axisLatent / (double)longLatent,
+            MidpointRounding.ToEven));
+        return Math.Max(Math.Max(2, overlapLatent + 1), rounded);
+    }
+
+    private static IReadOnlyList<TileInterval> SplitBySize(
+        int length,
+        int size,
+        int overlap,
+        bool causal = false)
+    {
+        if (length <= size)
+        {
+            return [new TileInterval(0, length, 0, 0)];
+        }
+        if (size <= 0 || overlap < 0 || overlap >= size)
+        {
+            throw new ArgumentOutOfRangeException(nameof(size), "Tile size and overlap are invalid.");
+        }
+        var stride = size - overlap;
+        var amount = (length + size - 2 * overlap - 1) / stride;
+        var intervals = new List<TileInterval>(amount)
+        {
+            new(0, size, 0, overlap),
+        };
+        for (var index = 1; index < amount - 1; index++)
+        {
+            intervals.Add(new(index * stride, index * stride + size, overlap, overlap));
+        }
+        intervals.Add(new((amount - 1) * stride, length, overlap, 0));
+        if (causal)
+        {
+            for (var index = 1; index < intervals.Count; index++)
+            {
+                var interval = intervals[index];
+                intervals[index] = interval with
+                {
+                    Start = interval.Start - 1,
+                    LeftRamp = interval.LeftRamp + 1,
+                };
+            }
+        }
+        return intervals;
+    }
+
+    private static TileInterval MapTemporal(TileInterval interval, int scale) => new(
+        interval.Start * scale,
+        1 + (interval.End - 1) * scale,
+        interval.LeftRamp == 0 ? 0 : 1 + (interval.LeftRamp - 1) * scale,
+        interval.RightRamp * scale);
+
+    private static TileInterval MapSpatial(TileInterval interval, int scale) => new(
+        interval.Start * scale,
+        interval.End * scale,
+        interval.LeftRamp * scale,
+        interval.RightRamp * scale);
+
+    private Tensor TrapezoidalMask(int length, int leftRamp, int rightRamp, bool leftStartsFromZero = false)
+    {
+        var values = Enumerable.Repeat(1F, length).ToArray();
+        if (leftRamp > 0)
+        {
+            var denominator = leftStartsFromZero ? leftRamp : leftRamp + 1;
+            for (var index = 0; index < leftRamp; index++)
+            {
+                values[index] *= (index + (leftStartsFromZero ? 0 : 1)) / (float)denominator;
+            }
+        }
+        if (rightRamp > 0)
+        {
+            var denominator = rightRamp + 1F;
+            for (var index = 0; index < rightRamp; index++)
+            {
+                values[length - rightRamp + index] *= (rightRamp - index) / denominator;
+            }
+        }
+        return tensor(values, dtype: ScalarType.Float32, device: device);
+    }
+
     private sealed record DecoderBlock(string Name, int Layers);
+
+    private sealed record TileInterval(int Start, int End, int LeftRamp, int RightRamp)
+    {
+        public int Length => End - Start;
+    }
 
     private sealed record DecoderConfig(
         string ClassName,
@@ -159,6 +335,16 @@ public sealed class CheckpointVideoDecoder
         bool ReflectSpatialPadding,
         IReadOnlyList<DecoderBlock> Blocks)
     {
+        public int TemporalScale => Blocks.Aggregate(
+            1,
+            (scale, block) => block.Name is "compress_time" or "compress_all" ? scale * 2 : scale);
+
+        public int HeightScale => PatchSize * Blocks.Aggregate(
+            1,
+            (scale, block) => block.Name is "compress_space" or "compress_all" ? scale * 2 : scale);
+
+        public int WidthScale => HeightScale;
+
         public static DecoderConfig Parse(IReadOnlyDictionary<string, string> metadata)
         {
             if (!metadata.TryGetValue("config", out var raw))

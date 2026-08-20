@@ -87,7 +87,9 @@ internal static class PipelineExecution
         var session = request.CheckpointSession ?? new CheckpointPipelineSession(
             Required(request.CheckpointPath, "checkpoint path"),
             Required(request.TextEmbeddingsPath, "--text-embeddings"),
-            request.TorchSharpLibraryPath);
+            request.TorchSharpLibraryPath,
+            request.SpatialUpsamplerPath,
+            request.OffloadMode);
         try
         {
             var generated = session.Generate(mode, request);
@@ -128,7 +130,8 @@ internal static class PipelineExecution
             return new PipelineResult(
                 mode.ModuleName, [Path.GetFullPath(outputPath)], generated.Video!.FrameCount,
                 generated.Video.FramesPerSecond, generated.Audio is not null,
-                request.HdrColorSpace is not null, "native_csharp_full_checkpoint");
+                request.HdrColorSpace is not null,
+                generated.TwoStage ? "native_csharp_two_stage_full_checkpoint" : "native_csharp_full_checkpoint");
         }
         finally
         {

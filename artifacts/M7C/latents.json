@@ -1,0 +1,301 @@
+{
+  "comparisons": {
+    "stage1_audio": {
+      "cosine": 0.9915962219238281,
+      "elements": 32128,
+      "exact_fraction": 0.031405627727508545,
+      "maximum_absolute_error": 1.13671875,
+      "rmse": 0.06246110796928406
+    },
+    "stage1_step0_video_input": {
+      "cosine": 0.9999071955680847,
+      "elements": 1523712,
+      "exact_fraction": 1.0,
+      "maximum_absolute_error": 0.0,
+      "rmse": 0.0
+    },
+    "stage1_step0_video_velocity": {
+      "cosine": 0.9998753070831299,
+      "elements": 1523712,
+      "exact_fraction": 0.26211974024772644,
+      "maximum_absolute_error": 0.110595703125,
+      "rmse": 0.007536906283348799
+    },
+    "stage1_video": {
+      "cosine": 0.9153267741203308,
+      "elements": 1523712,
+      "exact_fraction": 0.012045583687722683,
+      "maximum_absolute_error": 8.03125,
+      "rmse": 0.4150083065032959
+    },
+    "stage2_audio": {
+      "cosine": 0.9477697610855103,
+      "elements": 32128,
+      "exact_fraction": 0.009586653672158718,
+      "maximum_absolute_error": 2.9365234375,
+      "rmse": 0.2213510274887085
+    },
+    "stage2_video": {
+      "cosine": 0.8929765224456787,
+      "elements": 6094848,
+      "exact_fraction": 0.010552519001066685,
+      "maximum_absolute_error": 9.0,
+      "rmse": 0.4597310423851013
+    }
+  },
+  "csharp": {
+    "stage1_audio": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 3.53125,
+      "mean": 0.07096368074417114,
+      "minimum": -6.03125,
+      "shape": [
+        1,
+        8,
+        251,
+        16
+      ],
+      "standard_deviation": 0.47751614451408386
+    },
+    "stage1_step0_audio_input": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 4.1875,
+      "mean": -0.005295626353472471,
+      "minimum": -3.921875,
+      "shape": [
+        1,
+        251,
+        128
+      ],
+      "standard_deviation": 0.9946098923683167
+    },
+    "stage1_step0_audio_velocity": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 4.65625,
+      "mean": -0.14561113715171814,
+      "minimum": -4.90625,
+      "shape": [
+        1,
+        251,
+        128
+      ],
+      "standard_deviation": 1.1901775598526
+    },
+    "stage1_step0_video_input": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 5.125,
+      "mean": -0.000563546665944159,
+      "minimum": -4.8125,
+      "shape": [
+        1,
+        11904,
+        128
+      ],
+      "standard_deviation": 1.000740647315979
+    },
+    "stage1_step0_video_velocity": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 5.375,
+      "mean": -0.011012771166861057,
+      "minimum": -5.90625,
+      "shape": [
+        1,
+        11904,
+        128
+      ],
+      "standard_deviation": 1.1611042022705078
+    },
+    "stage1_video": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 8.125,
+      "mean": 0.011730014346539974,
+      "minimum": -7.25,
+      "shape": [
+        1,
+        128,
+        31,
+        16,
+        24
+      ],
+      "standard_deviation": 1.0082060098648071
+    },
+    "stage2_audio": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 4.34375,
+      "mean": 0.11765140295028687,
+      "minimum": -6.34375,
+      "shape": [
+        1,
+        8,
+        251,
+        16
+      ],
+      "standard_deviation": 0.6787036657333374
+    },
+    "stage2_step0_audio_input": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 4.25,
+      "mean": 0.008909543044865131,
+      "minimum": -3.5,
+      "shape": [
+        1,
+        251,
+        128
+      ],
+      "standard_deviation": 0.9100378751754761
+    },
+    "stage2_step0_audio_velocity": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 7.3125,
+      "mean": -0.1177009642124176,
+      "minimum": -5.15625,
+      "shape": [
+        1,
+        251,
+        128
+      ],
+      "standard_deviation": 1.132311463356018
+    },
+    "stage2_step0_video_input": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 4.59375,
+      "mean": 0.0006435521645471454,
+      "minimum": -4.625,
+      "shape": [
+        1,
+        47616,
+        128
+      ],
+      "standard_deviation": 0.9138473868370056
+    },
+    "stage2_step0_video_velocity": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 9.8125,
+      "mean": -0.011434860527515411,
+      "minimum": -10.8125,
+      "shape": [
+        1,
+        47616,
+        128
+      ],
+      "standard_deviation": 1.3831230401992798
+    },
+    "stage2_video": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 8.9375,
+      "mean": 0.0073645273223519325,
+      "minimum": -8.8125,
+      "shape": [
+        1,
+        128,
+        31,
+        32,
+        48
+      ],
+      "standard_deviation": 0.992651104927063
+    }
+  },
+  "csharp_fixture_sha256": "ca4769fcebabfe77d65d5ade99c02df7cb2dcd62891a6d09cec98366e381d49d",
+  "python": {
+    "stage1_audio": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 3.53125,
+      "mean": 0.07255987077951431,
+      "minimum": -6.03125,
+      "shape": [
+        1,
+        8,
+        251,
+        16
+      ],
+      "standard_deviation": 0.4737718105316162
+    },
+    "stage1_step0_video_input": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 5.125,
+      "mean": -0.000563546665944159,
+      "minimum": -4.8125,
+      "shape": [
+        1,
+        11904,
+        128
+      ],
+      "standard_deviation": 1.000740647315979
+    },
+    "stage1_step0_video_velocity": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 5.375,
+      "mean": -0.010964693501591682,
+      "minimum": -5.90625,
+      "shape": [
+        1,
+        11904,
+        128
+      ],
+      "standard_deviation": 1.1610486507415771
+    },
+    "stage1_video": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 8.1875,
+      "mean": 0.011087764985859394,
+      "minimum": -7.53125,
+      "shape": [
+        1,
+        128,
+        31,
+        16,
+        24
+      ],
+      "standard_deviation": 1.0095417499542236
+    },
+    "stage2_audio": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 4.15625,
+      "mean": 0.11714176833629608,
+      "minimum": -6.375,
+      "shape": [
+        1,
+        8,
+        251,
+        16
+      ],
+      "standard_deviation": 0.6695953011512756
+    },
+    "stage2_video": {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "maximum": 10.75,
+      "mean": 0.007310014683753252,
+      "minimum": -9.375,
+      "shape": [
+        1,
+        128,
+        31,
+        32,
+        48
+      ],
+      "standard_deviation": 0.9936875104904175
+    }
+  },
+  "python_fixture_sha256": "97cc7a9c8312812ebe3837cee2067e6f940f1dcb01791571709e161fd667cc77",
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false
+}

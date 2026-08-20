@@ -1,0 +1,452 @@
+{
+  "accepted_m7a_source_sha": "523d81b92c796048f2bbcc299c5c4f21e3fd5b5e",
+  "artifact_sha256": {
+    "abi-smoke.json": "d2dbbff813842ea00cec3c818759ca5982f707a94423501532c6756c18a3764e",
+    "checkpoint-runtime.json": "f387a65b4e8a74189c28bcff4571a5d6887575171dcf4999917d855f13bfcbb2",
+    "comparison.json": "3e8da1aba0291602c338c4deae5be0d3f12b146e467633deb49619e95d7b733a",
+    "hardware.json": "b0d3e5dd8e161953f7f185367b3197ae0204033ed1f7a6a146152bdad3f8aeb8",
+    "latents.json": "edf6ab372b8474e85c92edf649597a2390a0b327ba8cd8160e18adafcf2f4091",
+    "media-pipelines.json": "d86e39b682410b9106b01ea038076870cd20b95182fbf1bf645b705a45d2217a",
+    "models.json": "ee011849538fcc0a714e55390b9601e958b99ca0e101741682a0b5be76f80e9b",
+    "port-repair.json": "10451bcf5295a6c9c5e6b595d04291737e8b7bc4afaf58443b9c51c24e4c8095",
+    "production-transformer-regression.json": "600dbd5bb3e55964bc94f8239d6e9ca76e603a8924a545df969780ceec0aa0ce",
+    "production-transformer.json": "ea8a4f5c1fbec52b2496861ed9b3a68388e75758c6bc376d6a8bb455bd8e4409",
+    "tests.json": "1aee636e6fdf0641faa490030690f23c41569ffacb0161d0ebe85f56d8ce3641",
+    "videos.json": "6cf8b1987c9605164ae87e1a1a61e7769d242ccd8b4890444575a32d9ac82174"
+  },
+  "comparison": {
+    "artifacts": {
+      "contact_sheet_jpg": {
+        "path": "/workspace/LTX-2/build/M7C/comparison-final/m7c-contact-sheet.jpg",
+        "sha256": "aa78f94e16c87743188d91bcb705cbc0d7e87ad4023399f7d5eab6eb2755bb6f",
+        "size_bytes": 236542
+      },
+      "side_by_side_mp4": {
+        "path": "/workspace/LTX-2/build/M7C/comparison-final/m7c-csharp-vs-python-side-by-side.mp4",
+        "sha256": "ab6258f332e5ed861603a58f3f0245c5b571088565ea41588db08fa69314678f",
+        "size_bytes": 6918928
+      }
+    },
+    "audio_apsnr_db": {
+      "channel_0": 171.886,
+      "channel_1": 171.886
+    },
+    "result": "pass",
+    "schema_version": 1,
+    "secrets_recorded": false,
+    "video_metrics": {
+      "psnr_db": {
+        "average": 23.818049,
+        "u": 34.023154,
+        "v": 33.500916,
+        "y": 22.206588
+      },
+      "ssim": {
+        "all": 0.869215,
+        "u": 0.935704,
+        "v": 0.934696,
+        "y": 0.836223
+      }
+    },
+    "visual_review": "coherent_matching_beach_scene_across_five_sampled_times"
+  },
+  "execution_order": [
+    "native_csharp_two_stage",
+    "python_reference_two_stage"
+  ],
+  "generated_at_utc": "2026-08-20T10:29:39.639343Z",
+  "gpu": {
+    "compute_capability": "8.0",
+    "csharp_peak_memory_used_mib": 81147,
+    "driver": "580.173.02",
+    "memory_total_mib": 81920,
+    "name": "NVIDIA A100-SXM4-80GB",
+    "python_peak_memory_used_mib": 48947
+  },
+  "milestone": "M7C",
+  "models": {
+    "checkpoint": {
+      "model_version": "2.3.0",
+      "path": "/workspace/ltx-model-cache/M7A/ltx23-distilled-checkpoint/ltx-2.3-22b-distilled-1.1.safetensors",
+      "repository": "Lightricks/LTX-2.3",
+      "revision": "6b5a83e3045eaf8e46cfa0acce512412aa2b9cce",
+      "sha256": "b33b7fe4bbfe084f484be4aaf90b0f1d95dca20d403ac4c0e037eb8c4f0af7cc"
+    },
+    "prompt_context": {
+      "offload": "none",
+      "path": "/workspace/LTX-2/build/M7C/beach-volleyball-context.safetensors",
+      "peak_cuda_memory_allocated_bytes": 51065139712,
+      "preparation_elapsed_seconds": 13.478882007068023,
+      "sha256": "f4e7df3f9768932049c4ab3a2f733db0f39b9144e2ed6bfa46d01248f49fa495"
+    },
+    "spatial_upsampler": {
+      "path": "/workspace/ltx-model-cache/M7C/ltx23-spatial-upscaler/ltx-2.3-spatial-upscaler-x2-1.1.safetensors",
+      "repository": "Lightricks/LTX-2.3",
+      "revision": "6b5a83e3045eaf8e46cfa0acce512412aa2b9cce",
+      "sha256": "5f416311fa8172b65af67530758964708d29a317b830d689a51143b7f91913ed"
+    },
+    "text_encoder": {
+      "repository": "google/gemma-3-12b-it-qat-q4_0-unquantized",
+      "revision": "68f7ee4fbd59087436ada77ed2d62f373fdd4482"
+    }
+  },
+  "offload": {
+    "csharp": "required_disk_weight_streaming_after_resident_cuda_oom",
+    "python": "none_resident"
+  },
+  "plan_revision": "M7C",
+  "plan_sha256": "6c7fbd1012661adba0dc7a9b89a8cbed7c1a1014fa9475b93531edad58578982",
+  "port_repair": {
+    "failed_attempts_retained_on_host": {
+      "mux_240_frame_failure": "/workspace/LTX-2/build/M7C/csharp-mux-failure-4",
+      "offload_abi_failures": [
+        "/workspace/LTX-2/build/M7C/csharp-offload-failure-1",
+        "/workspace/LTX-2/build/M7C/csharp-offload-failure-2",
+        "/workspace/LTX-2/build/M7C/csharp-offload-failure-3"
+      ],
+      "resident_oom": "/workspace/LTX-2/build/M7C/csharp-resident-failure",
+      "uniform_content_failure": "/workspace/LTX-2/build/M7C/csharp-content-failure-5"
+    },
+    "python_substitution_for_csharp": false,
+    "repairs": [
+      "interleave RoPE axes exactly like Python generate_freqs",
+      "use native at::linear and at::add through the maintained TorchSharp bridge",
+      "match X0Model BF16 conversion plus EulerDiffusionStep semantics",
+      "implement learned x2 spatial latent upsampler",
+      "add exact auto-tiling for the convolutional video VAE decoder",
+      "mux an explicit 241 video frames without -shortest truncation"
+    ],
+    "result": "pass",
+    "root_cause": "RoPE frequency axes were transposed after already reaching the reference frequency-axis layout",
+    "schema_version": 1,
+    "secrets_recorded": false
+  },
+  "prompt_sha256": "fe9c3956eff10418967a912607b3c29ae77b9920a7013f62e692fa06742d855d",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "settings": {
+    "audio_tokens": 251,
+    "duration_target_seconds": 10,
+    "frame_rate": 24,
+    "frames": 241,
+    "height": 1024,
+    "seed": 20260821,
+    "stage1_inference_steps": 8,
+    "stage1_sigmas": [
+      1,
+      0.99375,
+      0.9875,
+      0.98125,
+      0.975,
+      0.909375,
+      0.725,
+      0.421875,
+      0
+    ],
+    "stage2_sigmas": [
+      0.909375,
+      0.725,
+      0.421875,
+      0
+    ],
+    "width": 1536
+  },
+  "source_reference_sha": "523d81b92c796048f2bbcc299c5c4f21e3fd5b5e",
+  "state": "accepted",
+  "test_totals": {
+    "failed": 0,
+    "passed": 66,
+    "skipped": 0
+  },
+  "verification_command": "scripts/remote/verify-milestone.sh M7C",
+  "videos": {
+    "csharp": {
+      "elapsed_seconds": 424.47585,
+      "ffprobe": {
+        "format": {
+          "bit_rate": "14563104",
+          "duration": "10.041667",
+          "filename": "/workspace/LTX-2/build/M7C/videos/m7c-csharp-beach-volleyball.mp4",
+          "format_long_name": "QuickTime / MOV",
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "nb_programs": 0,
+          "nb_streams": 2,
+          "probe_score": 100,
+          "size": "18279731",
+          "start_time": "0.000000",
+          "tags": {
+            "compatible_brands": "isomiso2avc1mp41",
+            "major_brand": "isom",
+            "minor_version": "512"
+          }
+        },
+        "streams": [
+          {
+            "avg_frame_rate": "24/1",
+            "bit_rate": "14461549",
+            "bits_per_raw_sample": "8",
+            "chroma_location": "left",
+            "closed_captions": 0,
+            "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+            "codec_name": "h264",
+            "codec_tag": "0x31637661",
+            "codec_tag_string": "avc1",
+            "codec_type": "video",
+            "coded_height": 1024,
+            "coded_width": 1536,
+            "disposition": {
+              "attached_pic": 0,
+              "captions": 0,
+              "clean_effects": 0,
+              "comment": 0,
+              "default": 1,
+              "dependent": 0,
+              "descriptions": 0,
+              "dub": 0,
+              "forced": 0,
+              "hearing_impaired": 0,
+              "karaoke": 0,
+              "lyrics": 0,
+              "metadata": 0,
+              "non_diegetic": 0,
+              "original": 0,
+              "still_image": 0,
+              "timed_thumbnails": 0,
+              "visual_impaired": 0
+            },
+            "duration": "10.041667",
+            "duration_ts": 123392,
+            "extradata_size": 39,
+            "field_order": "progressive",
+            "film_grain": 0,
+            "has_b_frames": 0,
+            "height": 1024,
+            "id": "0x1",
+            "index": 0,
+            "is_avc": "true",
+            "level": 40,
+            "nal_length_size": "4",
+            "nb_frames": "241",
+            "pix_fmt": "yuv420p",
+            "profile": "Constrained Baseline",
+            "r_frame_rate": "24/1",
+            "refs": 1,
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "tags": {
+              "encoder": "Lavc libx264",
+              "handler_name": "VideoHandler",
+              "language": "und",
+              "vendor_id": "[0][0][0][0]"
+            },
+            "time_base": "1/12288",
+            "width": 1536
+          },
+          {
+            "avg_frame_rate": "0/0",
+            "bit_rate": "96534",
+            "bits_per_sample": 0,
+            "channel_layout": "stereo",
+            "channels": 2,
+            "codec_long_name": "AAC (Advanced Audio Coding)",
+            "codec_name": "aac",
+            "codec_tag": "0x6134706d",
+            "codec_tag_string": "mp4a",
+            "codec_type": "audio",
+            "disposition": {
+              "attached_pic": 0,
+              "captions": 0,
+              "clean_effects": 0,
+              "comment": 0,
+              "default": 1,
+              "dependent": 0,
+              "descriptions": 0,
+              "dub": 0,
+              "forced": 0,
+              "hearing_impaired": 0,
+              "karaoke": 0,
+              "lyrics": 0,
+              "metadata": 0,
+              "non_diegetic": 0,
+              "original": 0,
+              "still_image": 0,
+              "timed_thumbnails": 0,
+              "visual_impaired": 0
+            },
+            "duration": "10.010000",
+            "duration_ts": 480480,
+            "extradata_size": 5,
+            "id": "0x2",
+            "index": 1,
+            "initial_padding": 0,
+            "nb_frames": "471",
+            "profile": "LC",
+            "r_frame_rate": "0/0",
+            "sample_fmt": "fltp",
+            "sample_rate": "48000",
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "tags": {
+              "handler_name": "SoundHandler",
+              "language": "und",
+              "vendor_id": "[0][0][0][0]"
+            },
+            "time_base": "1/48000"
+          }
+        ]
+      },
+      "full_stream_decode": "pass",
+      "gpu_samples": 411,
+      "offload": "disk_weight_streaming",
+      "path": "/workspace/LTX-2/build/M7C/videos/m7c-csharp-beach-volleyball.mp4",
+      "peak_gpu_memory_used_mib": 81147,
+      "sha256": "9bd4d680246737dcac62226b9c5c1984cb9f1d093bfec5bd0704fc952a1785af",
+      "size_bytes": 18279731
+    },
+    "python": {
+      "elapsed_seconds": 123.904568,
+      "ffprobe": {
+        "format": {
+          "bit_rate": "6578393",
+          "duration": "10.041667",
+          "filename": "/workspace/LTX-2/build/M7C/videos/m7c-python-beach-volleyball.mp4",
+          "format_long_name": "QuickTime / MOV",
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "nb_programs": 0,
+          "nb_streams": 2,
+          "probe_score": 100,
+          "size": "8257254",
+          "start_time": "0.000000",
+          "tags": {
+            "compatible_brands": "isomiso2avc1mp41",
+            "encoder": "Lavf62.12.102",
+            "major_brand": "isom",
+            "minor_version": "512"
+          }
+        },
+        "streams": [
+          {
+            "avg_frame_rate": "24/1",
+            "bit_rate": "6443838",
+            "bits_per_raw_sample": "8",
+            "chroma_location": "left",
+            "closed_captions": 0,
+            "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+            "codec_name": "h264",
+            "codec_tag": "0x31637661",
+            "codec_tag_string": "avc1",
+            "codec_type": "video",
+            "coded_height": 1024,
+            "coded_width": 1536,
+            "color_range": "tv",
+            "color_space": "bt709",
+            "disposition": {
+              "attached_pic": 0,
+              "captions": 0,
+              "clean_effects": 0,
+              "comment": 0,
+              "default": 1,
+              "dependent": 0,
+              "descriptions": 0,
+              "dub": 0,
+              "forced": 0,
+              "hearing_impaired": 0,
+              "karaoke": 0,
+              "lyrics": 0,
+              "metadata": 0,
+              "non_diegetic": 0,
+              "original": 0,
+              "still_image": 0,
+              "timed_thumbnails": 0,
+              "visual_impaired": 0
+            },
+            "duration": "10.041667",
+            "duration_ts": 123392,
+            "extradata_size": 48,
+            "field_order": "progressive",
+            "film_grain": 0,
+            "has_b_frames": 2,
+            "height": 1024,
+            "id": "0x1",
+            "index": 0,
+            "is_avc": "true",
+            "level": 40,
+            "nal_length_size": "4",
+            "nb_frames": "241",
+            "pix_fmt": "yuv420p",
+            "profile": "High",
+            "r_frame_rate": "24/1",
+            "refs": 1,
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "tags": {
+              "handler_name": "VideoHandler",
+              "language": "und",
+              "vendor_id": "[0][0][0][0]"
+            },
+            "time_base": "1/12288",
+            "width": 1536
+          },
+          {
+            "avg_frame_rate": "0/0",
+            "bit_rate": "128065",
+            "bits_per_sample": 0,
+            "channel_layout": "stereo",
+            "channels": 2,
+            "codec_long_name": "AAC (Advanced Audio Coding)",
+            "codec_name": "aac",
+            "codec_tag": "0x6134706d",
+            "codec_tag_string": "mp4a",
+            "codec_type": "audio",
+            "disposition": {
+              "attached_pic": 0,
+              "captions": 0,
+              "clean_effects": 0,
+              "comment": 0,
+              "default": 1,
+              "dependent": 0,
+              "descriptions": 0,
+              "dub": 0,
+              "forced": 0,
+              "hearing_impaired": 0,
+              "karaoke": 0,
+              "lyrics": 0,
+              "metadata": 0,
+              "non_diegetic": 0,
+              "original": 0,
+              "still_image": 0,
+              "timed_thumbnails": 0,
+              "visual_impaired": 0
+            },
+            "duration": "10.010000",
+            "duration_ts": 480480,
+            "extradata_size": 5,
+            "id": "0x2",
+            "index": 1,
+            "initial_padding": 0,
+            "nb_frames": "471",
+            "profile": "LC",
+            "r_frame_rate": "0/0",
+            "sample_fmt": "fltp",
+            "sample_rate": "48000",
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "tags": {
+              "handler_name": "SoundHandler",
+              "language": "und",
+              "vendor_id": "[0][0][0][0]"
+            },
+            "time_base": "1/48000"
+          }
+        ]
+      },
+      "full_stream_decode": "pass",
+      "gpu_samples": 120,
+      "offload": "none_resident",
+      "path": "/workspace/LTX-2/build/M7C/videos/m7c-python-beach-volleyball.mp4",
+      "peak_gpu_memory_used_mib": 48947,
+      "sha256": "16a15b7e68d94087da1ed1c3217e22dfacdaa5ceedda21ab83c5ff6b24ac32fd",
+      "size_bytes": 8257254
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "gpu": {
+    "compute_capability": "8.0",
+    "csharp_peak_memory_used_mib": 81147,
+    "driver": "580.173.02",
+    "memory_total_mib": 81920,
+    "name": "NVIDIA A100-SXM4-80GB",
+    "python_peak_memory_used_mib": 48947
+  },
+  "offload": {
+    "csharp": "required_disk_weight_streaming_after_resident_cuda_oom",
+    "python": "none_resident"
+  },
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false
+}

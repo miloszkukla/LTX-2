@@ -40,18 +40,21 @@ public sealed class CheckpointTransformerRuntime : IDisposable
     private readonly Device device;
     private readonly TransformerConfig config;
     private readonly IReadOnlyDictionary<string, CheckpointLoraAdapter> adapters;
+    private readonly bool cacheWeights;
     private bool disposed;
 
     public CheckpointTransformerRuntime(
         CheckpointTensorStore store,
         Device device,
-        IReadOnlyDictionary<string, CheckpointLoraAdapter>? adapters = null)
+        IReadOnlyDictionary<string, CheckpointLoraAdapter>? adapters = null,
+        bool cacheWeights = true)
     {
         ArgumentNullException.ThrowIfNull(store);
         ArgumentNullException.ThrowIfNull(device);
         this.store = store;
         this.device = device;
         this.adapters = adapters ?? new Dictionary<string, CheckpointLoraAdapter>(StringComparer.Ordinal);
+        this.cacheWeights = cacheWeights;
         config = TransformerConfig.Parse(store.Metadata);
         ValidateCheckpointSurface();
         ValidateAdapters();
@@ -158,7 +161,9 @@ public sealed class CheckpointTransformerRuntime : IDisposable
             .repeat([features.shape[1] / config.ConnectorRegisters, 1])
             .unsqueeze(0)
             .expand(features.shape[0], -1, -1);
-        x = mask.unsqueeze(-1).mul(x).add(mask.unsqueeze(-1).mul(-1).add(1).mul(registers));
+        x = TorchSharpRuntime.Add(
+            mask.unsqueeze(-1).mul(x),
+            mask.unsqueeze(-1).mul(-1).add(1).mul(registers));
         var positions = arange(0, x.shape[1], dtype: ScalarType.Float32, device: device)
             .reshape(1, 1, x.shape[1])
             .expand(x.shape[0], -1, -1);
@@ -169,9 +174,9 @@ public sealed class CheckpointTransformerRuntime : IDisposable
             var block = $"{prefix}transformer_1d_blocks.{layer}.";
             var normalized = RmsNorm(x);
             var attended = Attention(normalized, null, null, rope, null, block + "attn1", config.ConnectorHeads);
-            x = x.add(attended);
+            x = TorchSharpRuntime.Add(x, attended);
             normalized = RmsNorm(x);
-            x = x.add(FeedForward(normalized, block + "ff"));
+            x = TorchSharpRuntime.Add(x, FeedForward(normalized, block + "ff"));
         }
         return RmsNorm(x).MoveToOuterDisposeScope();
     }
@@ -258,9 +263,9 @@ public sealed class CheckpointTransformerRuntime : IDisposable
                 block + "attn1",
                 config.VideoHeads,
                 observeTensor);
-            vx = vx!.add(attended.mul(values[2]));
+            vx = TorchSharpRuntime.Add(vx!, attended.mul(values[2]));
             var afterSelfAttention = RmsNorm(vx);
-            vx = vx.add(TextCrossAttention(
+            vx = TorchSharpRuntime.Add(vx, TextCrossAttention(
                 afterSelfAttention,
                 video.Context,
                 video.ContextMask,
@@ -286,9 +291,9 @@ public sealed class CheckpointTransformerRuntime : IDisposable
                 block + "audio_attn1",
                 config.AudioHeads,
                 observeTensor);
-            ax = ax!.add(attended.mul(values[2]));
+            ax = TorchSharpRuntime.Add(ax!, attended.mul(values[2]));
             var afterSelfAttention = RmsNorm(ax);
-            ax = ax.add(TextCrossAttention(
+            ax = TorchSharpRuntime.Add(ax, TextCrossAttention(
                 afterSelfAttention,
                 audio.Context,
                 audio.ContextMask,
@@ -321,7 +326,7 @@ public sealed class CheckpointTransformerRuntime : IDisposable
                     0);
                 var q = ModulatedRmsNorm(videoBeforeCross, videoValues.Scale, videoValues.Shift);
                 var kv = ModulatedRmsNorm(audioBeforeCross, audioValues.Scale, audioValues.Shift);
-                vx = videoBeforeCross.add(Attention(
+                vx = TorchSharpRuntime.Add(videoBeforeCross, Attention(
                     q,
                     kv,
                     null,
@@ -345,7 +350,7 @@ public sealed class CheckpointTransformerRuntime : IDisposable
                     2);
                 var q = ModulatedRmsNorm(audioBeforeCross, audioValues.Scale, audioValues.Shift);
                 var kv = ModulatedRmsNorm(videoBeforeCross, videoValues.Scale, videoValues.Shift);
-                ax = audioBeforeCross.add(Attention(
+                ax = TorchSharpRuntime.Add(audioBeforeCross, Attention(
                     q,
                     kv,
                     null,
@@ -361,13 +366,13 @@ public sealed class CheckpointTransformerRuntime : IDisposable
         {
             var values = AdaValues(block + "scale_shift_table", video!.Timestep, 3, 3);
             var normalized = ModulatedRmsNorm(vx!, values[1], values[0]);
-            vx = vx!.add(FeedForward(normalized, block + "ff", observeTensor).mul(values[2]));
+            vx = TorchSharpRuntime.Add(vx!, FeedForward(normalized, block + "ff", observeTensor).mul(values[2]));
         }
         if (runAudio)
         {
             var values = AdaValues(block + "audio_scale_shift_table", audio!.Timestep, 3, 3);
             var normalized = ModulatedRmsNorm(ax!, values[1], values[0]);
-            ax = ax!.add(FeedForward(normalized, block + "audio_ff", observeTensor).mul(values[2]));
+            ax = TorchSharpRuntime.Add(ax!, FeedForward(normalized, block + "audio_ff", observeTensor).mul(values[2]));
         }
         return (video is null ? null : video with { X = vx! }, audio is null ? null : audio with { X = ax! });
     }
@@ -423,21 +428,23 @@ public sealed class CheckpointTransformerRuntime : IDisposable
         var queryValues = AdaValues(scaleShiftTable, timestep, 6, 3);
         var promptTable = Weight(promptScaleShiftTable).unsqueeze(0).unsqueeze(0);
         var prompt = promptTimestep.reshape(promptTimestep.shape[0], promptTimestep.shape[1], 2, -1);
-        var modulation = promptTable.add(prompt);
+        var modulation = TorchSharpRuntime.Add(promptTable, prompt);
         var shift = modulation.narrow(2, 0, 1).squeeze(2);
         var scale = modulation.narrow(2, 1, 1).squeeze(2);
-        var q = normalized.mul(queryValues[1].add(1)).add(queryValues[0]);
-        var kv = context.mul(scale.add(1)).add(shift);
+        var q = TorchSharpRuntime.Add(normalized.mul(queryValues[1].add(1)), queryValues[0]);
+        var kv = TorchSharpRuntime.Add(context.mul(scale.add(1)), shift);
         return Attention(q, kv, contextMask, null, null, attentionPrefix, heads, observeTensor).mul(queryValues[2]);
     }
 
     private CrossAda CrossAdaValues(string tableName, Tensor scaleShift, Tensor gate, int start)
     {
         var table = Weight(tableName);
-        var scaleShiftValues = table.narrow(0, 0, 4).unsqueeze(0).unsqueeze(0)
-            .add(scaleShift.reshape(scaleShift.shape[0], scaleShift.shape[1], 4, -1));
-        var gateValues = table.narrow(0, 4, 1).unsqueeze(0).unsqueeze(0)
-            .add(gate.reshape(gate.shape[0], gate.shape[1], 1, -1));
+        var scaleShiftValues = TorchSharpRuntime.Add(
+            table.narrow(0, 0, 4).unsqueeze(0).unsqueeze(0),
+            scaleShift.reshape(scaleShift.shape[0], scaleShift.shape[1], 4, -1));
+        var gateValues = TorchSharpRuntime.Add(
+            table.narrow(0, 4, 1).unsqueeze(0).unsqueeze(0),
+            gate.reshape(gate.shape[0], gate.shape[1], 1, -1));
         return new CrossAda(
             scaleShiftValues.narrow(2, start, 1).squeeze(2),
             scaleShiftValues.narrow(2, start + 1, 1).squeeze(2),
@@ -447,8 +454,9 @@ public sealed class CheckpointTransformerRuntime : IDisposable
     private Tensor[] AdaValues(string tableName, Tensor timestep, int start, int count)
     {
         var table = Weight(tableName);
-        var values = table.unsqueeze(0).unsqueeze(0)
-            .add(timestep.reshape(timestep.shape[0], timestep.shape[1], table.shape[0], -1));
+        var values = TorchSharpRuntime.Add(
+            table.unsqueeze(0).unsqueeze(0),
+            timestep.reshape(timestep.shape[0], timestep.shape[1], table.shape[0], -1));
         return Enumerable.Range(start, count)
             .Select(index => values.narrow(2, index, 1).squeeze(2))
             .ToArray();
@@ -511,12 +519,12 @@ public sealed class CheckpointTransformerRuntime : IDisposable
         string observationPrefix)
     {
         var table = Weight(tableName).unsqueeze(0).unsqueeze(0);
-        var values = table.add(embeddedTimestep.unsqueeze(2));
+        var values = TorchSharpRuntime.Add(table, embeddedTimestep.unsqueeze(2));
         var shift = values.narrow(2, 0, 1).squeeze(2);
         var scale = values.narrow(2, 1, 1).squeeze(2);
         var normalized = nn.functional.layer_norm(x, [x.shape[^1]], eps: 1e-6);
         observeTensor?.Invoke(observationPrefix + "_output_norm", normalized);
-        var projectionInput = normalized.mul(scale.add(1)).add(shift);
+        var projectionInput = TorchSharpRuntime.Add(normalized.mul(scale.add(1)), shift);
         observeTensor?.Invoke(observationPrefix + "_output_projection_input", projectionInput);
         return Linear(projectionInput, projectionPrefix);
     }
@@ -548,6 +556,8 @@ public sealed class CheckpointTransformerRuntime : IDisposable
         {
             q = ApplyRope(q, queryRope);
             k = ApplyRope(k, keyRope ?? queryRope);
+            observeTensor?.Invoke(prefix + ".q_rope", q);
+            observeTensor?.Invoke(prefix + ".k_rope", k);
         }
 
         var batch = q.shape[0];
@@ -612,29 +622,24 @@ public sealed class CheckpointTransformerRuntime : IDisposable
         // though torch.nn.Linear autocast in the reference executes with the weight dtype.
         var linearInput = input.dtype == weight.dtype ? input : input.to(weight.dtype);
         var bias = store.Contains(prefix + ".bias") ? Weight(prefix + ".bias") : null;
-        var flattened = linearInput.flatten(0, -2);
-        var transposedWeight = weight.transpose(0, 1);
-        var projected = bias is null
-            ? flattened.matmul(transposedWeight)
-            : bias.addmm(flattened, transposedWeight);
-        var outputShape = linearInput.shape.ToArray();
-        outputShape[^1] = weight.shape[0];
-        var result = projected.reshape(outputShape);
+        var result = TorchSharpRuntime.Linear(linearInput, weight, bias);
         if (adapters.TryGetValue(prefix, out var adapter))
         {
             var a = adapter.A.to(input.dtype, device, non_blocking: false);
             var b = adapter.B.to(input.dtype, device, non_blocking: false);
-            result = result.add(linearInput.matmul(a.transpose(0, 1)).matmul(b.transpose(0, 1)).mul(adapter.Scale));
+            result = TorchSharpRuntime.Add(
+                result,
+                linearInput.matmul(a.transpose(0, 1)).matmul(b.transpose(0, 1)).mul(adapter.Scale));
         }
         return result;
     }
 
-    private Tensor Weight(string name) => store.Load(name, device, config.ComputeDType, cacheTensor: true);
+    private Tensor Weight(string name) => store.Load(name, device, config.ComputeDType, cacheTensor: cacheWeights);
 
     private static Tensor Silu(Tensor input) => nn.functional.silu(input);
 
     private static Tensor ModulatedRmsNorm(Tensor input, Tensor scale, Tensor shift) =>
-        RmsNorm(input).mul(scale.add(1)).add(shift);
+        TorchSharpRuntime.Add(RmsNorm(input).mul(scale.add(1)), shift);
 
     private static Tensor RmsNorm(Tensor input, Tensor? weight = null, double epsilon = 1e-6)
         => TorchSharpRuntime.RmsNorm(input, weight, epsilon);
@@ -644,8 +649,9 @@ public sealed class CheckpointTransformerRuntime : IDisposable
         Tensor resolved;
         if (positions.dim() == 4)
         {
-            resolved = positions.narrow(-1, 0, 1).squeeze(-1)
-                .add(positions.narrow(-1, 1, 1).squeeze(-1))
+            resolved = TorchSharpRuntime.Add(
+                    positions.narrow(-1, 0, 1).squeeze(-1),
+                    positions.narrow(-1, 1, 1).squeeze(-1))
                 .div(2);
         }
         else if (positions.dim() == 3)
@@ -676,7 +682,9 @@ public sealed class CheckpointTransformerRuntime : IDisposable
                     .unsqueeze(-1)
                     .mul(frequencies));
         }
-        var phases = stack(components.ToArray(), dim: -1).transpose(-1, -2).flatten(2);
+        // Each component is [B,T,F]; stacking on the last axis yields [B,T,F,axis],
+        // which is already the reference generate_freqs layout before flattening.
+        var phases = stack(components.ToArray(), dim: -1).flatten(2);
         var expected = dimension / 2;
         var padding = checked((int)(expected - phases.shape[2]));
         var cos = phases.cos();
@@ -701,7 +709,7 @@ public sealed class CheckpointTransformerRuntime : IDisposable
         var first = reshaped.narrow(3, 0, half);
         var second = reshaped.narrow(3, half, half);
         var rotatedFirst = first.mul(rope.Cos).sub(second.mul(rope.Sin));
-        var rotatedSecond = second.mul(rope.Cos).add(first.mul(rope.Sin));
+        var rotatedSecond = TorchSharpRuntime.Add(second.mul(rope.Cos), first.mul(rope.Sin));
         return cat([rotatedFirst, rotatedSecond], dim: 3)
             .transpose(1, 2)
             .contiguous()

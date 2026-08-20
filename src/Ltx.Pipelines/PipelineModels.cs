@@ -23,8 +23,11 @@ public sealed record PipelineRequest
     public bool SkipPreview { get; init; }
     public bool FixtureMode { get; init; }
     public string? CheckpointPath { get; init; }
+    public string? SpatialUpsamplerPath { get; init; }
+    public string OffloadMode { get; init; } = "none";
     public string? TextEmbeddingsPath { get; init; }
     public string? TorchSharpLibraryPath { get; init; }
+    public string? LatentDiagnosticsPath { get; init; }
     public int InferenceSteps { get; init; } = 1;
     public CheckpointPipelineSession? CheckpointSession { get; init; }
 }

@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using Ltx.Core;
 using Ltx.Media;
 using Ltx.SafeTensors;
@@ -6,24 +8,35 @@ using static TorchSharp.torch;
 
 namespace Ltx.Pipelines;
 
-public sealed record CheckpointPipelineOutput(RgbVideo? Video, AudioData? Audio);
+public sealed record CheckpointPipelineOutput(RgbVideo? Video, AudioData? Audio, bool TwoStage);
 
 /// <summary>Reusable, single-GPU production-checkpoint inference session for the pipeline registry.</summary>
 public sealed class CheckpointPipelineSession : IDisposable
 {
     private static readonly float[] DistilledSigmas = [1F, 0.99375F, 0.9875F, 0.98125F, 0.975F, 0.909375F, 0.725F, 0.421875F, 0F];
+    private static readonly float[] StageTwoDistilledSigmas = [0.909375F, 0.725F, 0.421875F, 0F];
     private readonly CheckpointTensorStore store;
     private readonly CheckpointTransformerRuntime transformer;
     private readonly CheckpointVideoDecoder videoDecoder;
     private readonly CheckpointAudioDecoder audioDecoder;
     private readonly CheckpointVocoder vocoder;
+    private readonly CheckpointLatentUpsampler? upsampler;
     private readonly SafeTensorIndex contexts;
     private bool disposed;
 
-    public CheckpointPipelineSession(string checkpointPath, string textEmbeddingsPath, string? torchSharpLibraryPath = null)
+    public CheckpointPipelineSession(
+        string checkpointPath,
+        string textEmbeddingsPath,
+        string? torchSharpLibraryPath = null,
+        string? spatialUpsamplerPath = null,
+        string offloadMode = "none")
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(checkpointPath);
         ArgumentException.ThrowIfNullOrWhiteSpace(textEmbeddingsPath);
+        if (offloadMode is not ("none" or "disk"))
+        {
+            throw new ArgumentOutOfRangeException(nameof(offloadMode));
+        }
         if (torchSharpLibraryPath is not null)
         {
             TorchSharpRuntime.Initialize(torchSharpLibraryPath);
@@ -33,17 +46,27 @@ public sealed class CheckpointPipelineSession : IDisposable
         {
             throw new InvalidOperationException("Checkpoint pipelines require exactly one CUDA device.");
         }
-        TorchSharpRuntime.UseMathSdpOnly();
+        if (spatialUpsamplerPath is null)
+        {
+            TorchSharpRuntime.UseMathSdpOnly();
+        }
+        else
+        {
+            TorchSharpRuntime.UsePythonSdpPriority();
+        }
         store = new CheckpointTensorStore([checkpointPath]);
         contexts = SafeTensorIndex.Open(textEmbeddingsPath);
         if (!contexts.Tensors.ContainsKey("video_context") || !contexts.Tensors.ContainsKey("audio_context"))
         {
             throw new InvalidDataException("Text embeddings must contain video_context and audio_context tensors.");
         }
-        transformer = new CheckpointTransformerRuntime(store, CUDA);
+        transformer = new CheckpointTransformerRuntime(store, CUDA, cacheWeights: offloadMode == "none");
         videoDecoder = new CheckpointVideoDecoder(store, CUDA);
         audioDecoder = new CheckpointAudioDecoder(store, CUDA);
         vocoder = new CheckpointVocoder(store, CUDA);
+        upsampler = spatialUpsamplerPath is null
+            ? null
+            : new CheckpointLatentUpsampler(store, spatialUpsamplerPath, CUDA);
     }
 
     public string ModelVersion => transformer.ModelVersion;
@@ -52,22 +75,29 @@ public sealed class CheckpointPipelineSession : IDisposable
     {
         ObjectDisposedException.ThrowIf(disposed, this);
         ValidateGeometry(request);
+        ValidatePrompt(request.Prompt);
         using var scope = NewDisposeScope();
         manual_seed(request.Seed);
         cuda.manual_seed_all(request.Seed);
         var videoEnabled = !mode.AudioOnly;
         var audioEnabled = !mode.HdrBatch;
+        var twoStage = mode.ModuleName == "ltx_pipelines.ti2vid_two_stages" && upsampler is not null;
+        var stageOneHeight = twoStage ? request.Height / 2 : request.Height;
+        var stageOneWidth = twoStage ? request.Width / 2 : request.Width;
         var latentFrames = (request.FrameCount - 1) / 8 + 1;
-        var latentHeight = request.Height / 32;
-        var latentWidth = request.Width / 32;
+        var latentHeight = stageOneHeight / 32;
+        var latentWidth = stageOneWidth / 32;
         var videoTokens = checked(latentFrames * latentHeight * latentWidth);
         var duration = request.FrameCount / request.FramesPerSecond;
-        var audioTokens = Math.Max(1, (int)Math.Ceiling(duration * 25));
+        var audioTokens = Math.Max(1, checked((int)Math.Round(duration * 25)));
         var videoLatent = videoEnabled
             ? randn([1, videoTokens, 128], dtype: ScalarType.BFloat16, device: CUDA)
             : null;
         var audioLatent = audioEnabled
             ? randn([1, audioTokens, 128], dtype: ScalarType.BFloat16, device: CUDA)
+            : null;
+        Dictionary<string, SafeTensor>? latentDiagnostics = request.LatentDiagnosticsPath is not null
+            ? new Dictionary<string, SafeTensor>(StringComparer.Ordinal)
             : null;
         using var videoContext = videoEnabled ? contexts.LoadTorchTensor("video_context", CUDA) : null;
         using var audioContext = audioEnabled ? contexts.LoadTorchTensor("audio_context", CUDA) : null;
@@ -76,8 +106,135 @@ public sealed class CheckpointPipelineSession : IDisposable
             : null;
         using var audioPositions = audioEnabled ? AudioPositions(audioTokens) : null;
 
-        var sigmas = ResolveSigmas(request.InferenceSteps);
-        for (var step = 0; step < sigmas.Length - 1; step++)
+        (videoLatent, audioLatent) = Denoise(
+            videoLatent,
+            audioLatent,
+            videoContext,
+            audioContext,
+            videoPositions,
+            audioPositions,
+            videoTokens,
+            audioTokens,
+            ResolveSigmas(request.InferenceSteps),
+            latentDiagnostics,
+            "stage1");
+
+        if (latentDiagnostics is not null && videoLatent is not null && audioLatent is not null)
+        {
+            using var stageOneVideo = videoLatent.reshape(1, latentFrames, latentHeight, latentWidth, 128)
+                .permute(0, 4, 1, 2, 3).contiguous();
+            using var stageOneAudio = audioLatent.reshape(1, audioTokens, 8, 16)
+                .permute(0, 2, 1, 3).contiguous();
+            latentDiagnostics["stage1_video"] = SafeTensor.FromTorchTensor(stageOneVideo);
+            latentDiagnostics["stage1_audio"] = SafeTensor.FromTorchTensor(stageOneAudio);
+        }
+
+        if (twoStage)
+        {
+            using var lowResolutionLatent = videoLatent!.reshape(
+                    1, latentFrames, latentHeight, latentWidth, 128)
+                .permute(0, 4, 1, 2, 3)
+                .contiguous();
+            using var upscaled = upsampler!.Upsample(lowResolutionLatent);
+            var stageTwoLatentHeight = request.Height / 32;
+            var stageTwoLatentWidth = request.Width / 32;
+            var stageTwoVideoTokens = checked(latentFrames * stageTwoLatentHeight * stageTwoLatentWidth);
+            using var unnoisedVideo = upscaled.permute(0, 2, 3, 4, 1)
+                .contiguous()
+                .reshape(1, stageTwoVideoTokens, 128);
+            var previousVideo = videoLatent;
+            videoLatent = AddNoise(unnoisedVideo, StageTwoDistilledSigmas[0]);
+            previousVideo.Dispose();
+            var previousAudio = audioLatent!;
+            audioLatent = AddNoise(previousAudio, StageTwoDistilledSigmas[0]);
+            previousAudio.Dispose();
+            using var stageTwoVideoPositions = VideoPositions(
+                latentFrames,
+                stageTwoLatentHeight,
+                stageTwoLatentWidth,
+                request.FramesPerSecond);
+            (videoLatent, audioLatent) = Denoise(
+                videoLatent,
+                audioLatent,
+                videoContext,
+                audioContext,
+                stageTwoVideoPositions,
+                audioPositions,
+                stageTwoVideoTokens,
+                audioTokens,
+                StageTwoDistilledSigmas,
+                latentDiagnostics,
+                "stage2");
+
+            if (latentDiagnostics is not null)
+            {
+                using var stageTwoVideo = videoLatent!.reshape(
+                        1, latentFrames, stageTwoLatentHeight, stageTwoLatentWidth, 128)
+                    .permute(0, 4, 1, 2, 3).contiguous();
+                using var stageTwoAudio = audioLatent!.reshape(1, audioTokens, 8, 16)
+                    .permute(0, 2, 1, 3).contiguous();
+                latentDiagnostics["stage2_video"] = SafeTensor.FromTorchTensor(stageTwoVideo);
+                latentDiagnostics["stage2_audio"] = SafeTensor.FromTorchTensor(stageTwoAudio);
+            }
+        }
+
+        if (latentDiagnostics is not null)
+        {
+            new SafeTensorFile(
+                latentDiagnostics,
+                new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["fixture_revision"] = "m7c-csharp-two-stage-latents-v1",
+                    ["prompt_sha256"] = Convert.ToHexStringLower(
+                        SHA256.HashData(Encoding.UTF8.GetBytes(request.Prompt))),
+                    ["seed"] = request.Seed.ToString(),
+                    ["frames"] = request.FrameCount.ToString(),
+                    ["frame_rate"] = request.FramesPerSecond.ToString(
+                        System.Globalization.CultureInfo.InvariantCulture),
+                    ["width"] = request.Width.ToString(),
+                    ["height"] = request.Height.ToString(),
+                }).Save(request.LatentDiagnosticsPath!);
+        }
+
+        RgbVideo? video = null;
+        AudioData? audio = null;
+        if (videoEnabled)
+        {
+            var finalLatentHeight = request.Height / 32;
+            var finalLatentWidth = request.Width / 32;
+            using var latent = videoLatent!.reshape(1, latentFrames, finalLatentHeight, finalLatentWidth, 128)
+                .permute(0, 4, 1, 2, 3).contiguous();
+            using var decoded = videoDecoder.DecodeTiled(latent);
+            video = ToVideo(decoded, request);
+        }
+        if (audioEnabled)
+        {
+            using var latent = audioLatent!.reshape(1, audioTokens, 8, 16)
+                .permute(0, 2, 1, 3).contiguous();
+            using var mel = audioDecoder.Decode(latent);
+            using var waveform = vocoder.Decode(mel);
+            audio = ToAudio(waveform, vocoder.OutputSampleRate);
+        }
+        return new CheckpointPipelineOutput(video, audio, twoStage);
+    }
+
+    private (Tensor? Video, Tensor? Audio) Denoise(
+        Tensor? videoLatent,
+        Tensor? audioLatent,
+        Tensor? videoContext,
+        Tensor? audioContext,
+        Tensor? videoPositions,
+        Tensor? audioPositions,
+        int videoTokens,
+        int audioTokens,
+        IReadOnlyList<float> sigmas,
+        Dictionary<string, SafeTensor>? diagnostics = null,
+        string? diagnosticPrefix = null)
+    {
+        using var scope = NewDisposeScope();
+        var videoEnabled = videoLatent is not null;
+        var audioEnabled = audioLatent is not null;
+        for (var step = 0; step < sigmas.Count - 1; step++)
         {
             using var stepScope = NewDisposeScope();
             var sigma = sigmas[step];
@@ -98,40 +255,61 @@ public sealed class CheckpointPipelineSession : IDisposable
                     ? new CheckpointTransformerInput(
                         audioLatent!, audioContext!, null, audioTimesteps!, sigmaTensor, audioPositions!)
                     : null);
+            if (step == 0 && diagnostics is not null && diagnosticPrefix is not null)
+            {
+                if (videoEnabled)
+                {
+                    diagnostics[$"{diagnosticPrefix}_step0_video_input"] =
+                        SafeTensor.FromTorchTensor(videoLatent!);
+                    diagnostics[$"{diagnosticPrefix}_step0_video_velocity"] =
+                        SafeTensor.FromTorchTensor(output.Video!);
+                }
+                if (audioEnabled)
+                {
+                    diagnostics[$"{diagnosticPrefix}_step0_audio_input"] =
+                        SafeTensor.FromTorchTensor(audioLatent!);
+                    diagnostics[$"{diagnosticPrefix}_step0_audio_velocity"] =
+                        SafeTensor.FromTorchTensor(output.Audio!);
+                }
+            }
             if (videoEnabled)
             {
                 var previous = videoLatent!;
-                videoLatent = previous.add(output.Video!.mul(next - sigma)).to(ScalarType.BFloat16)
+                videoLatent = EulerStep(previous, output.Video!, sigma, next)
                     .MoveToOuterDisposeScope();
                 previous.Dispose();
             }
             if (audioEnabled)
             {
                 var previous = audioLatent!;
-                audioLatent = previous.add(output.Audio!.mul(next - sigma)).to(ScalarType.BFloat16)
+                audioLatent = EulerStep(previous, output.Audio!, sigma, next)
                     .MoveToOuterDisposeScope();
                 previous.Dispose();
             }
         }
 
-        RgbVideo? video = null;
-        AudioData? audio = null;
-        if (videoEnabled)
-        {
-            using var latent = videoLatent!.reshape(1, latentFrames, latentHeight, latentWidth, 128)
-                .permute(0, 4, 1, 2, 3).contiguous();
-            using var decoded = videoDecoder.Decode(latent);
-            video = ToVideo(decoded, request);
-        }
-        if (audioEnabled)
-        {
-            using var latent = audioLatent!.reshape(1, audioTokens, 8, 16)
-                .permute(0, 2, 1, 3).contiguous();
-            using var mel = audioDecoder.Decode(latent);
-            using var waveform = vocoder.Decode(mel);
-            audio = ToAudio(waveform, vocoder.OutputSampleRate);
-        }
-        return new CheckpointPipelineOutput(video, audio);
+        return (
+            videoLatent?.MoveToOuterDisposeScope(),
+            audioLatent?.MoveToOuterDisposeScope());
+    }
+
+    private static Tensor EulerStep(Tensor sample, Tensor rawVelocity, float sigma, float nextSigma)
+    {
+        // Match X0Model + EulerDiffusionStep exactly. The reference first converts the raw
+        // velocity to a BF16 denoised sample, then reconstructs a BF16 velocity before taking
+        // the FP32 Euler update. The two BF16 round-trips are numerically observable.
+        using var sampleFloat = sample.to(ScalarType.Float32);
+        using var rawVelocityFloat = rawVelocity.to(ScalarType.Float32);
+        using var negativeScaledVelocity = rawVelocityFloat.mul(-sigma);
+        using var denoisedFloat = TorchSharpRuntime.Add(sampleFloat, negativeScaledVelocity);
+        using var denoised = denoisedFloat.to(sample.dtype);
+        using var denoisedAsFloat = denoised.to(ScalarType.Float32);
+        using var negativeDenoised = denoisedAsFloat.mul(-1);
+        using var difference = TorchSharpRuntime.Add(sampleFloat, negativeDenoised);
+        using var effectiveVelocity = difference.mul(1F / sigma).to(sample.dtype);
+        using var effectiveVelocityFloat = effectiveVelocity.to(ScalarType.Float32);
+        using var scaledStep = effectiveVelocityFloat.mul(nextSigma - sigma);
+        return TorchSharpRuntime.Add(sampleFloat, scaledStep).to(sample.dtype);
     }
 
     public void Dispose()
@@ -139,7 +317,27 @@ public sealed class CheckpointPipelineSession : IDisposable
         if (disposed) return;
         disposed = true;
         transformer.Dispose();
+        upsampler?.Dispose();
         store.Dispose();
+    }
+
+    private static Tensor AddNoise(Tensor initialLatent, float noiseScale)
+    {
+        var noise = randn_like(initialLatent);
+        return TorchSharpRuntime.Add(
+                initialLatent.to(ScalarType.Float32).mul(1 - noiseScale),
+                noise.to(ScalarType.Float32).mul(noiseScale))
+            .to(ScalarType.BFloat16);
+    }
+
+    private void ValidatePrompt(string prompt)
+    {
+        if (!contexts.Metadata.TryGetValue("prompt_sha256", out var expected)) return;
+        var actual = Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(prompt)));
+        if (!string.Equals(actual, expected, StringComparison.Ordinal))
+        {
+            throw new InvalidDataException("The supplied prompt does not match the prepared text embeddings.");
+        }
     }
 
     private static float[] ResolveSigmas(int steps)

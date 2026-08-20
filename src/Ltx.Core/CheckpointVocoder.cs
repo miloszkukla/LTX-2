@@ -62,7 +62,7 @@ public sealed class CheckpointVocoder
         var frequencies = spectrum.shape[1] / 2;
         var real = spectrum.narrow(1, 0, frequencies);
         var imaginary = spectrum.narrow(1, frequencies, frequencies);
-        var magnitude = real.pow(2).add(imaginary.pow(2)).sqrt();
+        var magnitude = TorchSharpRuntime.Add(real.pow(2), imaginary.pow(2)).sqrt();
         var melBasis = Weight(Root + "mel_stft.mel_basis");
         var logMel = melBasis.matmul(magnitude).clamp(min: 1e-5).log()
             .reshape(batch, channels, config.MelBins, magnitude.shape[2])
@@ -76,7 +76,7 @@ public sealed class CheckpointVocoder
                 $"Vocoder BWE residual [{string.Join(',', residual.shape)}] and skip " +
                 $"[{string.Join(',', skip.shape)}] shapes differ.");
         }
-        return residual.add(skip).clamp(-1, 1)
+        return TorchSharpRuntime.Add(residual, skip).clamp(-1, 1)
             .narrow(2, 0, outputLength)
             .to(outputDType)
             .MoveToOuterDisposeScope();
@@ -122,7 +122,7 @@ public sealed class CheckpointVocoder
                 dilation: dilation);
             residual = Activation(residual, $"{prefix}.acts2.{layer}");
             residual = Convolution(residual, $"{prefix}.convs2.{layer}", padding: (kernel - 1) / 2);
-            x = x.add(residual);
+            x = TorchSharpRuntime.Add(x, residual);
         }
         return x;
     }
@@ -136,7 +136,7 @@ public sealed class CheckpointVocoder
             .narrow(2, 15, input.shape[2] * 2);
         var alpha = Weight(prefix + ".act.alpha").exp().reshape(1, channels, 1);
         var beta = Weight(prefix + ".act.beta").exp().reshape(1, channels, 1);
-        up = up.add(up.mul(alpha).sin().pow(2).div(beta.add(1e-9)));
+        up = TorchSharpRuntime.Add(up, up.mul(alpha).sin().pow(2).div(beta.add(1e-9)));
         var downFilter = Weight(prefix + ".downsample.lowpass.filter").expand(channels, -1, -1);
         up = nn.functional.pad(up, [5, 6], PaddingModes.Replicate);
         return nn.functional.conv1d(up, downFilter, stride: 2, groups: channels);

@@ -3,12 +3,243 @@ set -Eeuo pipefail
 export PATH="/root/.local/bin:$PATH"
 
 milestone=${1:-}
-if [[ ! $milestone =~ ^M([0-7]|7A)$ ]]; then
-    echo "usage: $0 <M0..M7A>" >&2
+if [[ ! $milestone =~ ^M([0-7]|7A|7C)$ ]]; then
+    echo "usage: $0 <M0..M7A|M7C>" >&2
     exit 2
 fi
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 cd "$repo_root"
+
+if [[ $milestone == M7C ]]; then
+    failure_heartbeat() {
+        scripts/remote/publish-heartbeat.sh M7C blocked m7c_acceptance_gate_failed || true
+    }
+    trap failure_heartbeat ERR
+
+    expected_plan_sha=6c7fbd1012661adba0dc7a9b89a8cbed7c1a1014fa9475b93531edad58578982
+    expected_m7a_source=523d81b92c796048f2bbcc299c5c4f21e3fd5b5e
+    [[ $(sha256sum /root/C_SHARP_PORT_PLAN.M7C.md | awk '{print $1}') == "$expected_plan_sha" ]]
+    [[ $(git merge-base "$expected_m7a_source" HEAD) == "$expected_m7a_source" ]]
+    "$repo_root/.venv/bin/python" - <<'PY'
+import json
+from pathlib import Path
+
+summary = json.loads(Path("artifacts/M7A/summary.json").read_text())
+if summary.get("milestone") != "M7A" or summary.get("state") != "accepted":
+    raise SystemExit("M7C accepted M7A prerequisite is missing")
+PY
+
+    artifact_dir="$repo_root/artifacts/M7C"
+    mkdir -p "$artifact_dir"
+    "$repo_root/.venv/bin/python" scripts/remote/collect-m7c-evidence.py --artifact-dir "$artifact_dir"
+    dotnet build Ltx.sln --configuration Release --nologo
+    scripts/remote/run-m1-smoke.sh "$artifact_dir/abi-smoke.json"
+    scripts/remote/run-m5-media.sh "$artifact_dir/media-pipelines.json"
+
+    checkpoint=/workspace/ltx-model-cache/M7A/ltx23-distilled-checkpoint/ltx-2.3-22b-distilled-1.1.safetensors
+    upsampler=/workspace/ltx-model-cache/M7C/ltx23-spatial-upscaler/ltx-2.3-spatial-upscaler-x2-1.1.safetensors
+    context="$repo_root/build/M7C/beach-volleyball-context.safetensors"
+    stage_latents="$repo_root/build/M7C/diagnostics/python-stage-latents.safetensors"
+    checkpoint_oracle="$repo_root/build/M7A/acceptance/real-checkpoint-oracle.safetensors"
+    torchsharp_library="$repo_root/build/M1/torchsharp-build/LibTorchSharp/libLibTorchSharp.so"
+    library_path=$(scripts/remote/m1-library-path.sh)
+    scripts/remote/build-m5-media.sh >/dev/null
+    export LD_LIBRARY_PATH="$library_path:$repo_root/build/M1/torchsharp-build/LibTorchSharp:$repo_root/build/M1/ltx-cuda:$repo_root/build/M5/ltx-media${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+
+    [[ $(sha256sum "$checkpoint" | awk '{print $1}') == b33b7fe4bbfe084f484be4aaf90b0f1d95dca20d403ac4c0e037eb8c4f0af7cc ]]
+    [[ $(sha256sum "$upsampler" | awk '{print $1}') == 5f416311fa8172b65af67530758964708d29a317b830d689a51143b7f91913ed ]]
+    [[ $(sha256sum "$context" | awk '{print $1}') == f4e7df3f9768932049c4ab3a2f733db0f39b9144e2ed6bfa46d01248f49fa495 ]]
+
+    upsampler_output=$(dotnet run \
+        --project tests/Ltx.UpsamplerTests/Ltx.UpsamplerTests.csproj \
+        --configuration Release --no-build -- \
+        "$checkpoint" "$upsampler" "$repo_root/tests/fixtures/M7C/upsampler.safetensors" "$torchsharp_library")
+    [[ $upsampler_output == *"C# learned spatial upsampler: pass"* ]]
+
+    transformer_output=$(dotnet run \
+        --project tests/Ltx.VideoDecoderTests/Ltx.VideoDecoderTests.csproj \
+        --configuration Release --no-build -- \
+        transformer "$checkpoint" "$stage_latents" "$context" "$torchsharp_library" \
+        "$artifact_dir/production-transformer-regression.json")
+    [[ $transformer_output == *"M7C production transformer:"* ]]
+
+    decoder_preview="$repo_root/build/M7C/diagnostics/csharp-decode-python-latent-regression.mp4"
+    decoder_output=$(dotnet run \
+        --project tests/Ltx.VideoDecoderTests/Ltx.VideoDecoderTests.csproj \
+        --configuration Release --no-build -- \
+        "$checkpoint" "$stage_latents" "$torchsharp_library" "$decoder_preview")
+    [[ $decoder_output == *"M7C C# tiled decode: pass"* ]]
+
+    runtime_output=$(dotnet run \
+        --project tests/Ltx.CheckpointRuntimeTests/Ltx.CheckpointRuntimeTests.csproj \
+        --configuration Release --no-build -- \
+        "$checkpoint" "$checkpoint_oracle" "$torchsharp_library" "$artifact_dir/checkpoint-runtime.json")
+    [[ $runtime_output == *"M7A real checkpoint runtime: 6 passed, 0 failed"* ]]
+
+    csharp_decode_log="$artifact_dir/csharp-full-decode.stderr.log"
+    python_decode_log="$artifact_dir/python-full-decode.stderr.log"
+    ffmpeg -v error -i "$repo_root/build/M7C/videos/m7c-csharp-beach-volleyball.mp4" -f null - 2>"$csharp_decode_log"
+    ffmpeg -v error -i "$repo_root/build/M7C/videos/m7c-python-beach-volleyball.mp4" -f null - 2>"$python_decode_log"
+    [[ ! -s $csharp_decode_log && ! -s $python_decode_log ]]
+
+    UPSAMPLER_OUTPUT="$upsampler_output" \
+    TRANSFORMER_OUTPUT="$transformer_output" \
+    DECODER_OUTPUT="$decoder_output" \
+    RUNTIME_OUTPUT="$runtime_output" \
+    DECODER_PREVIEW="$decoder_preview" \
+    "$repo_root/.venv/bin/python" - <<'PY'
+import hashlib
+import json
+import os
+import subprocess
+from pathlib import Path
+
+preview = Path(os.environ["DECODER_PREVIEW"])
+probe = json.loads(subprocess.check_output(
+    ["ffprobe", "-v", "error", "-show_streams", "-of", "json", str(preview)], text=True
+))
+video = next(stream for stream in probe["streams"] if stream["codec_type"] == "video")
+if video.get("width") != 1536 or video.get("height") != 1024 or video.get("nb_frames") != "1":
+    raise SystemExit("M7C tiled decoder preview contract mismatch")
+report = {
+    "schema_version": 1,
+    "result": "pass",
+    "test_totals": {"passed": 66, "failed": 0, "skipped": 0},
+    "suites": {
+        "abi_smoke": 5,
+        "media_pipelines": 52,
+        "learned_spatial_upsampler": 1,
+        "production_geometry_transformer": 1,
+        "full_resolution_tiled_decoder": 1,
+        "checkpoint_runtime": 6,
+    },
+    "output": {
+        "upsampler": os.environ["UPSAMPLER_OUTPUT"],
+        "transformer": os.environ["TRANSFORMER_OUTPUT"],
+        "decoder": os.environ["DECODER_OUTPUT"],
+        "runtime": os.environ["RUNTIME_OUTPUT"],
+    },
+    "decoder_preview": {
+        "path": str(preview),
+        "sha256": hashlib.sha256(preview.read_bytes()).hexdigest(),
+        "ffprobe": probe,
+    },
+    "secrets_recorded": False,
+}
+Path("artifacts/M7C/tests.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+PY
+
+    git diff --check
+    "$repo_root/.venv/bin/python" - <<'PY'
+import hashlib
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+root = Path("artifacts/M7C")
+load = lambda name: json.loads((root / name).read_text())
+reports = {name: load(name) for name in (
+    "abi-smoke.json", "media-pipelines.json", "videos.json", "comparison.json", "latents.json",
+    "models.json", "hardware.json", "production-transformer.json", "production-transformer-regression.json",
+    "checkpoint-runtime.json", "port-repair.json", "tests.json",
+)}
+if any(report.get("result", "pass") != "pass" for report in reports.values()):
+    raise SystemExit("M7C evidence or regression result is not passing")
+
+videos = reports["videos.json"]
+if videos.get("execution_order") != ["native_csharp_two_stage", "python_reference_two_stage"]:
+    raise SystemExit("M7C C#-first execution order is missing")
+if videos.get("prompt_sha256") != "fe9c3956eff10418967a912607b3c29ae77b9920a7013f62e692fa06742d855d":
+    raise SystemExit("M7C exact prompt mismatch")
+settings = videos.get("settings", {})
+required_settings = {"seed": 20260821, "frames": 241, "frame_rate": 24, "width": 1536, "height": 1024}
+if any(settings.get(key) != value for key, value in required_settings.items()) or \
+        settings.get("stage1_sigmas") != [1, .99375, .9875, .98125, .975, .909375, .725, .421875, 0] or \
+        settings.get("stage2_sigmas") != [.909375, .725, .421875, 0]:
+    raise SystemExit("M7C sampling contract mismatch")
+expected_hashes = {
+    "csharp": "9bd4d680246737dcac62226b9c5c1984cb9f1d093bfec5bd0704fc952a1785af",
+    "python": "16a15b7e68d94087da1ed1c3217e22dfacdaa5ceedda21ab83c5ff6b24ac32fd",
+}
+for name, expected in expected_hashes.items():
+    item = videos["videos"][name]
+    if item.get("sha256") != expected or item.get("full_stream_decode") != "pass":
+        raise SystemExit(f"M7C {name} video identity/decode mismatch")
+
+comparison = reports["comparison.json"]
+if comparison["video_metrics"]["ssim"]["all"] < .80 or \
+        comparison["video_metrics"]["psnr_db"]["average"] < 20 or \
+        min(comparison["audio_apsnr_db"].values()) < 100:
+    raise SystemExit("M7C paired-output comparison gate failed")
+latents = reports["latents.json"]
+if latents["comparisons"]["stage1_step0_video_input"]["exact_fraction"] != 1 or \
+        latents["comparisons"]["stage1_step0_video_velocity"]["cosine"] < .999 or \
+        not (.8 < latents["csharp"]["stage1_video"]["standard_deviation"] < 1.2) or \
+        not (.8 < latents["csharp"]["stage2_video"]["standard_deviation"] < 1.2):
+    raise SystemExit("M7C latent/content parity gate failed")
+
+models = reports["models.json"]
+if models["checkpoint"]["revision"] != "6b5a83e3045eaf8e46cfa0acce512412aa2b9cce" or \
+        models["text_encoder"]["revision"] != "68f7ee4fbd59087436ada77ed2d62f373fdd4482":
+    raise SystemExit("M7C pinned model revision mismatch")
+hardware = reports["hardware.json"]
+gpu = hardware["gpu"]
+if not gpu["name"].startswith(("NVIDIA A100", "NVIDIA H100")) or gpu["memory_total_mib"] < 80_000 or \
+        max(gpu["csharp_peak_memory_used_mib"], gpu["python_peak_memory_used_mib"]) >= gpu["memory_total_mib"] or \
+        hardware["offload"] != {"csharp": "required_disk_weight_streaming_after_resident_cuda_oom", "python": "none_resident"}:
+    raise SystemExit("M7C GPU/offload gate failed")
+
+for name in ("production-transformer.json", "production-transformer-regression.json"):
+    transformer = reports[name]
+    if transformer.get("execution") != "native_csharp_streamed_production_geometry_transformer" or \
+            transformer.get("python_runtime_calls") != 0 or transformer["video"]["cosine"] < .999 or \
+            transformer["audio"]["cosine"] < .999:
+        raise SystemExit(f"M7C transformer parity gate failed: {name}")
+runtime = reports["checkpoint-runtime.json"]
+if runtime.get("test_totals") != {"passed": 6, "failed": 0, "skipped": 0} or \
+        runtime.get("python_runtime_calls") != 0 or \
+        runtime.get("comparisons", {}).get("convolutional_video_decoder_auto_tiled", {}).get("result") != "pass":
+    raise SystemExit("M7C checkpoint runtime regression gate failed")
+if reports["media-pipelines.json"].get("test_totals") != {"passed": 52, "failed": 0, "skipped": 0} or \
+        reports["tests.json"].get("test_totals") != {"passed": 66, "failed": 0, "skipped": 0}:
+    raise SystemExit("M7C regression totals mismatch")
+
+checksums = {
+    path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+    for path in sorted(root.glob("*.json"))
+    if path.name != "summary.json"
+}
+summary = {
+    "schema_version": 1,
+    "milestone": "M7C",
+    "state": "accepted",
+    "generated_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+    "source_reference_sha": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+    "accepted_m7a_source_sha": "523d81b92c796048f2bbcc299c5c4f21e3fd5b5e",
+    "plan_revision": "M7C",
+    "plan_sha256": "6c7fbd1012661adba0dc7a9b89a8cbed7c1a1014fa9475b93531edad58578982",
+    "verification_command": "scripts/remote/verify-milestone.sh M7C",
+    "execution_order": videos["execution_order"],
+    "prompt_sha256": videos["prompt_sha256"],
+    "settings": settings,
+    "videos": videos["videos"],
+    "comparison": comparison,
+    "models": {key: models[key] for key in ("checkpoint", "spatial_upsampler", "text_encoder", "prompt_context")},
+    "gpu": hardware["gpu"],
+    "offload": hardware["offload"],
+    "test_totals": {"passed": 66, "failed": 0, "skipped": 0},
+    "port_repair": reports["port-repair.json"],
+    "artifact_sha256": checksums,
+    "secrets_recorded": False,
+}
+(root / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+PY
+
+    trap - ERR
+    echo "M7C accepted"
+    exit 0
+fi
 
 if [[ $milestone == M7A ]]; then
     failure_heartbeat() {
@@ -77,7 +308,7 @@ expected_totals = {
     "storage": 16,
     "core": 34,
     "m4": 45,
-    "m5": 51,
+    "m5": 52,
     "m6": 21,
     "runtime": 5,
     "pipelines": 12,
@@ -207,14 +438,14 @@ summary = {
     "gpu": hardware["gpu"],
     "host": hardware["host"],
     "abi": smoke["abi"],
-    "test_totals": {"passed": 191, "failed": 0, "skipped": 0},
+    "test_totals": {"passed": 192, "failed": 0, "skipped": 0},
     "tests": {
         **smoke["tests"],
         "foundation_parity": "2_pass",
         "storage_regression": "16_pass",
         "core_model_regression": "34_pass",
         "cuda_quantization_lora_regression": "45_pass",
-        "media_pipeline_regression": "51_pass",
+        "media_pipeline_regression": "52_pass",
         "low_vram_training_regression": "21_pass",
         "real_checkpoint_components": "5_pass",
         "real_checkpoint_single_gpu_pipelines": "12_pass",
@@ -318,7 +549,7 @@ expected_totals = [
     (storage, {"passed": 16, "failed": 0, "skipped": 0}),
     (core, {"passed": 34, "failed": 0, "skipped": 0}),
     (m4, {"passed": 45, "failed": 0, "skipped": 0}),
-    (m5, {"passed": 51, "failed": 0, "skipped": 0}),
+    (m5, {"passed": 52, "failed": 0, "skipped": 0}),
     (m6, {"passed": 21, "failed": 0, "skipped": 0}),
 ]
 if any(result.get("test_totals") != expected for result, expected in expected_totals):
@@ -400,14 +631,14 @@ summary = {
     "toolchain": preflight["toolchain"],
     "gpu": {**preflight["gpu"], **m6["low_vram_profile"]},
     "abi": smoke["abi"],
-    "test_totals": {"passed": 173, "failed": 0, "skipped": 0},
+    "test_totals": {"passed": 174, "failed": 0, "skipped": 0},
     "tests": {
         **smoke["tests"],
         "foundation_parity": "2_pass",
         "storage_regression": "16_pass",
         "core_model_regression": "34_pass",
         "cuda_quantization_lora_regression": "45_pass",
-        "media_pipeline_regression": "51_pass",
+        "media_pipeline_regression": "52_pass",
         "preprocessing": "5_pass",
         "one_step_lora_training": "11_pass",
         "low_vram_profile": "5_pass",
@@ -505,10 +736,10 @@ if core.get("test_totals") != {"passed": 34, "failed": 0, "skipped": 0}:
     raise SystemExit("M5 core-model regression totals mismatch")
 if m4.get("test_totals") != {"passed": 45, "failed": 0, "skipped": 0}:
     raise SystemExit("M5 CUDA/quantization/LoRA regression totals mismatch")
-if m5.get("test_totals") != {"passed": 51, "failed": 0, "skipped": 0}:
+if m5.get("test_totals") != {"passed": 52, "failed": 0, "skipped": 0}:
     raise SystemExit("M5 media/pipeline totals mismatch")
 if m5.get("suite_totals") != {
-    "media": 9,
+    "media": 10,
     "pipelines": 12,
     "cli_modes": 12,
     "cli_help": 12,
@@ -581,14 +812,14 @@ summary = {
     "toolchain": preflight["toolchain"],
     "gpu": preflight["gpu"],
     "abi": smoke["abi"],
-    "test_totals": {"passed": 152, "failed": 0, "skipped": 0},
+    "test_totals": {"passed": 153, "failed": 0, "skipped": 0},
     "tests": {
         **smoke["tests"],
         "foundation_parity": "2_pass",
         "storage_regression": "16_pass",
         "core_model_regression": "34_pass",
         "cuda_quantization_lora_regression": "45_pass",
-        "media": "9_pass",
+        "media": "10_pass",
         "single_gpu_pipelines": "12_pass",
         "cli_success_help_errors": "30_pass",
     },

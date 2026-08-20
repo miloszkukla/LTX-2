@@ -76,9 +76,11 @@ new file mode 100644
 index 0000000..e042256
 --- /dev/null
 +++ b/src/Native/LibTorchSharp/THSLtxAbi.cpp
-@@ -0,0 +1,46 @@
+@@ -0,0 +1,71 @@
 +// LTX-specific ABI probe. This file is carried by the LTX TorchSharp fork.
 +#include "THSTorch.h"
++#include <ATen/ops/add.h>
++#include <ATen/ops/linear.h>
 +#include <ATen/ops/rms_norm.h>
 +#include <cuda_runtime_api.h>
 +#include <torch/version.h>
@@ -118,10 +120,33 @@ index 0000000..e042256
 +    at::globalContext().setAllowFP16BF16ReductionMathSDP(false);
 +}
 +
++EXPORT_API(void) THSLtx_use_python_sdp_priority()
++{
++    at::globalContext().setSDPUseFlash(true);
++    at::globalContext().setSDPUseFA3(false);
++    at::globalContext().setSDPUseMemEfficient(true);
++    at::globalContext().setSDPUseMath(true);
++    at::globalContext().setSDPUseCuDNN(true);
++    at::globalContext().setSDPUseOverrideable(false);
++    at::globalContext().setAllowFP16BF16ReductionMathSDP(false);
++    at::globalContext().setSDPPriorityOrder({3, 1, 2, 0, 4});
++}
++
 +EXPORT_API(Tensor) THSLtx_rms_norm(const Tensor input, const Tensor weight, const double eps)
 +{
 +    const std::optional<at::Tensor> normalized_weight = weight == nullptr ? std::nullopt : std::optional<at::Tensor>(*weight);
 +    CATCH_TENSOR(at::rms_norm(*input, {input->size(-1)}, normalized_weight, eps));
++}
++
++EXPORT_API(Tensor) THSLtx_add(const Tensor left, const Tensor right)
++{
++    CATCH_TENSOR(at::add(*left, *right));
++}
++
++EXPORT_API(Tensor) THSLtx_linear(const Tensor input, const Tensor weight, const Tensor bias)
++{
++    const std::optional<at::Tensor> optional_bias = bias == nullptr ? std::nullopt : std::optional<at::Tensor>(*bias);
++    CATCH_TENSOR(at::linear(*input, *weight, optional_bias));
 +}
 +diff --git a/src/Native/LibTorchSharp/THSTensor.cpp b/src/Native/LibTorchSharp/THSTensor.cpp
 index 3d4c2ea..c15b21f 100644

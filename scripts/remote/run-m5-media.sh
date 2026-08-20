@@ -61,8 +61,8 @@ media_output=$(dotnet run \
     --configuration Release \
     --no-build \
     -- "$fixture")
-if [[ $media_output != *"M5 media/pipeline fixtures: 21 passed, 0 failed; media=9, pipelines=12"* ]]; then
-    echo "M5 C# runner did not report the complete twenty-one-check pass" >&2
+if [[ $media_output != *"M5 media/pipeline fixtures: 22 passed, 0 failed; media=10, pipelines=12"* ]]; then
+    echo "M5 C# runner did not report the complete twenty-two-check pass" >&2
     exit 1
 fi
 
@@ -118,9 +118,9 @@ report = {
         "openimageio": manifest["oracle"]["openimageio"],
         "native_oiio_bridge_sha256": hashlib.sha256(native_library.read_bytes()).hexdigest(),
     },
-    "test_totals": {"passed": 51, "failed": 0, "skipped": 0},
+    "test_totals": {"passed": 52, "failed": 0, "skipped": 0},
     "suite_totals": {
-        "media": 9,
+        "media": 10,
         "pipelines": 12,
         "cli_modes": 12,
         "cli_help": 12,

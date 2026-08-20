@@ -37,6 +37,41 @@ for (var index = 0; index < expected.Length; index++)
     }
 }
 
+using var addLeft = tensor(new[] { 1.0f, -2.0f }, dtype: ScalarType.BFloat16, device: CUDA)
+    .reshape(1, 1, 2);
+using var addRight = tensor(new[] { 0.5f, 3.0f, -4.0f, 2.0f }, dtype: ScalarType.BFloat16, device: CUDA)
+    .reshape(1, 2, 2);
+using var addResult = TorchSharpRuntime.Add(addLeft, addRight);
+using var addResultCpu = addResult.to(ScalarType.Float32).cpu();
+var actualAdd = addResultCpu.data<float>().ToArray();
+var expectedAdd = new[] { 1.5f, 1.0f, -3.0f, 0.0f };
+for (var index = 0; index < expectedAdd.Length; index++)
+{
+    if (MathF.Abs(actualAdd[index] - expectedAdd[index]) > 1e-5f)
+    {
+        Console.Error.WriteLine($"Native tensor-add mismatch at {index}: {actualAdd[index]}.");
+        return 6;
+    }
+}
+
+using var linearInput = tensor(new[] { 1.0f, -2.0f }, dtype: ScalarType.BFloat16, device: CUDA)
+    .reshape(1, 2);
+using var linearWeight = tensor(new[] { 2.0f, 0.5f, -1.0f, 3.0f }, dtype: ScalarType.BFloat16, device: CUDA)
+    .reshape(2, 2);
+using var linearBias = tensor(new[] { 0.25f, -0.5f }, dtype: ScalarType.BFloat16, device: CUDA);
+using var linearResult = TorchSharpRuntime.Linear(linearInput, linearWeight, linearBias);
+using var linearResultCpu = linearResult.to(ScalarType.Float32).cpu();
+var actualLinear = linearResultCpu.data<float>().ToArray();
+var expectedLinear = new[] { 1.25f, -7.5f };
+for (var index = 0; index < expectedLinear.Length; index++)
+{
+    if (MathF.Abs(actualLinear[index] - expectedLinear[index]) > 1e-5f)
+    {
+        Console.Error.WriteLine($"Native linear mismatch at {index}: {actualLinear[index]}.");
+        return 7;
+    }
+}
+
 var nativeOutput = new float[expected.Length];
 LtxCudaNative.Affine(new[] { 1.0f, -2.0f, 3.5f }, nativeOutput, 2.0f, 0.5f);
 for (var index = 0; index < expected.Length; index++)

@@ -90,10 +90,36 @@ using (var runtime = new CheckpointTransformerRuntime(store, CUDA))
 store.ClearCache();
 
 using (var scope = NewDisposeScope())
+using (var runtime = new CheckpointTransformerRuntime(store, CUDA, cacheWeights: false))
+{
+    var video = new CheckpointTransformerInput(
+        Load("video_latent"),
+        Load("video_context"),
+        null,
+        Load("timesteps"),
+        Load("sigma"),
+        Load("video_positions"));
+    var audio = new CheckpointTransformerInput(
+        Load("audio_latent"),
+        Load("audio_context"),
+        null,
+        Load("timesteps"),
+        Load("sigma"),
+        Load("audio_positions"));
+    using var actual = runtime.Forward(video, audio);
+    Compare("streamed_transformer_video_velocity", actual.Video!, Load("video_velocity"));
+    Compare("streamed_transformer_audio_velocity", actual.Audio!, Load("audio_velocity"));
+    passed++;
+}
+store.ClearCache();
+
+using (var scope = NewDisposeScope())
 {
     var decoder = new CheckpointVideoDecoder(store, CUDA);
     using var actual = decoder.Decode(Load("video_decoder_latent"));
     Compare("convolutional_video_decoder", actual, Load("decoded_video"));
+    using var tiled = decoder.DecodeTiled(Load("video_decoder_latent"));
+    Compare("convolutional_video_decoder_auto_tiled", tiled, Load("decoded_video"));
     passed++;
 }
 store.ClearCache();

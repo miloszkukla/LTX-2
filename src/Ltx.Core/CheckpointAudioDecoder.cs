@@ -56,7 +56,7 @@ public sealed class CheckpointAudioDecoder
             .reshape(batch, frames, config.LatentChannels * 16);
         var means = Weight("audio_vae.per_channel_statistics.mean-of-means").reshape(1, 1, -1);
         var standardDeviations = Weight("audio_vae.per_channel_statistics.std-of-means").reshape(1, 1, -1);
-        x = x.mul(standardDeviations).add(means)
+        x = TorchSharpRuntime.Add(x.mul(standardDeviations), means)
             .reshape(batch, frames, config.LatentChannels, 16)
             .permute(0, 2, 1, 3)
             .contiguous();
@@ -103,7 +103,7 @@ public sealed class CheckpointAudioDecoder
         {
             input = Convolution(input, prefix + ".conv_shortcut.conv");
         }
-        return input.add(x);
+        return TorchSharpRuntime.Add(input, x);
     }
 
     private Tensor Convolution(Tensor input, string prefix)
