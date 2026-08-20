@@ -4,6 +4,11 @@
       "command": "authenticated HTTP byte-range probes for all 21 pinned required files in artifacts/M0/model-access.json",
       "exit_code": 4,
       "result": "17_byte_reads_succeeded_4_required_files_http_403"
+    },
+    {
+      "command": "continuation retry of authenticated HTTP byte-range probes for all 21 pinned required files in artifacts/M0/model-access.json",
+      "exit_code": 4,
+      "result": "17_byte_reads_succeeded_4_required_files_http_403"
     }
   ],
   "failure": {
@@ -15,6 +20,7 @@
     "stage": "prerequisite_model_access"
   },
   "generated_at_utc": "2026-08-20T05:03:50Z",
+  "reconfirmed_at_utc": "2026-08-20T05:13:13Z",
   "gpu": {
     "compute_capability": "8.0",
     "host_memory_total_gib": 294,
@@ -67,6 +73,7 @@
   "schema_version": 1,
   "secrets_recorded": false,
   "source_branch": "codex/ltx-csharp-m7a",
+  "latest_source_reference_sha": "c7c28d430f2ef343702110a3d6a188c9086b50fd",
   "source_reference_sha": "aa5802499a6b5bd7531676fc043fb440ac38ada9",
   "starting_m6_sha": "87ddf3078caf1d41290ee514b6c3c61e06448160",
   "state": "blocked",
