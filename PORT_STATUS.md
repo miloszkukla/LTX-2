@@ -11,15 +11,20 @@
 - Accepted M6 plan: revision M6, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. Its byte-for-byte contents remain preserved by accepted checkpoint `87ddf3078caf1d41290ee514b6c3c61e06448160`; the coordinator's M6 revision was content-identical to the accepted M5 revision.
 - Current M7A plan: `C_SHARP_PORT_PLAN.md`, revision M7A, SHA-256 `85da94394a9e37749d579bc333e79eedebe2a61f77324cacd7ecbd5d149247ba`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M7A.md` and adds the approved isolated M7A source/status branches and M8 integration requirement while retaining all accepted earlier milestone gates.
 
-## M7A — documentation/status checkpoint
+## M7A — blocked at required model-access prerequisite
 
 - Handoff acknowledged on 2026-08-20 UTC from accepted M6 checkpoint `87ddf3078caf1d41290ee514b6c3c61e06448160`; no M7A validation was started before this documentation/status checkpoint.
 - Isolation: `codex/ltx-csharp-m7a` was created and pushed from the exact accepted M6 SHA. M7B concurrently owns `codex/ltx-csharp`; M7A will not modify or push that branch.
 - Plan input: `/root/C_SHARP_PORT_PLAN.M7A.md`, SHA-256 `85da94394a9e37749d579bc333e79eedebe2a61f77324cacd7ecbd5d149247ba`; tracked byte-for-byte as `C_SHARP_PORT_PLAN.md`. All accepted M0–M6 plan and milestone evidence remains preserved in the tracked historical copies, accepted commits, and sections below.
 - Worker: one NVIDIA A100-SXM4-80GB (80 GiB, compute capability 8.0) with 294 GiB host RAM and a 200 GiB workspace disk. This satisfies the approved standard-profile validation tier; Hopper-specific native FP8 coverage is explicitly outside this A100 run.
-- Acceptance command: `scripts/remote/verify-milestone.sh M7A` after every M1–M6 suite, real-checkpoint single-GPU pipeline parity, the standard-profile trainer smoke test, and explicit deferred-scope reporting are implemented and passing.
+- Documentation/status checkpoint: `c0e4835da0d82b7e116f1cc17b87292f6febe457` was pushed before M7A validation. Heartbeat isolation support was subsequently pushed only to this source branch, and `codex/ltx-csharp-m7a-status` was created with the plan's redacted schema.
+- Prerequisite probe: authenticated one-byte HTTP range reads at every pinned revision succeeded for 17 of the 21 required files. Four required files returned HTTP 403: the LTX 2.5 detailing IC-LoRA, both LTX 2.3 HDR assets, and the LTX 2.3 DubIt LoRA. The probe read 17 bytes total from accessible payloads and did not download checkpoints.
+- Acceptance impact: the denied assets are required for in-scope single-GPU IC-LoRA, HDR, and DubIt real-checkpoint coverage. Therefore `scripts/remote/verify-milestone.sh M7A` cannot truthfully satisfy the approved every-pipeline gate, and it was not run or weakened.
+- Scope preserved: no alternate model/revision, fixture-only substitute, pipeline omission, or reduced acceptance gate was used. Every earlier accepted suite and artifact remains unchanged; standard-profile execution did not begin after the prerequisite failed.
+- Redacted evidence: `artifacts/M7A/prerequisite-failure.json`, SHA-256 `a24a9fd1f697d2e64a1ae0f4fa981b2a687251543f70a7d6213e60c58a0bbee3`; it contains repository IDs, pinned revisions, paths, status codes, and counts but no token, signed URL, credential, or environment value.
+- Recovery gate: grant the injected fine-grained read token gated-file access (including accepted terms) to `Lightricks/LTX-2.5-22b-IC-LoRA-Pixel-Spatial-Upscaler`, `Lightricks/LTX-2.3-22b-IC-LoRA-HDR`, and `Lightricks/LTX-2.3-22b-IC-LoRA-DubIt`, then resume M7A at the complete pinned-file prerequisite probe.
 - Heartbeat isolation: only `codex/ltx-csharp-m7a-status` may be force-updated by this worker. `codex/ltx-csharp-status` remains exclusively owned by the concurrent M7B worker.
-- Known failures: none at handoff. Next action: publish this checkpoint, enable the isolated heartbeat, and validate M7A prerequisites without reducing scope.
+- Known failure: `gated_required_model_files_403`. M7A is not accepted; the real-checkpoint parity and standard-profile trainer gates have not run.
 
 ## M6 — accepted checkpoint
 

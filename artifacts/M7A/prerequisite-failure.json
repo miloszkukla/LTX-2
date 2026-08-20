@@ -1,0 +1,78 @@
+{
+  "commands": [
+    {
+      "command": "authenticated HTTP byte-range probes for all 21 pinned required files in artifacts/M0/model-access.json",
+      "exit_code": 4,
+      "result": "17_byte_reads_succeeded_4_required_files_http_403"
+    }
+  ],
+  "failure": {
+    "code": "gated_required_model_files_403",
+    "fallback_permitted": false,
+    "fallback_reason": "M7A requires real-checkpoint parity for every in-scope single-GPU pipeline; fixture-only validation, alternate checkpoints, and omission of HDR, DubIt, or IC-LoRA modes would reduce the approved gate.",
+    "probe_bytes_read": 17,
+    "required_recovery": "Grant the worker's injected fine-grained read token gated-file access to all three denied repositories, including accepted repository terms, then restart M7A from this blocked checkpoint and rerun the complete pinned-file prerequisite probe.",
+    "stage": "prerequisite_model_access"
+  },
+  "generated_at_utc": "2026-08-20T05:03:50Z",
+  "gpu": {
+    "compute_capability": "8.0",
+    "host_memory_total_gib": 294,
+    "memory_total_mib": 81920,
+    "name": "NVIDIA A100-SXM4-80GB",
+    "visible_cuda_devices": 1
+  },
+  "milestone": "M7A",
+  "model_access": {
+    "denied_file_probes": [
+      {
+        "id": "ltx25-detailing-ic-lora",
+        "path": "ltx-2.5-22b-ic-lora-pixel-spatial-upscaler-x2-1.0.safetensors",
+        "repo": "Lightricks/LTX-2.5-22b-IC-LoRA-Pixel-Spatial-Upscaler",
+        "resolved_revision": "74c4e68ee7dd99f3997d5a1bb1a3784941822222",
+        "result": "http_denied",
+        "status_code": 403
+      },
+      {
+        "id": "ltx23-hdr-assets",
+        "path": "ltx-2.3-22b-ic-lora-hdr-0.9.safetensors",
+        "repo": "Lightricks/LTX-2.3-22b-IC-LoRA-HDR",
+        "resolved_revision": "577ab50f447358d00ba68ef204648dfe05646300",
+        "result": "http_denied",
+        "status_code": 403
+      },
+      {
+        "id": "ltx23-hdr-assets",
+        "path": "ltx-2.3-22b-ic-lora-hdr-scene-emb.safetensors",
+        "repo": "Lightricks/LTX-2.3-22b-IC-LoRA-HDR",
+        "resolved_revision": "577ab50f447358d00ba68ef204648dfe05646300",
+        "result": "http_denied",
+        "status_code": 403
+      },
+      {
+        "id": "ltx23-dubit-lora",
+        "path": "ltx-2.3-22b-ic-lora-dubit-0.9.safetensors",
+        "repo": "Lightricks/LTX-2.3-22b-IC-LoRA-DubIt",
+        "resolved_revision": "1456334c3d69924de5083e553733b108ed1147f2",
+        "result": "http_denied",
+        "status_code": 403
+      }
+    ],
+    "required_file_count": 21,
+    "successful_byte_range_probe_count": 17,
+    "successful_probe_status_code": 206
+  },
+  "plan_revision": "M7A",
+  "plan_sha256": "85da94394a9e37749d579bc333e79eedebe2a61f77324cacd7ecbd5d149247ba",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_branch": "codex/ltx-csharp-m7a",
+  "source_reference_sha": "aa5802499a6b5bd7531676fc043fb440ac38ada9",
+  "starting_m6_sha": "87ddf3078caf1d41290ee514b6c3c61e06448160",
+  "state": "blocked",
+  "token": {
+    "present": true,
+    "source": "pid1_transient",
+    "value_recorded": false
+  }
+}
