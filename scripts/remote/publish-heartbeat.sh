@@ -4,7 +4,7 @@ set -Eeuo pipefail
 milestone=${1:?usage: publish-heartbeat.sh MILESTONE PHASE [FAILURE_CODE]}
 phase=${2:?usage: publish-heartbeat.sh MILESTONE PHASE [FAILURE_CODE]}
 failure=${3:-none}
-if [[ ! $milestone =~ ^M[0-7]$ || ! $phase =~ ^[A-Za-z0-9_.:-]{1,80}$ || ! $failure =~ ^[A-Za-z0-9_.:-]{1,160}$ ]]; then
+if [[ ! $milestone =~ ^M([0-6]|7A)$ || ! $phase =~ ^[A-Za-z0-9_.:-]{1,80}$ || ! $failure =~ ^[A-Za-z0-9_.:-]{1,160}$ ]]; then
     echo "heartbeat fields must be short redacted identifiers" >&2
     exit 2
 fi

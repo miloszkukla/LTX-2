@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 milestone=${1:?usage: start-heartbeat.sh MILESTONE PHASE}
 phase=${2:?usage: start-heartbeat.sh MILESTONE PHASE}
-if [[ ! $milestone =~ ^M[0-7]$ || ! $phase =~ ^[A-Za-z0-9_.:-]{1,80}$ ]]; then
+if [[ ! $milestone =~ ^M([0-6]|7A)$ || ! $phase =~ ^[A-Za-z0-9_.:-]{1,80}$ ]]; then
     echo "heartbeat fields must be short redacted identifiers" >&2
     exit 2
 fi
