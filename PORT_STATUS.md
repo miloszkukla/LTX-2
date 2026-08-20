@@ -3,7 +3,16 @@
 ## Plan revision history
 
 - M0 bootstrap plan: `C_SHARP_PORT_PLAN.M0.md`, SHA-256 `d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6`. This is the byte-for-byte plan accepted at M0 and remains immutable historical evidence.
-- Current M1 plan: `C_SHARP_PORT_PLAN.md`, revision M1, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M1.md`.
+- Accepted M1 plan: `C_SHARP_PORT_PLAN.M1.md`, revision M1, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `e9dcbdf69c658ad026bdec6ee5cd4642847215a8`.
+- Current M2 plan: `C_SHARP_PORT_PLAN.md`, revision M2, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M2.md`; the coordinator's M2 revision is content-identical to the accepted M1 revision.
+
+## M2 — handoff acknowledged, implementation not started
+
+- Handoff acknowledged on 2026-08-20 UTC from accepted M1 checkpoint `e9dcbdf69c658ad026bdec6ee5cd4642847215a8`; no M2 implementation was started before this documentation/status checkpoint.
+- Plan input: `/root/C_SHARP_PORT_PLAN.M2.md`, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`; tracked as `C_SHARP_PORT_PLAN.md` with the accepted M0 and M1 plan copies retained as historical evidence.
+- Exact acceptance gate: safetensors/LoRA round trips and fixed checkpoint-loader fixtures pass at the recorded tolerances (FP32 `rtol=1e-4`, `atol=1e-5`; BF16/FP8 `rtol=2e-2`, `atol=5e-3`).
+- Required verification: `scripts/remote/verify-milestone.sh M2` on the existing 32 GB RTX 5090 worker. The implementation source checkpoint will be this handoff commit after it is pushed and will be recorded in the accepted M2 status and redacted heartbeat.
+- Known failures: none. Next action: begin M2 only after this documentation/status checkpoint is committed and pushed.
 
 ## M1 — accepted checkpoint
 
@@ -22,7 +31,7 @@
 
 - Verification: `scripts/remote/verify-milestone.sh M0` (exit 0).
 - Starting/source reference: `400fd31054597515f47125691032c04b1c3ee24e`; fork checkpoint SHA is recorded by the redacted heartbeat immediately after the atomic push (it cannot be embedded in its own commit).
-- Plan: `C_SHARP_PORT_PLAN.md`, SHA-256 `d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6`.
+- Plan: `C_SHARP_PORT_PLAN.M0.md`, SHA-256 `d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6`.
 - Worker: Vast instance `48162892`, single RTX 5090 32 GB, `$0.4259259259/hour`, direct SSH, 32 GB nominal RAM, 200 GiB disk. CUDA 13.2 / driver 580.95.05 minor-version compatibility; compute capability 12.0; native smoke contains `sm_120` SASS and no PTX.
 - Approved limits enforced: routine worker at or below `$0.60/hour`; H100 validation worker at or below `$1.20/hour`; per-instance duration and total spend are unlimited. No H100 was created for M0.
 - Remote access: ephemeral ED25519 deploy key fingerprint `SHA256:Vvy5vbMRoLgmo98uwFk8ZpTBhaX5VgmwE4CEPx++JP4`; write-enabled push proven. The registration ID is manager-held/redacted because the rental-host GitHub token is intentionally denied deploy-key administration (HTTP 403); recovery maps this fingerprint to the ID before revocation. No private key or credential is tracked.
