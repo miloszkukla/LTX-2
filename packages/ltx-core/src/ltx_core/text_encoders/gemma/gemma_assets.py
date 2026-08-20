@@ -69,7 +69,19 @@ class GemmaAssets:
     def load(cls, path: str | Path) -> GemmaAssets:
         p = Path(path)
         if p.is_dir():
-            return cls.from_root(p)
+            if any(p.rglob("config.json")) and any(p.rglob("tokenizer.json")):
+                return cls.from_root(p)
+            shards = tuple(sorted(item for item in p.rglob("*.safetensors") if item.is_file()))
+            if shards:
+                assets = cls.from_single_file(shards[0])
+                return cls(
+                    source=str(p),
+                    config_dict=assets.config_dict,
+                    tokenizer_json=assets.tokenizer_json,
+                    sidecars=assets.sidecars,
+                    weight_paths=tuple(str(item.resolve()) for item in shards),
+                )
+            raise FileNotFoundError(f"Gemma directory {path!r} has neither HF assets nor safetensors shards.")
         if is_safetensors_file(p):
             return cls.from_single_file(p)
         raise FileNotFoundError(f"Gemma path {path!r} is neither a directory nor a .safetensors file.")

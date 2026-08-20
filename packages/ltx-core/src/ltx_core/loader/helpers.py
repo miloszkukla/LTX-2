@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from os import PathLike, fspath
+from pathlib import Path
 from typing import TypeVar
 
 import torch
@@ -23,6 +24,24 @@ def as_path_list(paths: _PathArg | tuple[_PathArg, ...] | list[_PathArg]) -> lis
     if isinstance(paths, (str, PathLike)):
         return [fspath(paths)]
     return [fspath(p) for p in paths]
+
+
+def resolve_checkpoint_paths(path: _PathArg) -> tuple[str, ...]:
+    """Resolve a checkpoint file or a directory of ordered safetensors shards.
+
+    Directory support is required by low-host-memory disk streaming: safetensors
+    memory-maps each file, so a published single-file checkpoint larger than the
+    worker cgroup must be split into independently mmap-able shards.
+    """
+    resolved = Path(path).resolve()
+    if resolved.is_file():
+        return (str(resolved),)
+    if resolved.is_dir():
+        shards = tuple(str(item) for item in sorted(resolved.rglob("*.safetensors")) if item.is_file())
+        if shards:
+            return shards
+        raise FileNotFoundError(f"Checkpoint directory {resolved} contains no .safetensors shards")
+    raise FileNotFoundError(f"Checkpoint path does not exist: {resolved}")
 
 
 def load_state_dict(

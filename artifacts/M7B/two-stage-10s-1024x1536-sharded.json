@@ -1,0 +1,41 @@
+{
+  "attempt": "two-stage-10s-1024x1536-sharded",
+  "diagnostic_log_sha256": "5ede26b11776c083a53a3e90b5a19945b5612e6b98371b05da48146a3c81a4ce",
+  "exit_code": 0,
+  "failure_code": "none",
+  "failure_excerpt": null,
+  "finished_at_utc": "2026-08-20T06:39:52Z",
+  "gpu": {
+    "memory_total_mib": 32607,
+    "name": "NVIDIA GeForce RTX 5090",
+    "peak_sampled_memory_mib": 26090,
+    "sample_interval_seconds": 1
+  },
+  "milestone": "M7B",
+  "output": {
+    "exists": true,
+    "path": "/workspace/LTX-2/artifacts/M7B/ltx2-m7b-cinematic-golden-hour.mp4",
+    "size_bytes": 9445404
+  },
+  "pipeline": "TI2VidTwoStagesPipeline",
+  "prompt": "A continuous cinematic tracking shot glides forward at eye level along a rain-wet city street during golden hour. Warm sunlight reflects in amber streaks across puddles and slick asphalt while storefront signs and passing traffic blur softly in the background. A solitary person in a charcoal coat walks from the right sidewalk across the frame toward the left, stepping around a puddle as the camera keeps moving smoothly past them. A light breeze stirs their coat and nearby tree leaves. Cars roll slowly in the distance, tires hiss on wet pavement, footsteps splash naturally, and a muted city ambience of engines, distant voices, and a soft crosswalk signal remains synchronized. Realistic motion, natural anatomy, cinematic shallow depth of field, warm highlights, cool rain shadows, subtle lens flare, no cuts.",
+  "result": "pass",
+  "runtime_seconds": 4943,
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "seed": 20260820,
+  "settings": {
+    "diffvae_optimization": "chunked_eager",
+    "distilled_lora_strength": 1.0,
+    "frame_rate": 24.0,
+    "height": 1024,
+    "max_batch_size": 1,
+    "num_frames": 241,
+    "num_inference_steps": 30,
+    "offload": "disk",
+    "quantization": "fp8-cast",
+    "target_duration_seconds": 10.0,
+    "width": 1536
+  },
+  "started_at_utc": "2026-08-20T05:17:29Z"
+}

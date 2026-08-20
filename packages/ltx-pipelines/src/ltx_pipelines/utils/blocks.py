@@ -31,6 +31,7 @@ from ltx_core.duration_head import (
 from ltx_core.loader import SDOps
 from ltx_core.loader.attention_ops import set_attention_module_op
 from ltx_core.loader.fuse_loras import bf16_fuse_rule
+from ltx_core.loader.helpers import resolve_checkpoint_paths
 from ltx_core.loader.module_ops import ModuleOps
 from ltx_core.loader.primitives import BuilderProtocol, LoraPathStrengthAndSDOps, ModelBuilderProtocol
 from ltx_core.loader.registry import ModelRegistry, Registry
@@ -316,6 +317,11 @@ class DiffusionStage:
         mapping. A quantization policy that pins its own configurator takes
         precedence over ``model_configurator``.
         """
+        checkpoint_paths = resolve_checkpoint_paths(checkpoint_path)
+        checkpoint_source: str | tuple[str, ...] = (
+            checkpoint_paths[0] if len(checkpoint_paths) == 1 else checkpoint_paths
+        )
+
         # A quantization policy may pin its own configurator; otherwise use the one
         # provided by the caller (defaults to the audio-video LTXModelConfigurator).
         configurator = (
@@ -327,7 +333,7 @@ class DiffusionStage:
         transformer_builder: ModelBuilderProtocol[LTXModelProtocol]
         if offload_mode == OffloadMode.NONE:
             transformer_builder = Builder(
-                model_path=checkpoint_path,
+                model_path=checkpoint_source,
                 model_class_configurator=configurator,
                 model_sd_ops=model_sd_ops,
                 loras=tuple(loras),
@@ -335,7 +341,7 @@ class DiffusionStage:
             )
         else:
             transformer_builder = cls._build_streaming_builder(
-                checkpoint_path=checkpoint_path,
+                checkpoint_path=checkpoint_source,
                 configurator=configurator,
                 model_sd_ops=model_sd_ops,
                 loras=tuple(loras),
@@ -357,7 +363,7 @@ class DiffusionStage:
     @staticmethod
     def _build_streaming_builder(
         *,
-        checkpoint_path: str,
+        checkpoint_path: str | tuple[str, ...],
         configurator: type[ModelConfigurator],
         model_sd_ops: SDOps,
         loras: tuple[LoraPathStrengthAndSDOps, ...],

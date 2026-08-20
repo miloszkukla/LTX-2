@@ -24,21 +24,38 @@ class DiskTensorReader:
     """Key-based tensor accessor over one or more safetensors files."""
 
     def __init__(self, paths: list[str]) -> None:
-        self._handles: list[safetensors.safe_open] = []
+        self._paths = list(paths)
         self._key_to_handle_idx: dict[str, int] = {}
-        for path in paths:
-            handle = safetensors.safe_open(path, framework="pt", device="cpu")
-            handle_idx = len(self._handles)
-            self._handles.append(handle)
-            for sft_key in handle.keys():  # noqa: SIM118
-                self._key_to_handle_idx[sft_key] = handle_idx
+        self._active_context = None
+        self._active_handle = None
+        self._active_handle_idx: int | None = None
+        for handle_idx, path in enumerate(paths):
+            with safetensors.safe_open(path, framework="pt", device="cpu") as handle:
+                for sft_key in handle.keys():  # noqa: SIM118
+                    self._key_to_handle_idx[sft_key] = handle_idx
 
     def get_tensor(self, key: str) -> torch.Tensor:
-        return self._handles[self._key_to_handle_idx[key]].get_tensor(key)
+        handle_idx = self._key_to_handle_idx[key]
+        if handle_idx != self._active_handle_idx:
+            self._close_active_handle()
+            self._active_context = safetensors.safe_open(
+                self._paths[handle_idx], framework="pt", device="cpu"
+            )
+            self._active_handle = self._active_context.__enter__()
+            self._active_handle_idx = handle_idx
+        return self._active_handle.get_tensor(key)
 
     def close(self) -> None:
-        self._handles.clear()
+        self._close_active_handle()
+        self._paths.clear()
         self._key_to_handle_idx.clear()
+
+    def _close_active_handle(self) -> None:
+        if self._active_context is not None:
+            self._active_context.__exit__(None, None, None)
+        self._active_context = None
+        self._active_handle = None
+        self._active_handle_idx = None
 
     def __contains__(self, key: str) -> bool:
         return key in self._key_to_handle_idx
@@ -68,6 +85,7 @@ class DiskBlockReader:
             tensor = self._reader.get_tensor(sft_key)
             if self._sd_ops is None:
                 target[param_name].copy_(tensor)
+                del tensor
                 continue
             full_key = make_block_key(self._blocks_prefix, block_idx, param_name)
             for result in self._sd_ops.apply_to_key_value(full_key, tensor):
@@ -77,6 +95,7 @@ class DiskBlockReader:
                         f"(expected prefix '{block_prefix}'); cannot route to a per-block buffer."
                     )
                 target[result.new_key[len(block_prefix) :]].copy_(result.new_value)
+            del tensor
 
     def cleanup(self) -> None:
         self._reader.close()

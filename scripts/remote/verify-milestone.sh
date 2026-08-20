@@ -3,12 +3,88 @@ set -Eeuo pipefail
 export PATH="/root/.local/bin:$PATH"
 
 milestone=${1:-}
-if [[ ! $milestone =~ ^M[0-7]$ ]]; then
-    echo "usage: $0 <M0..M7>" >&2
+if [[ ! $milestone =~ ^M([0-6]|7B)$ ]]; then
+    echo "usage: $0 <M0..M6|M7B>" >&2
     exit 2
 fi
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 cd "$repo_root"
+
+if [[ $milestone == M7B ]]; then
+    failure_heartbeat() {
+        scripts/remote/publish-heartbeat.sh M7B blocked acceptance_gate_failed || true
+    }
+    trap failure_heartbeat ERR
+
+    expected_m0_plan_sha=d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6
+    expected_m1_m4_plan_sha=7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea
+    expected_m5_m7b_plan_sha=c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2
+    actual_m0_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M0.md | awk '{print $1}')
+    actual_m1_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M1.md | awk '{print $1}')
+    actual_m2_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M2.md | awk '{print $1}')
+    actual_m3_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M3.md | awk '{print $1}')
+    actual_m4_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M4.md | awk '{print $1}')
+    actual_m5_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M5.md | awk '{print $1}')
+    actual_m7b_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.md | awk '{print $1}')
+    if [[ $actual_m0_plan_sha != "$expected_m0_plan_sha" || \
+          $actual_m1_plan_sha != "$expected_m1_m4_plan_sha" || \
+          $actual_m2_plan_sha != "$expected_m1_m4_plan_sha" || \
+          $actual_m3_plan_sha != "$expected_m1_m4_plan_sha" || \
+          $actual_m4_plan_sha != "$expected_m1_m4_plan_sha" || \
+          $actual_m5_plan_sha != "$expected_m5_m7b_plan_sha" || \
+          $actual_m7b_plan_sha != "$expected_m5_m7b_plan_sha" ]]; then
+        echo "M0-M7B plan preservation gate failed" >&2
+        exit 1
+    fi
+
+    python3 - <<'PY'
+import json
+from pathlib import Path
+
+summary = json.loads(Path("artifacts/M6/summary.json").read_text())
+if summary.get("milestone") != "M6" or summary.get("state") != "accepted":
+    raise SystemExit("M6 accepted prerequisite is missing")
+PY
+
+    output="$repo_root/artifacts/M7B/ltx2-m7b-cinematic-golden-hour.mp4"
+    if [[ ! -s $output || ! -s artifacts/M7B/delivery.json ]]; then
+        echo "M7B delivery candidate or artifact reference is missing" >&2
+        exit 1
+    fi
+
+    dotnet build Ltx.sln --configuration Release --nologo
+    .venv/bin/ruff check --ignore PLR0917 \
+        scripts/remote/shard-safetensors.py \
+        scripts/remote/record-m7b-delivery.py \
+        scripts/remote/verify-m7b.py \
+        packages/ltx-core/src/ltx_core/block_streaming/disk.py \
+        packages/ltx-core/src/ltx_core/loader/helpers.py \
+        packages/ltx-core/src/ltx_core/quantization/fp8_cast.py \
+        packages/ltx-core/src/ltx_core/text_encoders/gemma/gemma_assets.py \
+        packages/ltx-pipelines/src/ltx_pipelines/utils/constants.py \
+        packages/ltx-pipelines/src/ltx_pipelines/utils/model_paths.py \
+        packages/ltx-pipelines/src/ltx_pipelines/utils/blocks.py
+    bash -n scripts/remote/run-m7b-sample.sh
+    python3 -m py_compile \
+        scripts/remote/shard-safetensors.py \
+        scripts/remote/record-m7b-delivery.py \
+        scripts/remote/verify-m7b.py \
+        packages/ltx-core/src/ltx_core/block_streaming/disk.py \
+        packages/ltx-core/src/ltx_core/loader/helpers.py \
+        packages/ltx-core/src/ltx_core/quantization/fp8_cast.py \
+        packages/ltx-core/src/ltx_core/text_encoders/gemma/gemma_assets.py \
+        packages/ltx-pipelines/src/ltx_pipelines/utils/constants.py \
+        packages/ltx-pipelines/src/ltx_pipelines/utils/model_paths.py \
+        packages/ltx-pipelines/src/ltx_pipelines/utils/blocks.py
+    ffmpeg -v error -i "$output" -map 0:v:0 -map 0:a:0 -f null -
+    scripts/remote/verify-m7b.py
+    git diff --check
+
+    trap - ERR
+    scripts/remote/publish-heartbeat.sh M7B verified none
+    echo "M7B accepted"
+    exit 0
+fi
 
 if [[ $milestone == M6 ]]; then
     failure_heartbeat() {

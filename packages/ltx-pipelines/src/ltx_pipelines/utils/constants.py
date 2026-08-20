@@ -6,6 +6,7 @@ from safetensors import safe_open
 
 from ltx_core.components.guiders import MultiModalGuiderParams
 from ltx_core.loader import parse_model_version
+from ltx_core.loader.helpers import resolve_checkpoint_paths
 from ltx_core.types import SpatioTemporalScaleFactors
 
 # =============================================================================
@@ -146,7 +147,8 @@ def detect_model_version(checkpoint_path: str) -> tuple[int, ...]:
     logger = logging.getLogger(__name__)
 
     try:
-        with safe_open(checkpoint_path, framework="pt") as f:
+        first_path = resolve_checkpoint_paths(checkpoint_path)[0]
+        with safe_open(first_path, framework="pt") as f:
             metadata = f.metadata() or {}
         version = metadata.get("model_version", "")
     except Exception:

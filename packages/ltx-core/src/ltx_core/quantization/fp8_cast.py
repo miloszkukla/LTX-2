@@ -4,6 +4,7 @@ import safetensors
 import torch
 
 from ltx_core.loader.fuse_loras import FuseRule, bf16_fuse_rule
+from ltx_core.loader.helpers import resolve_checkpoint_paths
 from ltx_core.loader.kernels import TRITON_AVAILABLE
 from ltx_core.loader.module_ops import ModuleOps
 from ltx_core.loader.primitives import StateDict
@@ -257,17 +258,19 @@ def _read_scales(checkpoint_path: str | Path) -> dict[str, torch.Tensor]:
     accepted for forward compatibility.
     """
     out: dict[str, torch.Tensor] = {}
-    with safetensors.safe_open(str(checkpoint_path), framework="pt", device="cpu") as h:
-        raw_keys = h.keys()
-        for k in raw_keys:
-            if not k.endswith("_scale"):
-                continue
-            if not k.startswith(_RAW_DIFFUSION_MODEL_PREFIX):
-                raise ValueError(
-                    f"Scale key {k!r} does not start with the expected raw prefix {_RAW_DIFFUSION_MODEL_PREFIX!r}"
-                )
-            param_key = k.removeprefix(_RAW_DIFFUSION_MODEL_PREFIX).removesuffix("_scale")
-            out[param_key] = h.get_tensor(k)
+    for path in resolve_checkpoint_paths(checkpoint_path):
+        with safetensors.safe_open(path, framework="pt", device="cpu") as h:
+            raw_keys = h.keys()
+            for k in raw_keys:
+                if not k.endswith("_scale"):
+                    continue
+                if not k.startswith(_RAW_DIFFUSION_MODEL_PREFIX):
+                    raise ValueError(
+                        f"Scale key {k!r} does not start with the expected raw prefix "
+                        f"{_RAW_DIFFUSION_MODEL_PREFIX!r}"
+                    )
+                param_key = k.removeprefix(_RAW_DIFFUSION_MODEL_PREFIX).removesuffix("_scale")
+                out[param_key] = h.get_tensor(k)
     return out
 
 

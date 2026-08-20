@@ -59,6 +59,10 @@ wandb/
 !artifacts/M4/*.json
 !artifacts/M5/
 !artifacts/M5/*.json
+!artifacts/M6/
+!artifacts/M6/*.json
+!artifacts/M7B/
+!artifacts/M7B/*.json
 !tests/fixtures/
 !tests/fixtures/M1/
 !tests/fixtures/M1/*.json

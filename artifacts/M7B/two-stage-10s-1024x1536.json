@@ -1,0 +1,43 @@
+{
+  "attempt": "two-stage-10s-1024x1536",
+  "diagnostic_log_sha256": "50977130e04fa71dc657cc152cb6523c8bf7c966738783b3debebfa20718453f",
+  "exit_code": 1,
+  "diagnosis": "The 42,018,190,584-byte published transformer is larger than the worker's 31,403,802,624-byte host-memory cgroup. safetensors therefore failed its whole-file mmap before model loading, inference, or VRAM allocation.",
+  "failure_code": "host_mmap_cgroup_limit",
+  "failure_excerpt": "RuntimeError: unable to mmap 42018190584 bytes from file </workspace/LTX-2/models/ltx-2.5/diffusion_models/ltx-2.5-22b-dev-transformer-bf16.safetensors>: Cannot allocate memory (12)",
+  "finished_at_utc": "2026-08-20T05:05:55Z",
+  "gpu": {
+    "memory_total_mib": 32607,
+    "name": "NVIDIA GeForce RTX 5090",
+    "peak_sampled_memory_mib": 4,
+    "sample_interval_seconds": 1
+  },
+  "milestone": "M7B",
+  "mitigation": "Tensor payloads were copied byte-for-byte into independently mmap-able shards, the loader was extended to resolve shard directories, and disk streaming was changed to retain at most one active shard mapping.",
+  "output": {
+    "exists": false,
+    "path": "/workspace/LTX-2/artifacts/M7B/ltx2-m7b-cinematic-golden-hour.mp4",
+    "size_bytes": 0
+  },
+  "pipeline": "TI2VidTwoStagesPipeline",
+  "prompt": "A continuous cinematic tracking shot glides forward at eye level along a rain-wet city street during golden hour. Warm sunlight reflects in amber streaks across puddles and slick asphalt while storefront signs and passing traffic blur softly in the background. A solitary person in a charcoal coat walks from the right sidewalk across the frame toward the left, stepping around a puddle as the camera keeps moving smoothly past them. A light breeze stirs their coat and nearby tree leaves. Cars roll slowly in the distance, tires hiss on wet pavement, footsteps splash naturally, and a muted city ambience of engines, distant voices, and a soft crosswalk signal remains synchronized. Realistic motion, natural anatomy, cinematic shallow depth of field, warm highlights, cool rain shadows, subtle lens flare, no cuts.",
+  "result": "fail",
+  "runtime_seconds": 4,
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "seed": 20260820,
+  "settings": {
+    "diffvae_optimization": "chunked_eager",
+    "distilled_lora_strength": 1.0,
+    "frame_rate": 24.0,
+    "height": 1024,
+    "max_batch_size": 1,
+    "num_frames": 241,
+    "num_inference_steps": 30,
+    "offload": "disk",
+    "quantization": "fp8-cast",
+    "target_duration_seconds": 10.0,
+    "width": 1536
+  },
+  "started_at_utc": "2026-08-20T05:05:51Z"
+}

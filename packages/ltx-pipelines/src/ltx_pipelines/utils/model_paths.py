@@ -11,6 +11,8 @@ import argparse
 from dataclasses import dataclass
 from typing import Literal
 
+from ltx_core.loader.helpers import resolve_checkpoint_paths
+
 
 @dataclass(frozen=True, slots=True)
 class ModelPaths:
@@ -96,9 +98,9 @@ class ModelPaths:
     ) -> ModelPaths:
         """Build paths for an explicit split pack; omitted components stay ``None``."""
         if transformer_path is not None and text_encoder_path is not None:
-            embeddings: tuple[str, ...] = (transformer_path, text_encoder_path)
+            embeddings = (*resolve_checkpoint_paths(transformer_path), *resolve_checkpoint_paths(text_encoder_path))
         elif transformer_path is not None:
-            embeddings = (transformer_path,)
+            embeddings = resolve_checkpoint_paths(transformer_path)
         else:
             embeddings = ()
         return cls(
