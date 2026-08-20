@@ -59,8 +59,8 @@ heartbeat = {
 Path(os.environ["HEARTBEAT_FILE"]).write_text(json.dumps(heartbeat, indent=2, sort_keys=True) + "\n")
 PY
 
-ssh_command='ssh -i /root/.ssh/ltx_csharp_deploy -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new'
-if [[ ! -f /root/.ssh/ltx_csharp_deploy ]]; then
+ssh_command='ssh -i /root/.ssh/ltx_csharp_m7a_deploy -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new'
+if [[ ! -f /root/.ssh/ltx_csharp_m7a_deploy ]]; then
     echo "ephemeral deploy key is missing" >&2
     exit 1
 fi
