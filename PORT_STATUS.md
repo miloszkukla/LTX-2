@@ -5,7 +5,16 @@
 - M0 bootstrap plan: `C_SHARP_PORT_PLAN.M0.md`, SHA-256 `d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6`. This is the byte-for-byte plan accepted at M0 and remains immutable historical evidence.
 - Accepted M1 plan: `C_SHARP_PORT_PLAN.M1.md`, revision M1, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `e9dcbdf69c658ad026bdec6ee5cd4642847215a8`.
 - Accepted M2 plan: `C_SHARP_PORT_PLAN.M2.md`, revision M2, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `f53c216a4a9598d1bc626923744095aac7311a46`.
-- Current M3 plan: `C_SHARP_PORT_PLAN.md`, revision M3, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M3.md`; the coordinator's M3 revision is content-identical to the accepted M1 and M2 revisions.
+- Accepted M3 plan: `C_SHARP_PORT_PLAN.M3.md`, revision M3, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `ebbfd2b38a8eb5fd346ffe9b3e3833bab05277d4`.
+- Current M4 plan: `C_SHARP_PORT_PLAN.md`, revision M4, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M4.md`; the coordinator's M4 revision is content-identical to the accepted M1, M2, and M3 revisions.
+
+## M4 — handoff acknowledged, implementation not started
+
+- Handoff acknowledged on 2026-08-20 UTC from accepted M3 checkpoint `ebbfd2b38a8eb5fd346ffe9b3e3833bab05277d4`; no M4 implementation was started before this documentation/status checkpoint.
+- Plan input: `/root/C_SHARP_PORT_PLAN.M4.md`, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`; tracked as `C_SHARP_PORT_PLAN.md` with the accepted M0, M1, M2, and M3 plan copies retained as historical evidence.
+- Exact acceptance gate: every in-scope, non-B200 single-GPU native kernel has a tested correctness path; quantization and LoRA fuse/unfuse fixtures pass at FP32 `rtol=1e-4`, `atol=1e-5` and BF16/FP8 `rtol=2e-2`, `atol=5e-3` where applicable.
+- Required verification: `scripts/remote/verify-milestone.sh M4` on the existing 32 GB RTX 5090 worker. The implementation source checkpoint will be this handoff commit after it is pushed and will be recorded in the accepted M4 status and redacted heartbeat.
+- Known failures: none. Next action: begin M4 only after this documentation/status checkpoint is committed and pushed.
 
 ## M3 — accepted checkpoint
 
