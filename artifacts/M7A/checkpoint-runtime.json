@@ -1,0 +1,787 @@
+{
+  "schema_version": 1,
+  "result": "pass",
+  "fixture_revision": "m7a-real-checkpoint-runtime-v4",
+  "checkpoint_model_version": "2.3.0",
+  "checkpoint_tensor_count": 5947,
+  "execution": "native_csharp_torchsharp_cuda_full_checkpoint",
+  "python_runtime_calls": 0,
+  "test_totals": {
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0
+  },
+  "numerical_tolerances": {
+    "bf16": {
+      "rtol": 0.02,
+      "atol": 0.005,
+      "result": "pass"
+    }
+  },
+  "comparisons": {
+    "transformer_video_prepared": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_prepared": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn1.input": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn1.to_v": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn1.to_gate_logits": {
+      "elements": 32,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn1.to_out": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn1": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn2.input": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn2.context": {
+      "elements": 4194304,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn2.to_q": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn2.to_k": {
+      "elements": 4194304,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn2.q_norm": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn2.k_norm": {
+      "elements": 4194304,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn2.to_v": {
+      "elements": 4194304,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn2.to_gate_logits": {
+      "elements": 32,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn2.attended": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn2.to_out": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_attn2": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_audio_attn1": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_audio_attn2": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_audio_to_video_attn": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_video_to_audio_attn": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_ff": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_block_0_audio_ff": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_0": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_0": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_1": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_1": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_2": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_2": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_3": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_3": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_4": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_4": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_5": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_5": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_6": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_6": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_7": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_7": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_8": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_8": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_9": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_9": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_10": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_10": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_11": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_11": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_12": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_12": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_13": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_13": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_14": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_14": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_15": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_15": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_16": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_16": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_17": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_17": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_18": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_18": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_19": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_19": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_20": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_20": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_21": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_21": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_22": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_22": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_23": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_23": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_24": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_24": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_25": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_25": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_26": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_26": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_27": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_27": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_28": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_28": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_29": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_29": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_30": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_30": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_31": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_31": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_32": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_32": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_33": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_33": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_34": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_34": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_35": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_35": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_36": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_36": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_37": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_37": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_38": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_38": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_39": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_39": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_40": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_40": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_41": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_41": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_42": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_42": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_43": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_43": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_44": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_44": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_45": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_45": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_46": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_46": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_block_47": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_block_47": {
+      "elements": 2048,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_output_norm": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_output_projection_input": {
+      "elements": 4096,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_video_velocity": {
+      "elements": 128,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "transformer_audio_velocity": {
+      "elements": 128,
+      "max_absolute_error": 0,
+      "max_relative_error": 0,
+      "result": "pass"
+    },
+    "convolutional_video_decoder": {
+      "elements": 3072,
+      "max_absolute_error": 0.01171875,
+      "max_relative_error": 1.3333334,
+      "result": "pass"
+    },
+    "audio_vae_decoder": {
+      "elements": 640,
+      "max_absolute_error": 0.0625,
+      "max_relative_error": 0.009803922,
+      "result": "pass"
+    },
+    "vocoder_with_bandwidth_extension": {
+      "elements": 4800,
+      "max_absolute_error": 0.0009765625,
+      "max_relative_error": 38.155556,
+      "result": "pass"
+    }
+  },
+  "elapsed_seconds": 34.9639004,
+  "secrets_recorded": false
+}

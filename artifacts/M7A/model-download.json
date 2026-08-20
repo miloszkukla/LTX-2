@@ -1,0 +1,30 @@
+{
+  "files": [
+    {
+      "artifact_id": "ltx23-distilled-checkpoint",
+      "path": "ltx-2.3-22b-distilled-1.1.safetensors",
+      "sha256": "b33b7fe4bbfe084f484be4aaf90b0f1d95dca20d403ac4c0e037eb8c4f0af7cc",
+      "size_bytes": 46149345334,
+      "state": "cached_verified"
+    },
+    {
+      "artifact_id": "ltx23-hdr-assets",
+      "path": "ltx-2.3-22b-ic-lora-hdr-0.9.safetensors",
+      "sha256": "c56bfa0f2e4461a8b2f318f494c61c5bf97f462f2220e31ece93ea7851ca871e",
+      "size_bytes": 327309312,
+      "state": "cached_verified"
+    },
+    {
+      "artifact_id": "ltx23-hdr-assets",
+      "path": "ltx-2.3-22b-ic-lora-hdr-scene-emb.safetensors",
+      "sha256": "78bffa6049bae2649a4365ec8769db88052c21348d643e8fc1ce6d483d994c5b",
+      "size_bytes": 12583096,
+      "state": "cached_verified"
+    }
+  ],
+  "generated_at_utc": "2026-08-20T07:29:21.563476Z",
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "token_source": "inherited_runtime_environment"
+}

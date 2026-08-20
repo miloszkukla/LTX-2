@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "result": "pass",
+  "execution": "native_csharp_full_checkpoint_backward",
+  "python_runtime_calls": 0,
+  "profile": "standard_single_gpu",
+  "checkpoint_model_version": "2.3.0",
+  "layer_count": 48,
+  "batch_size": 1,
+  "mixed_precision": "bf16",
+  "base_quantization": "none",
+  "optimizer": "adamw",
+  "optimizer_state_residence": "cuda_adamw",
+  "trainable_parameter_count": 8448,
+  "frozen_parameter_count": 21005004544,
+  "loss": 0.022675807,
+  "gradient_norm": 0.14196147,
+  "parameter_delta_norm": 0.09013178,
+  "cuda_device_count": 1,
+  "test_totals": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "elapsed_seconds": 34.2445332,
+  "secrets_recorded": false
+}
