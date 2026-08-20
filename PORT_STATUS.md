@@ -4,7 +4,16 @@
 
 - M0 bootstrap plan: `C_SHARP_PORT_PLAN.M0.md`, SHA-256 `d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6`. This is the byte-for-byte plan accepted at M0 and remains immutable historical evidence.
 - Accepted M1 plan: `C_SHARP_PORT_PLAN.M1.md`, revision M1, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `e9dcbdf69c658ad026bdec6ee5cd4642847215a8`.
-- Current M2 plan: `C_SHARP_PORT_PLAN.md`, revision M2, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M2.md`; the coordinator's M2 revision is content-identical to the accepted M1 revision.
+- Accepted M2 plan: `C_SHARP_PORT_PLAN.M2.md`, revision M2, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `f53c216a4a9598d1bc626923744095aac7311a46`.
+- Current M3 plan: `C_SHARP_PORT_PLAN.md`, revision M3, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M3.md`; the coordinator's M3 revision is content-identical to the accepted M1 and M2 revisions.
+
+## M3 — handoff acknowledged, implementation not started
+
+- Handoff acknowledged on 2026-08-20 UTC from accepted M2 checkpoint `f53c216a4a9598d1bc626923744095aac7311a46`; no M3 implementation was started before this documentation/status checkpoint.
+- Plan input: `/root/C_SHARP_PORT_PLAN.M3.md`, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`; tracked as `C_SHARP_PORT_PLAN.md` with the accepted M0, M1, and M2 plan copies retained as historical evidence.
+- Exact acceptance gate: transformer, VAE, audio/vocoder, conditioning, and offload fixture suites pass with seeded numerical parity at FP32 `rtol=1e-4`, `atol=1e-5` and BF16/FP8 `rtol=2e-2`, `atol=5e-3`.
+- Required verification: `scripts/remote/verify-milestone.sh M3` on the existing 32 GB RTX 5090 worker. The implementation source checkpoint will be this handoff commit after it is pushed and will be recorded in the accepted M3 status and redacted heartbeat.
+- Known failures: none. Next action: begin M3 only after this documentation/status checkpoint is committed and pushed.
 
 ## M2 — accepted checkpoint
 
