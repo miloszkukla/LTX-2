@@ -3,12 +3,253 @@ set -Eeuo pipefail
 export PATH="/root/.local/bin:$PATH"
 
 milestone=${1:-}
-if [[ ! $milestone =~ ^M[0-7]$ ]]; then
-    echo "usage: $0 <M0..M7>" >&2
+if [[ ! $milestone =~ ^M([0-7]|7A)$ ]]; then
+    echo "usage: $0 <M0..M7A>" >&2
     exit 2
 fi
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 cd "$repo_root"
+
+if [[ $milestone == M7A ]]; then
+    failure_heartbeat() {
+        scripts/remote/publish-heartbeat.sh M7A blocked m7a_acceptance_gate_failed || true
+    }
+    trap failure_heartbeat ERR
+
+    expected_m0_plan_sha=d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6
+    expected_m1_m4_plan_sha=7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea
+    expected_m5_m6_plan_sha=c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2
+    expected_m7a_plan_sha=85da94394a9e37749d579bc333e79eedebe2a61f77324cacd7ecbd5d149247ba
+    [[ $(sha256sum C_SHARP_PORT_PLAN.M0.md | awk '{print $1}') == "$expected_m0_plan_sha" ]]
+    for plan in C_SHARP_PORT_PLAN.M1.md C_SHARP_PORT_PLAN.M2.md C_SHARP_PORT_PLAN.M3.md C_SHARP_PORT_PLAN.M4.md; do
+        [[ $(sha256sum "$plan" | awk '{print $1}') == "$expected_m1_m4_plan_sha" ]]
+    done
+    [[ $(sha256sum C_SHARP_PORT_PLAN.M5.md | awk '{print $1}') == "$expected_m5_m6_plan_sha" ]]
+    [[ $(sha256sum C_SHARP_PORT_PLAN.md | awk '{print $1}') == "$expected_m7a_plan_sha" ]]
+
+    python3 - <<'PY'
+import json
+from pathlib import Path
+
+summary = json.loads(Path("artifacts/M6/summary.json").read_text())
+if summary.get("milestone") != "M6" or summary.get("state") != "accepted":
+    raise SystemExit("M6 accepted prerequisite is missing")
+PY
+
+    artifact_dir="$repo_root/artifacts/M7A"
+    mkdir -p "$artifact_dir"
+    dotnet build Ltx.sln --configuration Release --nologo
+    scripts/remote/run-m1-smoke.sh "$artifact_dir/abi-smoke.json"
+    scripts/remote/run-m1-parity.sh "$artifact_dir/foundation-parity.json"
+    scripts/remote/run-m2-storage.sh "$artifact_dir/storage.json"
+    scripts/remote/run-m3-core.sh "$artifact_dir/core-model.json"
+    scripts/remote/run-m4-cuda.sh "$artifact_dir/cuda-quantization-lora.json"
+    scripts/remote/run-m5-media.sh "$artifact_dir/media-pipelines.json"
+    scripts/remote/run-m6-training.sh "$artifact_dir/low-vram-training.json"
+    scripts/remote/run-m7a-checkpoint.sh "$artifact_dir"
+    git diff --check
+
+    python3 - <<'PY'
+import json
+from pathlib import Path
+
+root = Path("artifacts/M7A")
+load = lambda name: json.loads((root / name).read_text())
+reports = {
+    "smoke": load("abi-smoke.json"),
+    "foundation": load("foundation-parity.json"),
+    "storage": load("storage.json"),
+    "core": load("core-model.json"),
+    "m4": load("cuda-quantization-lora.json"),
+    "m5": load("media-pipelines.json"),
+    "m6": load("low-vram-training.json"),
+    "download": load("model-download.json"),
+    "oracle": load("checkpoint-oracle.json"),
+    "runtime": load("checkpoint-runtime.json"),
+    "pipelines": load("real-pipelines.json"),
+    "trainer": load("standard-trainer.json"),
+    "hardware": load("hardware.json"),
+}
+if any(report.get("result") != "pass" for report in reports.values() if report is not reports["oracle"]):
+    raise SystemExit("M7A result artifact is not passing")
+expected_totals = {
+    "foundation": 2,
+    "storage": 16,
+    "core": 34,
+    "m4": 45,
+    "m5": 51,
+    "m6": 21,
+    "runtime": 5,
+    "pipelines": 12,
+    "trainer": 1,
+}
+for name, passed in expected_totals.items():
+    if reports[name].get("test_totals") != {"passed": passed, "failed": 0, "skipped": 0}:
+        raise SystemExit(f"M7A {name} totals mismatch")
+
+downloaded = {item["path"]: item for item in reports["download"].get("files", [])}
+expected_files = {
+    "ltx-2.3-22b-distilled-1.1.safetensors": (46149345334, "b33b7fe4bbfe084f484be4aaf90b0f1d95dca20d403ac4c0e037eb8c4f0af7cc"),
+    "ltx-2.3-22b-ic-lora-hdr-0.9.safetensors": (327309312, "c56bfa0f2e4461a8b2f318f494c61c5bf97f462f2220e31ece93ea7851ca871e"),
+    "ltx-2.3-22b-ic-lora-hdr-scene-emb.safetensors": (12583096, "78bffa6049bae2649a4365ec8769db88052c21348d643e8fc1ce6d483d994c5b"),
+}
+if downloaded.keys() != expected_files.keys():
+    raise SystemExit("M7A pinned checkpoint file set mismatch")
+for path, (size, checksum) in expected_files.items():
+    item = downloaded[path]
+    if item.get("size_bytes") != size or item.get("sha256") != checksum or item.get("state") not in {"cached_verified", "downloaded_verified"}:
+        raise SystemExit(f"M7A checkpoint verification failed for {path}")
+
+oracle = reports["oracle"]
+if oracle.get("fixture_revision") != "m7a-real-checkpoint-runtime-v4" or oracle.get("tolerances") != {
+    "bf16": {"rtol": 0.02, "atol": 0.005}
+}:
+    raise SystemExit("M7A retained checkpoint oracle mismatch")
+runtime = reports["runtime"]
+if runtime.get("checkpoint_model_version") != "2.3.0" or runtime.get("checkpoint_tensor_count") != 5947 or \
+        runtime.get("execution") != "native_csharp_torchsharp_cuda_full_checkpoint" or \
+        runtime.get("python_runtime_calls") != 0 or runtime.get("fixture_revision") != "m7a-real-checkpoint-runtime-v4":
+    raise SystemExit("M7A native checkpoint runtime contract mismatch")
+comparisons = runtime.get("comparisons", {})
+for layer in range(48):
+    for modality in ("video", "audio"):
+        if comparisons.get(f"transformer_{modality}_block_{layer}", {}).get("result") != "pass":
+            raise SystemExit(f"M7A transformer block parity missing for {modality} layer {layer}")
+for name in ("transformer_video_velocity", "transformer_audio_velocity", "convolutional_video_decoder", "audio_vae_decoder", "vocoder_with_bandwidth_extension"):
+    if comparisons.get(name, {}).get("result") != "pass":
+        raise SystemExit(f"M7A checkpoint component parity missing: {name}")
+
+surface = json.loads(Path("artifacts/M0/source-surface.json").read_text())
+expected_modules = {item["module"] for item in surface["pipelines"] if item["status"] == "in_scope"}
+pipelines = reports["pipelines"]
+actual_modules = {item["module"] for item in pipelines.get("modes", [])}
+if len(expected_modules) != 12 or actual_modules != expected_modules or \
+        pipelines.get("checkpoint_model_version") != "2.3.0" or \
+        pipelines.get("execution") != "native_csharp_torchsharp_cuda_full_checkpoint" or \
+        pipelines.get("python_runtime_calls") != 0 or \
+        any(item.get("execution") != "native_csharp_full_checkpoint" or item.get("result") != "pass" for item in pipelines.get("modes", [])):
+    raise SystemExit("M7A does not execute every in-scope pipeline through the native checkpoint runtime")
+
+trainer = reports["trainer"]
+required_trainer = {
+    "execution": "native_csharp_full_checkpoint_backward",
+    "python_runtime_calls": 0,
+    "profile": "standard_single_gpu",
+    "checkpoint_model_version": "2.3.0",
+    "layer_count": 48,
+    "batch_size": 1,
+    "mixed_precision": "bf16",
+    "base_quantization": "none",
+    "optimizer": "adamw",
+    "optimizer_state_residence": "cuda_adamw",
+    "cuda_device_count": 1,
+}
+if any(trainer.get(key) != value for key, value in required_trainer.items()) or \
+        trainer.get("trainable_parameter_count") != 8448 or trainer.get("frozen_parameter_count", 0) < 20_000_000_000 or \
+        min(trainer.get("loss", 0), trainer.get("gradient_norm", 0), trainer.get("parameter_delta_norm", 0)) <= 0:
+    raise SystemExit("M7A standard-profile trainer contract mismatch")
+
+gpu = reports["hardware"].get("gpu", {})
+host = reports["hardware"].get("host", {})
+if not (gpu.get("name", "").startswith("NVIDIA A100") or gpu.get("name", "").startswith("NVIDIA H100")) or \
+        gpu.get("device_count") != 1 or gpu.get("memory_total_mib", 0) < 80_000 or \
+        gpu.get("peak_memory_used_mib", 0) >= gpu.get("memory_total_mib", 0) or \
+        host.get("minimum_memory_available_mib", 0) < 8_192:
+    raise SystemExit("M7A 80 GB single-GPU/host-memory gate failed")
+PY
+
+    python3 - <<'PY'
+import hashlib
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+root = Path("artifacts/M7A")
+load = lambda name: json.loads((root / name).read_text())
+smoke = load("abi-smoke.json")
+foundation = load("foundation-parity.json")
+storage = load("storage.json")
+core = load("core-model.json")
+m4 = load("cuda-quantization-lora.json")
+m5 = load("media-pipelines.json")
+m6 = load("low-vram-training.json")
+download = load("model-download.json")
+oracle = load("checkpoint-oracle.json")
+runtime = load("checkpoint-runtime.json")
+pipelines = load("real-pipelines.json")
+trainer = load("standard-trainer.json")
+hardware = load("hardware.json")
+preflight = json.loads(Path("artifacts/M0/preflight.json").read_text())
+surface = json.loads(Path("artifacts/M0/source-surface.json").read_text())
+checksums = {
+    path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+    for path in sorted(root.glob("*.json"))
+    if path.name != "summary.json"
+}
+deferred_pipelines = [item for item in surface["pipelines"] if item["status"] == "deferred"]
+deferred_kernels = [item for item in surface["native_kernels"] if item["status"] == "deferred"]
+summary = {
+    "schema_version": 1,
+    "milestone": "M7A",
+    "state": "accepted",
+    "generated_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+    "source_reference_sha": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+    "plan_revision": "M7A",
+    "plan_sha256": "85da94394a9e37749d579bc333e79eedebe2a61f77324cacd7ecbd5d149247ba",
+    "verification_command": "scripts/remote/verify-milestone.sh M7A",
+    "commands": [
+        {"command": "dotnet build Ltx.sln --configuration Release --nologo", "exit_code": 0},
+        *[{"command": f"scripts/remote/run-m{index}-{name}.sh", "exit_code": 0} for index, name in ((1, "smoke"), (1, "parity"), (2, "storage"), (3, "core"), (4, "cuda"), (5, "media"), (6, "training"))],
+        {"command": "scripts/remote/run-m7a-checkpoint.sh", "exit_code": 0},
+    ],
+    "toolchain": preflight["toolchain"],
+    "gpu": hardware["gpu"],
+    "host": hardware["host"],
+    "abi": smoke["abi"],
+    "test_totals": {"passed": 191, "failed": 0, "skipped": 0},
+    "tests": {
+        **smoke["tests"],
+        "foundation_parity": "2_pass",
+        "storage_regression": "16_pass",
+        "core_model_regression": "34_pass",
+        "cuda_quantization_lora_regression": "45_pass",
+        "media_pipeline_regression": "51_pass",
+        "low_vram_training_regression": "21_pass",
+        "real_checkpoint_components": "5_pass",
+        "real_checkpoint_single_gpu_pipelines": "12_pass",
+        "standard_profile_trainer": "1_pass",
+    },
+    "checkpoint": {
+        "model_version": runtime["checkpoint_model_version"],
+        "tensor_count": runtime["checkpoint_tensor_count"],
+        "files": download["files"],
+        "oracle_revision": runtime["fixture_revision"],
+        "execution": runtime["execution"],
+        "python_runtime_calls": runtime["python_runtime_calls"],
+    },
+    "real_pipelines": pipelines["modes"],
+    "standard_trainer": trainer,
+    "numerical_tolerances": runtime["numerical_tolerances"],
+    "deferred": {
+        "pipelines": deferred_pipelines,
+        "native_kernels": deferred_kernels,
+        "multi_gpu": "out_of_scope",
+        "ddp_fsdp_nccl_cuda_ipc_all_to_all": "out_of_scope",
+        "b200_specific": "out_of_scope",
+        "full_fine_tuning": "out_of_scope",
+        "hopper_specific_fp8_on_a100": "out_of_scope",
+    },
+    "artifact_sha256": checksums,
+    "secrets_recorded": False,
+}
+(root / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+PY
+
+    trap - ERR
+    echo "M7A accepted"
+    exit 0
+fi
 
 if [[ $milestone == M6 ]]; then
     failure_heartbeat() {
