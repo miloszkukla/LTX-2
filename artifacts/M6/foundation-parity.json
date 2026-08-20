@@ -1,0 +1,26 @@
+{
+  "fixture_revision": "m1-foundation-v1",
+  "fixture_sha256": "84199de9aaac9d64d6c9812e894a87bb11352faa137024058b9b42d4b4b47ee2",
+  "generated_at_utc": "2026-08-20T04:12:30.569361Z",
+  "numerical_tolerances": {
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "oracle": {
+    "cuda": "13.2",
+    "pytorch": "2.13.0+cu132",
+    "seed": 20260820
+  },
+  "output": "Parity fixtures: 2 passed, 0 failed; FP32 rtol=0.0001, atol=1e-05; revision=m1-foundation-v1",
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "test_totals": {
+    "failed": 0,
+    "passed": 2,
+    "skipped": 0
+  }
+}

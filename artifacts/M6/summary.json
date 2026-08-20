@@ -1,0 +1,192 @@
+{
+  "abi": {
+    "cuda": "13.2",
+    "cxx11_abi": 1,
+    "ltx": "1.0",
+    "pytorch": "2.13.0",
+    "torchsharp_managed": "0.107.0",
+    "torchsharp_revision": "8f4def03b641b6753f18076aa5438f8eaaef2d30"
+  },
+  "artifact_sha256": {
+    "abi-smoke.json": "9ff8d687afb808668f18d972ee1b6f18b9ddd9bf7b14e37e14bfee2b371d43d7",
+    "core-model.json": "1ab6b30658afff6456eb1e50dcc97ca710e2bcf9b0118fdd3902940353ab40e1",
+    "cuda-quantization-lora.json": "a7a832411e8e76857215d91dff7df182bf7f1309482bdf7e2b1f09e04a4bfdb0",
+    "foundation-parity.json": "dedb316daf5895664385696200085fcc6232782e96f862eff04dfe36e0143aa5",
+    "low-vram-training.json": "ad612dc4bec667c0807a2a056b28aff382f5ad2cc6adabdb3fad20cb87d3edbe",
+    "media-pipelines.json": "dfce977f155eb884a4be28117243929a101ddbf84dfeb3454b9b07b8fbcb54fe",
+    "storage.json": "a9cf31c063db75b35fb5d0e861c73b71d3b34dc5a960ef55fe85405705549d37"
+  },
+  "commands": [
+    {
+      "command": "dotnet build Ltx.sln --configuration Release --nologo",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-smoke.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-parity.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m2-storage.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m3-core.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m4-cuda.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m5-media.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m6-training.sh",
+      "exit_code": 0
+    }
+  ],
+  "dependencies": {
+    "cuda": "13.2",
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "native_oiio_bridge_sha256": "4a0ee655931e029a981592e5fd9368be1db984fdad09fe64db904f1a4a1e8212",
+    "numpy": "2.3.2",
+    "openimageio": "2.4.17.0",
+    "packaging": "25.0",
+    "safetensors": "0.6.2",
+    "torch": "2.13.0+cu132",
+    "torchsharp": "0.107.0"
+  },
+  "fixture_revision": "m6-low-vram-training-v1",
+  "fixture_set_sha256": "e420c4ae7c248686d2be462aaed9db830db7f7936b6e1704cdda688e9782a471",
+  "fixture_sha256": {
+    "manifest.json": "2e95a76187d0f3339e928c7f8a853d7b47eac9fd1336ebc2a0b15bfb1b199cb0"
+  },
+  "generated_at_utc": "2026-08-20T04:13:14.246941Z",
+  "gpu": {
+    "activation_chunk_size": 3,
+    "alpha": 2.0,
+    "base_quantization": "int8-rowwise",
+    "base_weight_residence": "cpu_int8",
+    "batch_size": 1,
+    "beta1": 0.9,
+    "beta2": 0.999,
+    "compute_capability": "12.0",
+    "driver": "580.95.05",
+    "driver_policy": "CUDA 13.x minor-version compatibility; SASS-only native build; no PTX JIT",
+    "epsilon": 1e-08,
+    "gpu_peak_memory_mib": 704,
+    "gpu_total_memory_mib": 32607,
+    "gradient_checkpointing": true,
+    "learning_rate": 0.001,
+    "max_gradient_norm": 1.0,
+    "memory_total_mib": 32607,
+    "memory_used_mib": 2,
+    "mixed_precision": "bf16",
+    "name": "NVIDIA GeForce RTX 5090",
+    "optimizer": "cpu-offloaded-adamw8bit",
+    "optimizer_state_residence": "cpu_int8",
+    "rank": 2,
+    "sass_architecture": "sm_120",
+    "sigma": 0.37,
+    "temperature_c": 35,
+    "visible_cuda_devices": 1,
+    "weight_decay": 0.01
+  },
+  "low_vram_profile": {
+    "activation_chunk_size": 3,
+    "alpha": 2.0,
+    "base_quantization": "int8-rowwise",
+    "base_weight_residence": "cpu_int8",
+    "batch_size": 1,
+    "beta1": 0.9,
+    "beta2": 0.999,
+    "epsilon": 1e-08,
+    "gpu_peak_memory_mib": 704,
+    "gpu_total_memory_mib": 32607,
+    "gradient_checkpointing": true,
+    "learning_rate": 0.001,
+    "max_gradient_norm": 1.0,
+    "mixed_precision": "bf16",
+    "optimizer": "cpu-offloaded-adamw8bit",
+    "optimizer_state_residence": "cpu_int8",
+    "rank": 2,
+    "sigma": 0.37,
+    "visible_cuda_devices": 1,
+    "weight_decay": 0.01
+  },
+  "milestone": "M6",
+  "numerical_tolerances": {
+    "bf16": {
+      "atol": 0.005,
+      "result": "pass",
+      "rtol": 0.02
+    },
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "plan_revision": "M6",
+  "plan_sha256": "c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2",
+  "preprocessing": {
+    "dataset_pairing": "strict_sample_and_metadata_validation_pass",
+    "format": "safetensors",
+    "overwrite_guard": "pass",
+    "text_conditions": "projection_and_attention_mask_pass",
+    "video_latents": "projection_and_geometry_pass"
+  },
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_reference_sha": "cba194a0cb94ea19c233bec02c44f4c6126b8e0d",
+  "state": "accepted",
+  "suite_totals": {
+    "low_vram": 5,
+    "preprocessing": 5,
+    "training": 11
+  },
+  "test_totals": {
+    "failed": 0,
+    "passed": 173,
+    "skipped": 0
+  },
+  "tests": {
+    "core_model_regression": "34_pass",
+    "cuda_quantization_lora_regression": "45_pass",
+    "foundation_parity": "2_pass",
+    "low_vram_profile": "5_pass",
+    "ltx_native_cuda": "pass",
+    "media_pipeline_regression": "51_pass",
+    "one_step_lora_training": "11_pass",
+    "preprocessing": "5_pass",
+    "sass_only": "pass",
+    "storage_regression": "16_pass",
+    "torchsharp_abi_probe": "pass",
+    "torchsharp_cuda_tensor": "pass"
+  },
+  "toolchain": {
+    "cmake": "cmake version 3.28.3",
+    "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "cuda_release": "13.2",
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "ninja": "1.11.1",
+    "python": "Python 3.12.3",
+    "uv": "uv 0.12.5 (x86_64-unknown-linux-gnu)"
+  },
+  "training": {
+    "lora_a_gradient": "deterministic_bf16_pass",
+    "lora_b_gradient": "deterministic_bf16_pass",
+    "loss": 1.0940678119659424,
+    "mode": "single_gpu_lora_one_step",
+    "objective": "flow_matching_velocity_masked_mse",
+    "optimizer_step": "cpu_offloaded_adamw8bit_pass"
+  },
+  "verification_command": "scripts/remote/verify-milestone.sh M6"
+}

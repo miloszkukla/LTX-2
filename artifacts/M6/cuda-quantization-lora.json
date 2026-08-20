@@ -1,0 +1,155 @@
+{
+  "dependencies": {
+    "cuda": "13.2",
+    "torch": "2.13.0+cu132",
+    "torchsharp": "0.107.0"
+  },
+  "fixture_revision": "m4-cuda-quantization-lora-v1",
+  "fixture_set_sha256": "420f7a7f17e69898f0f4b43a01ebb2d2ddedf847f1393a651445738e7e2745b0",
+  "fixture_sha256": {
+    "manifest.json": "fda7db0808a76368ca396a961456ed8dd2719914104646cd5be28eb6b33a4f1b"
+  },
+  "generated_at_utc": "2026-08-20T04:12:57.781184Z",
+  "gpu": {
+    "ptx_embedded": false,
+    "sass_architecture": "sm_120"
+  },
+  "kernel_inventory": {
+    "correctness": {
+      "_block_quant_kernel": "gpu_fixture_pass",
+      "_block_quant_norm_kernel": "gpu_fixture_pass",
+      "_blockwise_dequantize_kernel": "gpu_fixture_pass",
+      "_fused_gate_up_swiglu_kernel": "gpu_fixture_pass",
+      "_fused_up_mul_kernel": "gpu_fixture_pass",
+      "_gated_attention_kernel": "gpu_fixture_pass",
+      "_gelu": "gpu_fixture_pass",
+      "_kernel": "gpu_fixture_pass",
+      "_na3d_kernel": "gpu_fixture_pass",
+      "_quant_rms_sum_mult_kernel": "gpu_fixture_pass",
+      "_quantize": "gpu_fixture_pass",
+      "_rms_norm_split_rope_kernel": "gpu_fixture_pass",
+      "amax_scale_kernel": "gpu_fixture_pass",
+      "dequantize_kernel": "gpu_fixture_pass",
+      "fp6_pack_kernel": "gpu_fixture_pass",
+      "fp6_unpack_kernel": "gpu_fixture_pass",
+      "fused_add_round_kernel": "gpu_fixture_pass",
+      "gemm_fp8_kernel": "gpu_fixture_pass",
+      "mul_scalars_kernel": "gpu_fixture_pass",
+      "norm_rope_cvt_kernel": "gpu_fixture_pass",
+      "quantize_kernel": "gpu_fixture_pass",
+      "quantize_tiled_kernel": "gpu_fixture_pass",
+      "sm90_fp8_gemm_1d2d_bias_impl": "gpu_fixture_pass",
+      "sm90_fp8_gemm_1d2d_impl": "gpu_fixture_pass"
+    },
+    "deferred": [
+      {
+        "implementation": "cuda-cpp",
+        "line": 87,
+        "name": "send_recv_all2all",
+        "path": "packages/ltx-kernels/csrc/all2all/cuda/all2all_heads.cu",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cuda-cpp",
+        "line": 206,
+        "name": "gather_heads",
+        "path": "packages/ltx-kernels/csrc/all2all/cuda/all2all_heads.cu",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cuda-cpp",
+        "line": 71,
+        "name": "allgather",
+        "path": "packages/ltx-kernels/csrc/all2all/cuda/allgather.cu",
+        "reason": "Multi-GPU, distributed, NCCL, and all-to-all paths are outside the single-GPU port.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cutlass-cute-dsl",
+        "line": 363,
+        "name": "_fna_kernel",
+        "path": "packages/ltx-kernels/src/ltx_kernels/vae/block_fna_dsl.py",
+        "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+        "status": "deferred"
+      },
+      {
+        "implementation": "cutlass-cute-dsl",
+        "line": 82,
+        "name": "_na_kernel",
+        "path": "packages/ltx-kernels/src/ltx_kernels/vae/na_attn_dsl.py",
+        "reason": "B200/datacenter-Blackwell CUTLASS DSL path; an in-scope eager or non-B200 fallback is inventoried separately.",
+        "status": "deferred"
+      }
+    ],
+    "in_scope": 24,
+    "tested": 24,
+    "total": 29
+  },
+  "lora": {
+    "bf16_regression": "covered_by_M2_storage",
+    "nvfp4_fuse": "pass",
+    "nvfp4_unfuse": "exact_original_snapshot_pass"
+  },
+  "native_binding_inventory": {
+    "correctness": {
+      "amax_scale": "managed_binding_pass",
+      "dequantize_nvfp4": "managed_binding_pass",
+      "fp6_pack": "managed_binding_pass",
+      "fp6_unpack": "managed_binding_pass",
+      "fp8_gemm_nt_sm89": "managed_binding_pass",
+      "fp8_gemm_nt_sm90": "managed_binding_pass",
+      "gemm_alpha_mode": "managed_binding_pass",
+      "mul_scalars": "managed_binding_pass",
+      "probe_gemm_support": "managed_binding_pass",
+      "quantize_nvfp4": "managed_binding_pass",
+      "rms_norm_rope": "managed_binding_pass",
+      "rms_norm_split_rope": "managed_binding_pass",
+      "scaled_mm_nvfp4": "managed_binding_pass",
+      "set_gemm_alpha_on_device": "managed_binding_pass",
+      "set_gemm_autotune": "managed_binding_pass"
+    },
+    "in_scope": 15,
+    "tested": 15
+  },
+  "numerical_tolerances": {
+    "bf16_fp8": {
+      "atol": 0.005,
+      "result": "pass",
+      "rtol": 0.02
+    },
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "oracle": {
+    "cuda_version": "13.2",
+    "framework": "pytorch",
+    "framework_version": "2.13.0+cu132",
+    "seed": 20260820
+  },
+  "output": "M4 CUDA/quantization/LoRA fixtures: 45 passed, 0 failed; kernels=24, bindings=15, quantization=4, lora=2; FP32 rtol=0.0001, atol=1e-05; reduced rtol=0.02, atol=0.005",
+  "quantization": {
+    "blockwise_fp8": "quant_dequant_gelu_norm_rms_fma_pass",
+    "fp6_pack_unpack": "exact_pass",
+    "nvfp4": "packed_scales_dequant_scaled_mm_pass",
+    "rowwise_int8": "pass"
+  },
+  "result": "pass",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "suite_totals": {
+    "lora": 2,
+    "native_bindings": 15,
+    "native_kernels": 24,
+    "quantization": 4
+  },
+  "test_totals": {
+    "failed": 0,
+    "passed": 45,
+    "skipped": 0
+  }
+}

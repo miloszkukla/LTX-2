@@ -10,14 +10,19 @@
 - Accepted M5 plan: `C_SHARP_PORT_PLAN.M5.md`, revision M5, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. This preserves the byte-for-byte plan accepted with checkpoint `829c61c8d3b9733ae9b813bdf7b0dc892e978a7e` and includes the approved M7A/M7B/M8 delivery and teardown workflow.
 - Current M6 plan: `C_SHARP_PORT_PLAN.md`, revision M6, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M6.md`; the coordinator's M6 revision is content-identical to the accepted M5 revision.
 
-## M6 — handoff acknowledged, implementation not started
+## M6 — accepted checkpoint
 
-- Handoff acknowledged on 2026-08-20 UTC from accepted M5 checkpoint `829c61c8d3b9733ae9b813bdf7b0dc892e978a7e`; no M6 implementation was started before this documentation/status checkpoint.
-- Plan input: `/root/C_SHARP_PORT_PLAN.M6.md`, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`; tracked as `C_SHARP_PORT_PLAN.md` with accepted M0, M1, M2, M3, M4, and M5 plan copies retained as historical evidence.
-- Accepted prerequisite: `artifacts/M5/summary.json` records milestone M5 as accepted with 152 passing checks, 0 failed, and 0 skipped; `origin/codex/ltx-csharp` is at the same accepted M5 checkpoint and the worktree was clean at handoff.
-- Worker: existing Vast instance `48162892`, single RTX 5090 32 GB, compute capability 12.0. The accepted ABI remains PyTorch `2.13.0+cu132`, CUDA `13.2`, TorchSharp `0.107.0`, and LTX native ABI `1.0`.
-- Acceptance target: `scripts/remote/verify-milestone.sh M6` must exit 0 after preprocessing and one-step single-GPU LoRA training pass, including deterministic loss/gradient fixtures under the low-VRAM profile.
-- Known failures: none. Next action: implement M6 low-VRAM training only.
+- Handoff acknowledged on 2026-08-20 UTC from accepted M5 checkpoint `829c61c8d3b9733ae9b813bdf7b0dc892e978a7e`; no M6 implementation was started before the pushed documentation/status checkpoint `cba194a0cb94ea19c233bec02c44f4c6126b8e0d`.
+- Plan input: `/root/C_SHARP_PORT_PLAN.M6.md`, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`; tracked as `C_SHARP_PORT_PLAN.md` with accepted M0, M1, M2, M3, M4, and M5 plan copies retained as historical evidence. The M6 input is content-identical to the accepted M5 plan and retains the approved M7A/M7B/M8 additions.
+- Verification: `scripts/remote/verify-milestone.sh M6` (exit 0). The Release solution build, all M1–M5 prerequisite regressions, deterministic preprocessing runner, and one-step single-GPU low-VRAM LoRA training runner passed.
+- Starting/source checkpoint: `cba194a0cb94ea19c233bec02c44f4c6126b8e0d`; the final fork checkpoint SHA is recorded by the redacted heartbeat immediately after the atomic push because it cannot be embedded in its own commit.
+- Preprocessing scope: deterministic video-latent and caption-connector projection writes paired `video_latents`/`conditions` safetensors with validated geometry, FPS, schema, sample identity, attention mask, exact sample-set pairing, and an overwrite guard. The C# dataset loader consumes those artifacts without retaining preprocessing models on the GPU.
+- Training scope: flow-matching interpolation `(1-sigma)*latent + sigma*noise`, velocity target `noise-latent`, masked MSE, BF16 LoRA-only autograd, gradient clipping, and one CPU-offloaded AdamW8bit update passed. Both LoRA A and B gradients and the scalar loss matched the pinned PyTorch `2.13.0+cu132` CUDA oracle.
+- Low-VRAM profile: batch size 1, activation chunk size 3 with recomputation, BF16 compute, rowwise-INT8 frozen base weight on CPU, quantized AdamW moments on CPU, and one visible CUDA device. Peak sampled usage was 704 MiB of 32,607 MiB on the existing single RTX 5090 32 GB worker; the fixed miniature acceptance fixture intentionally validates mechanics rather than production-checkpoint capacity.
+- Fixed fixture: `m6-low-vram-training-v1`, seed `20260820`, fixture-set SHA-256 `e420c4ae7c248686d2be462aaed9db830db7f7936b6e1704cdda688e9782a471`; tracked manifest SHA-256 `2e95a76187d0f3339e928c7f8a853d7b47eac9fd1336ebc2a0b15bfb1b199cb0`.
+- Numerical results: FP32 preprocessing/noise/target checks passed at `rtol=1e-4`, `atol=1e-5`; BF16 loss, gradients, and update passed at `rtol=2e-2`, `atol=5e-3`. The oracle loss was `1.0940678119659424`; C# reported `1.09406793` with gradient norm `0.0490528084`.
+- Redacted evidence: `artifacts/M6/abi-smoke.json`, `artifacts/M6/foundation-parity.json`, `artifacts/M6/storage.json`, `artifacts/M6/core-model.json`, `artifacts/M6/cuda-quantization-lora.json`, `artifacts/M6/media-pipelines.json`, `artifacts/M6/low-vram-training.json`, and `artifacts/M6/summary.json`; 173 checks passed, 0 failed, 0 skipped including every prerequisite regression.
+- Known failures: none. M7A and M7B are not started; M6 scope ended at this accepted checkpoint.
 
 ## M5 — accepted checkpoint
 
