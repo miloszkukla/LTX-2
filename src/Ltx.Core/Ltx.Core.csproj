@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <PackageReference Include="TorchSharp" />
+    <ProjectReference Include="../Ltx.SafeTensors/Ltx.SafeTensors.csproj" />
   </ItemGroup>
 </Project>

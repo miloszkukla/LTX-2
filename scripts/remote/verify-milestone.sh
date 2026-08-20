@@ -10,6 +10,132 @@ fi
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 cd "$repo_root"
 
+if [[ $milestone == M2 ]]; then
+    failure_heartbeat() {
+        scripts/remote/publish-heartbeat.sh M2 blocked acceptance_gate_failed || true
+    }
+    trap failure_heartbeat ERR
+
+    expected_m0_plan_sha=d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6
+    expected_m1_plan_sha=7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea
+    expected_m2_plan_sha=7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea
+    actual_m0_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M0.md | awk '{print $1}')
+    actual_m1_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.M1.md | awk '{print $1}')
+    actual_m2_plan_sha=$(sha256sum C_SHARP_PORT_PLAN.md | awk '{print $1}')
+    if [[ $actual_m0_plan_sha != "$expected_m0_plan_sha" || \
+          $actual_m1_plan_sha != "$expected_m1_plan_sha" || \
+          $actual_m2_plan_sha != "$expected_m2_plan_sha" ]]; then
+        echo "M0/M1/M2 plan preservation gate failed" >&2
+        exit 1
+    fi
+
+    python3 - <<'PY'
+import json
+from pathlib import Path
+
+summary = json.loads(Path("artifacts/M1/summary.json").read_text())
+if summary.get("milestone") != "M1" or summary.get("state") != "accepted":
+    raise SystemExit("M1 accepted prerequisite is missing")
+PY
+
+    artifact_dir="$repo_root/artifacts/M2"
+    mkdir -p "$artifact_dir"
+    dotnet build Ltx.sln --configuration Release --nologo
+    scripts/remote/run-m1-smoke.sh "$artifact_dir/abi-smoke.json"
+    scripts/remote/run-m1-parity.sh "$artifact_dir/foundation-parity.json"
+    scripts/remote/run-m2-storage.sh "$artifact_dir/storage.json"
+    git diff --check
+
+    python3 - <<'PY'
+import json
+from pathlib import Path
+
+root = Path("artifacts/M2")
+smoke = json.loads((root / "abi-smoke.json").read_text())
+foundation = json.loads((root / "foundation-parity.json").read_text())
+storage = json.loads((root / "storage.json").read_text())
+if smoke.get("result") != "pass" or foundation.get("result") != "pass" or storage.get("result") != "pass":
+    raise SystemExit("M2 result artifact is not passing")
+if foundation.get("test_totals") != {"passed": 2, "failed": 0, "skipped": 0}:
+    raise SystemExit("M2 foundation regression totals mismatch")
+if storage.get("test_totals") != {"passed": 16, "failed": 0, "skipped": 0}:
+    raise SystemExit("M2 storage totals mismatch")
+if storage.get("fixture_revision") != "m2-storage-model-loading-v1":
+    raise SystemExit("M2 fixture revision mismatch")
+if storage.get("numerical_tolerances") != {
+    "fp32": {"rtol": 1e-4, "atol": 1e-5, "result": "pass"},
+    "bf16": {"rtol": 2e-2, "atol": 5e-3, "result": "pass"},
+}:
+    raise SystemExit("M2 numerical tolerance mismatch")
+if storage.get("round_trip") != {
+    "safetensors": "exact_dtype_shape_payload_metadata",
+    "lora": "exact_dtype_shape_payload_metadata",
+}:
+    raise SystemExit("M2 round-trip gate mismatch")
+PY
+
+    python3 - <<'PY'
+import hashlib
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+root = Path("artifacts/M2")
+smoke = json.loads((root / "abi-smoke.json").read_text())
+foundation = json.loads((root / "foundation-parity.json").read_text())
+storage = json.loads((root / "storage.json").read_text())
+preflight = json.loads(Path("artifacts/M0/preflight.json").read_text())
+
+checksums = {
+    path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+    for path in sorted(root.glob("*.json"))
+    if path.name != "summary.json"
+}
+summary = {
+    "schema_version": 1,
+    "milestone": "M2",
+    "state": "accepted",
+    "generated_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+    "source_reference_sha": subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], text=True
+    ).strip(),
+    "plan_revision": "M2",
+    "plan_sha256": "7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea",
+    "verification_command": "scripts/remote/verify-milestone.sh M2",
+    "commands": [
+        {"command": "dotnet build Ltx.sln --configuration Release --nologo", "exit_code": 0},
+        {"command": "scripts/remote/run-m1-smoke.sh", "exit_code": 0},
+        {"command": "scripts/remote/run-m1-parity.sh", "exit_code": 0},
+        {"command": "scripts/remote/run-m2-storage.sh", "exit_code": 0},
+    ],
+    "toolchain": preflight["toolchain"],
+    "gpu": preflight["gpu"],
+    "abi": smoke["abi"],
+    "test_totals": {"passed": 22, "failed": 0, "skipped": 0},
+    "tests": {
+        **smoke["tests"],
+        "foundation_parity": "2_pass",
+        **storage["tests"],
+    },
+    "fixture_revision": storage["fixture_revision"],
+    "fixture_set_sha256": storage["fixture_set_sha256"],
+    "fixture_sha256": storage["fixture_sha256"],
+    "dependencies": storage["dependencies"],
+    "round_trip": storage["round_trip"],
+    "numerical_tolerances": storage["numerical_tolerances"],
+    "artifact_sha256": checksums,
+    "secrets_recorded": False,
+}
+(root / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+PY
+
+    trap - ERR
+    scripts/remote/publish-heartbeat.sh M2 verified none
+    echo "M2 accepted"
+    exit 0
+fi
+
 if [[ $milestone == M1 ]]; then
     failure_heartbeat() {
         scripts/remote/publish-heartbeat.sh M1 blocked acceptance_gate_failed || true
@@ -112,7 +238,7 @@ PY
 fi
 
 if [[ $milestone != M0 ]]; then
-    echo "$milestone has not started; M0 and M1 are the implemented acceptance gates" >&2
+    echo "$milestone has not started; M0 through M2 are the implemented acceptance gates" >&2
     exit 2
 fi
 

@@ -6,13 +6,18 @@
 - Accepted M1 plan: `C_SHARP_PORT_PLAN.M1.md`, revision M1, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `e9dcbdf69c658ad026bdec6ee5cd4642847215a8`.
 - Current M2 plan: `C_SHARP_PORT_PLAN.md`, revision M2, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M2.md`; the coordinator's M2 revision is content-identical to the accepted M1 revision.
 
-## M2 — handoff acknowledged, implementation not started
+## M2 — accepted checkpoint
 
-- Handoff acknowledged on 2026-08-20 UTC from accepted M1 checkpoint `e9dcbdf69c658ad026bdec6ee5cd4642847215a8`; no M2 implementation was started before this documentation/status checkpoint.
-- Plan input: `/root/C_SHARP_PORT_PLAN.M2.md`, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`; tracked as `C_SHARP_PORT_PLAN.md` with the accepted M0 and M1 plan copies retained as historical evidence.
-- Exact acceptance gate: safetensors/LoRA round trips and fixed checkpoint-loader fixtures pass at the recorded tolerances (FP32 `rtol=1e-4`, `atol=1e-5`; BF16/FP8 `rtol=2e-2`, `atol=5e-3`).
-- Required verification: `scripts/remote/verify-milestone.sh M2` on the existing 32 GB RTX 5090 worker. The implementation source checkpoint will be this handoff commit after it is pushed and will be recorded in the accepted M2 status and redacted heartbeat.
-- Known failures: none. Next action: begin M2 only after this documentation/status checkpoint is committed and pushed.
+- Handoff acknowledged on 2026-08-20 UTC from accepted M1 checkpoint `e9dcbdf69c658ad026bdec6ee5cd4642847215a8`; no M2 implementation was started before the pushed documentation/status checkpoint `67db844be650eeb2be35d4a8849464f58a65ecd9`.
+- Plan input: `/root/C_SHARP_PORT_PLAN.M2.md`, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`; tracked as `C_SHARP_PORT_PLAN.md` with accepted M0 and M1 copies retained as historical evidence.
+- Verification: `scripts/remote/verify-milestone.sh M2` (exit 0). The Release solution build, M1 ABI/native and parity regressions, exact safetensors/LoRA round trips, and fixed sharded checkpoint-loader fixtures all passed.
+- Starting/source checkpoint: `67db844be650eeb2be35d4a8849464f58a65ecd9`; the final fork checkpoint SHA is recorded by the redacted heartbeat immediately after the atomic push because it cannot be embedded in its own commit.
+- Scope completed: schema-validated safetensors read/write with deterministic headers and raw dtype preservation; TorchSharp tensor conversion; metadata-only reads and JSON metadata parsing; sharded checkpoint load/filter/key mapping; LoRA loading, Comfy prefix mapping, and BF16-aggregation fuse/unfuse.
+- Worker: existing Vast instance `48162892`, single RTX 5090 32 GB, compute capability 12.0. The accepted M1 ABI remained PyTorch `2.13.0+cu132`, CUDA `13.2`, TorchSharp `0.107.0`, and `sm_120` SASS-only native code.
+- Fixed fixture: `m2-storage-model-loading-v1`, fixture-set SHA-256 `4a8dc2680c3adf8acb78f5ff7a4ac60001eedeb9c3638848551f334c601448bf`. Individual file SHA-256 values are recorded in `artifacts/M2/summary.json`; no model checkpoint bytes were required for M2.
+- Numerical results: FP32 passed at `rtol=1e-4`, `atol=1e-5`; BF16 passed at `rtol=2e-2`, `atol=5e-3`. Safetensors and LoRA round trips preserved dtype, shape, payload, and metadata exactly in both C# and the pinned Python safetensors `0.6.2` verifier.
+- Redacted evidence: `artifacts/M2/abi-smoke.json`, `artifacts/M2/foundation-parity.json`, `artifacts/M2/storage.json`, and `artifacts/M2/summary.json`; 22 checks passed, 0 failed, 0 skipped.
+- A first verification attempt exposed randomized metadata-key ordering in the Python reference writer; fixture generation was canonicalized, reproduced byte-for-byte across clean runs, and the complete unchanged gate then passed twice. Known failures: none. Next milestone: M3 is not started.
 
 ## M1 — accepted checkpoint
 

@@ -1,0 +1,282 @@
+{
+  "checkpoint": {
+    "expected": {
+      "block.linear.bias": {
+        "dtype": "float32",
+        "shape": [
+          3
+        ],
+        "values": [
+          0.6773720979690552,
+          0.864027738571167,
+          -0.09719357639551163
+        ]
+      },
+      "block.linear.weight": {
+        "dtype": "float32",
+        "shape": [
+          3,
+          4
+        ],
+        "values": [
+          0.29485175013542175,
+          -0.1402158886194229,
+          -1.8498122692108154,
+          -0.746943473815918,
+          -1.2041863203048706,
+          0.3495189845561981,
+          -0.2620583772659302,
+          -0.068941630423069,
+          0.13125745952129364,
+          -0.2717289924621582,
+          0.2353334277868271,
+          0.6923027634620667
+        ]
+      },
+      "block.norm.weight": {
+        "dtype": "bfloat16",
+        "shape": [
+          3
+        ],
+        "values": [
+          -1.9765625,
+          -1.1796875,
+          1.4140625
+        ]
+      },
+      "block.proj.weight": {
+        "dtype": "bfloat16",
+        "shape": [
+          2,
+          3
+        ],
+        "values": [
+          1.0703125,
+          0.95703125,
+          -0.283203125,
+          0.61328125,
+          -0.54296875,
+          0.8203125
+        ]
+      }
+    },
+    "paths": [
+      "checkpoint-00001-of-00002.safetensors",
+      "checkpoint-00002-of-00002.safetensors"
+    ]
+  },
+  "file_sha256": {
+    "checkpoint-00001-of-00002.safetensors": "b4db6b884445aa359e967d15b7389204a50bf3b2680ba1a760036a1abb1e4599",
+    "checkpoint-00002-of-00002.safetensors": "7e0676dc2bdf8436af2625f9b2f133f57de0c27c79ce5de68b030712e4015685",
+    "lora.safetensors": "00f9c0da4bb8e0d8bb6dda5aa1fedc4c7effe3ad25ccfbea0c1c8d248e2ad88d",
+    "storage-mixed.safetensors": "7504662f77349d1e0f48f98e9cc51ddf563f31334499b3cda3c5051fb53f4ffe"
+  },
+  "fixture_revision": "m2-storage-model-loading-v1",
+  "lora": {
+    "expected_fused": {
+      "block.linear.weight": {
+        "dtype": "float32",
+        "shape": [
+          3,
+          4
+        ],
+        "values": [
+          0.8203125,
+          -1.1171875,
+          -2.28125,
+          -2.546875,
+          -2.40625,
+          0.90625,
+          -0.26171875,
+          1.7421875,
+          1.78125,
+          0.267578125,
+          1.0,
+          -0.0234375
+        ]
+      },
+      "block.proj.weight": {
+        "dtype": "bfloat16",
+        "shape": [
+          2,
+          3
+        ],
+        "values": [
+          0.67578125,
+          0.76171875,
+          -0.11328125,
+          1.1875,
+          -0.263671875,
+          0.56640625
+        ]
+      }
+    },
+    "expected_unfused": {
+      "block.linear.weight": {
+        "dtype": "float32",
+        "shape": [
+          3,
+          4
+        ],
+        "values": [
+          0.296875,
+          -0.140625,
+          -1.8515625,
+          -0.7421875,
+          -1.2109375,
+          0.3515625,
+          -0.26171875,
+          -0.0703125,
+          0.1328125,
+          -0.271484375,
+          0.234375,
+          0.69140625
+        ]
+      },
+      "block.proj.weight": {
+        "dtype": "bfloat16",
+        "shape": [
+          2,
+          3
+        ],
+        "values": [
+          1.0703125,
+          0.95703125,
+          -0.283203125,
+          0.61328125,
+          -0.54296875,
+          0.8203125
+        ]
+      }
+    },
+    "mapped_keys": [
+      "block.linear.lora_A.weight",
+      "block.linear.lora_B.weight",
+      "block.proj.lora_A.weight",
+      "block.proj.lora_B.weight"
+    ],
+    "metadata": {
+      "adapter": "m2-fixed-lora",
+      "format": "pt",
+      "reference_downscale_factor": "2"
+    },
+    "path": "lora.safetensors",
+    "strength": 0.625
+  },
+  "metadata": {
+    "config": "{\"model\":{\"hidden_size\":4,\"layers\":1},\"scheduler\":{\"steps\":8}}",
+    "license": "LTX-2 Community License",
+    "model_version": "2.5.0"
+  },
+  "mixed_tensors": {
+    "bf16_values": {
+      "dtype": "bfloat16",
+      "shape": [
+        5
+      ],
+      "values": [
+        -3.5,
+        -0.125,
+        0.0,
+        1.5,
+        9.75
+      ]
+    },
+    "bool_mask": {
+      "dtype": "bool",
+      "shape": [
+        5
+      ],
+      "values": [
+        1.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ]
+    },
+    "empty_f32": {
+      "dtype": "float32",
+      "shape": [
+        0,
+        3
+      ],
+      "values": []
+    },
+    "float16_values": {
+      "dtype": "float16",
+      "shape": [
+        3
+      ],
+      "values": [
+        -2.25,
+        0.5,
+        4.0
+      ]
+    },
+    "float32_matrix": {
+      "dtype": "float32",
+      "shape": [
+        2,
+        3
+      ],
+      "values": [
+        -0.501660943031311,
+        -0.5605300068855286,
+        0.3687848746776581,
+        1.6196893453598022,
+        -0.5583090782165527,
+        1.384318470954895
+      ]
+    },
+    "int64_ids": {
+      "dtype": "int64",
+      "shape": [
+        4
+      ],
+      "values": [
+        0.0,
+        17.0,
+        -9.0,
+        1099511627776.0
+      ]
+    },
+    "scalar_f64": {
+      "dtype": "float64",
+      "shape": [],
+      "values": [
+        3.25
+      ]
+    },
+    "uint8_pixels": {
+      "dtype": "uint8",
+      "shape": [
+        4
+      ],
+      "values": [
+        0.0,
+        1.0,
+        127.0,
+        255.0
+      ]
+    }
+  },
+  "oracle": {
+    "cuda_version": "13.2",
+    "framework": "pytorch",
+    "framework_version": "2.13.0+cu132",
+    "safetensors_version": "0.6.2",
+    "seed": 20260820
+  },
+  "schema_version": 1,
+  "tolerances": {
+    "bf16": {
+      "atol": 0.005,
+      "rtol": 0.02
+    },
+    "fp32": {
+      "atol": 1e-05,
+      "rtol": 0.0001
+    }
+  }
+}

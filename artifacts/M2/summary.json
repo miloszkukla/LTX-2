@@ -1,0 +1,113 @@
+{
+  "abi": {
+    "cuda": "13.2",
+    "cxx11_abi": 1,
+    "ltx": "1.0",
+    "pytorch": "2.13.0",
+    "torchsharp_managed": "0.107.0",
+    "torchsharp_revision": "8f4def03b641b6753f18076aa5438f8eaaef2d30"
+  },
+  "artifact_sha256": {
+    "abi-smoke.json": "37337c7e27bc786ec4f02309fa2b8f1bb961722aecba5365f3105e42377e0e6a",
+    "foundation-parity.json": "b729849ef5e441dd7e2bb5e33b16009836beccb037cbef173766404a0b38e009",
+    "storage.json": "8e5d92eb9b85d023a571a419a69bcf406fb8b4478b84c8f46f0f7fb7954d2f3f"
+  },
+  "commands": [
+    {
+      "command": "dotnet build Ltx.sln --configuration Release --nologo",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-smoke.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-parity.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m2-storage.sh",
+      "exit_code": 0
+    }
+  ],
+  "dependencies": {
+    "numpy": "2.3.2",
+    "packaging": "25.0",
+    "safetensors": "0.6.2",
+    "torchsharp": "0.107.0"
+  },
+  "fixture_revision": "m2-storage-model-loading-v1",
+  "fixture_set_sha256": "4a8dc2680c3adf8acb78f5ff7a4ac60001eedeb9c3638848551f334c601448bf",
+  "fixture_sha256": {
+    "checkpoint-00001-of-00002.safetensors": "b4db6b884445aa359e967d15b7389204a50bf3b2680ba1a760036a1abb1e4599",
+    "checkpoint-00002-of-00002.safetensors": "7e0676dc2bdf8436af2625f9b2f133f57de0c27c79ce5de68b030712e4015685",
+    "lora.safetensors": "00f9c0da4bb8e0d8bb6dda5aa1fedc4c7effe3ad25ccfbea0c1c8d248e2ad88d",
+    "manifest.json": "439a015c5d759980a9469ee582ff42a9d382566bfa6ed57659d9619bd6d93a60",
+    "storage-mixed.safetensors": "7504662f77349d1e0f48f98e9cc51ddf563f31334499b3cda3c5051fb53f4ffe"
+  },
+  "generated_at_utc": "2026-08-20T02:29:43.306652Z",
+  "gpu": {
+    "compute_capability": "12.0",
+    "driver": "580.95.05",
+    "driver_policy": "CUDA 13.x minor-version compatibility; SASS-only native build; no PTX JIT",
+    "memory_total_mib": 32607,
+    "memory_used_mib": 2,
+    "name": "NVIDIA GeForce RTX 5090",
+    "sass_architecture": "sm_120",
+    "temperature_c": 35
+  },
+  "milestone": "M2",
+  "numerical_tolerances": {
+    "bf16": {
+      "atol": 0.005,
+      "result": "pass",
+      "rtol": 0.02
+    },
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "plan_revision": "M2",
+  "plan_sha256": "7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea",
+  "round_trip": {
+    "lora": "exact_dtype_shape_payload_metadata",
+    "safetensors": "exact_dtype_shape_payload_metadata"
+  },
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_reference_sha": "67db844be650eeb2be35d4a8849464f58a65ecd9",
+  "state": "accepted",
+  "test_totals": {
+    "failed": 0,
+    "passed": 22,
+    "skipped": 0
+  },
+  "tests": {
+    "checkpoint_shards": "pass",
+    "csharp_storage_and_loader_fixtures": "13_pass",
+    "foundation_parity": "2_pass",
+    "lora_fuse_unfuse": "pass",
+    "lora_key_mapping": "pass",
+    "lora_round_trip": "exact",
+    "ltx_native_cuda": "pass",
+    "metadata_json": "pass",
+    "python_roundtrip_interop": "3_pass",
+    "safetensors_round_trip": "exact",
+    "sass_only": "pass",
+    "torchsharp_abi_probe": "pass",
+    "torchsharp_cuda_tensor": "pass"
+  },
+  "toolchain": {
+    "cmake": "cmake version 3.28.3",
+    "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "cuda_release": "13.2",
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "ninja": "1.11.1",
+    "python": "Python 3.12.3",
+    "uv": "uv 0.12.5 (x86_64-unknown-linux-gnu)"
+  },
+  "verification_command": "scripts/remote/verify-milestone.sh M2"
+}
