@@ -11,14 +11,18 @@
 - Accepted M6 plan: revision M6, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. Its byte-for-byte contents remain preserved by accepted checkpoint `87ddf3078caf1d41290ee514b6c3c61e06448160`; the coordinator's M6 revision was content-identical to the accepted M5 revision.
 - Current M7B plan: `C_SHARP_PORT_PLAN.md`, revision M7B, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M7B.md`; the coordinator's M7B revision is content-identical to the accepted M6 revision, so no plan bytes changed.
 
-## M7B — handoff acknowledged, not started
+## M7B — blocked at gated model access prerequisite
 
 - Handoff acknowledged on 2026-08-20 UTC from accepted M6 checkpoint `87ddf3078caf1d41290ee514b6c3c61e06448160`; no M7B sample implementation or model download started before this documentation/status checkpoint.
 - Plan input: `/root/C_SHARP_PORT_PLAN.M7B.md`, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`; tracked as `C_SHARP_PORT_PLAN.md`, which already byte-matched the handoff. All accepted M0–M6 plan and milestone evidence remains preserved in the tracked historical copies, accepted commits, and sections below.
 - Scope: M7B only on the existing single RTX 5090 32 GB worker, in parallel with the coordinator's separate M7A validation worker. The documented two-stage duration-then-resolution mitigation ladder is required before any diagnosed 32 GB VRAM fallback to the standalone distilled pipeline.
-- Intended verification: `scripts/remote/verify-milestone.sh M7B` after the final playable MP4, its matching SHA-256, model revisions, settings, GPU peak memory, and `ffprobe` evidence have been recorded.
-- Documentation/status checkpoint: this commit is pushed before M7B implementation; its exact SHA is published through the redacted heartbeat because a commit cannot embed its own SHA.
-- Known failures: none. M7B implementation is not started; M7A is outside this worker's scope.
+- Documentation/status checkpoint: `5f403e3206b2c148be5f717038a89cb8a2a718d5` was pushed before M7B implementation, and its exact SHA was published through the redacted heartbeat.
+- Prerequisite failure: the injected read token remains present and authenticated repository metadata resolves exactly to `Lightricks/LTX-2.5@6c7e5e573ac1667efc83407806fe9b0b93730e60`, but authenticated LFS metadata requests for all six required two-stage payloads return HTTP 403 `GatedRepoError`. The standalone distilled-transformer payload returns the same gate. No checkpoint bytes were downloaded and no prompt inference began.
+- M0 gap diagnosed: the accepted M0 probe was metadata-only and therefore established repository/revision visibility, not permission to download gated LFS payloads. The first byte-download attempt exposed the missing gated-file approval.
+- Scope preserved: the distilled fallback was not selected because the plan permits it only for a diagnosed remaining 32 GB VRAM limit after two-stage duration and resolution mitigations, not for repository access. No alternate model or revision was substituted.
+- Redacted evidence: `artifacts/M7B/prerequisite-failure.json`, SHA-256 `abb4cbf12b325ecbd1014f332c1faf7a37e3893e12d7996b9bb1c2da12caa45e`; it records seven file-level 403 results and no secret values.
+- Recovery gate: grant the worker's injected fine-grained read token gated-file access to `Lightricks/LTX-2.5` (including accepted model terms), then restart M7B at the pinned revision and run `scripts/remote/verify-milestone.sh M7B` only after the required MP4 and evidence exist.
+- Known failure: `gated_model_file_access_403`. M7B is not accepted and no final MP4 exists. M7A is outside this worker's scope and may continue independently.
 
 ## M6 — accepted checkpoint
 

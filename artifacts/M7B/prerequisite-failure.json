@@ -1,0 +1,90 @@
+{
+  "commands": [
+    {
+      "command": "hf download <six pinned two-stage files> --revision 6c7e5e573ac1667efc83407806fe9b0b93730e60 --local-dir <worker-local-model-dir>",
+      "exit_code": 1,
+      "result": "gated_repository_access_denied"
+    },
+    {
+      "command": "authenticated repository and LFS file-metadata probes at pinned revision",
+      "exit_code": 0,
+      "result": "repository_metadata_readable_but_all_required_file_payloads_http_403"
+    }
+  ],
+  "failure": {
+    "code": "gated_model_file_access_403",
+    "fallback_permitted": false,
+    "fallback_reason": "The standalone distilled fallback is permitted only after a diagnosed remaining 32 GB VRAM limit, not for a model-access failure.",
+    "model_bytes_downloaded": false,
+    "required_recovery": "Grant the worker's injected fine-grained read token access to gated Lightricks/LTX-2.5 model files, including accepted repository terms, then restart M7B from the pinned revision.",
+    "stage": "prerequisite_model_download"
+  },
+  "generated_at_utc": "2026-08-20T04:21:45Z",
+  "gpu": {
+    "compute_capability": "12.0",
+    "memory_total_mib": 32607,
+    "name": "NVIDIA GeForce RTX 5090"
+  },
+  "milestone": "M7B",
+  "model_repository": {
+    "file_probes": [
+      {
+        "id": "ltx25-dev-transformer",
+        "path": "diffusion_models/ltx-2.5-22b-dev-transformer-bf16.safetensors",
+        "result": "GatedRepoError",
+        "status_code": 403
+      },
+      {
+        "id": "ltx25-text-encoder",
+        "path": "text_encoders/gemma4-12b-with-proj-ltx-2.5-bf16.safetensors",
+        "result": "GatedRepoError",
+        "status_code": 403
+      },
+      {
+        "id": "ltx25-video-vae-diffusion",
+        "path": "vae/ltx-2.5-video-vae-bf16.safetensors",
+        "result": "GatedRepoError",
+        "status_code": 403
+      },
+      {
+        "id": "ltx25-audio-vae",
+        "path": "vae/ltx-2.5-audio-vae-bf16.safetensors",
+        "result": "GatedRepoError",
+        "status_code": 403
+      },
+      {
+        "id": "ltx25-spatial-upscaler",
+        "path": "latent_upscale_models/ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors",
+        "result": "GatedRepoError",
+        "status_code": 403
+      },
+      {
+        "id": "ltx25-distilled-lora",
+        "path": "loras/ltx-2.5-22b-distilled-lora-450-bf16.safetensors",
+        "result": "GatedRepoError",
+        "status_code": 403
+      },
+      {
+        "id": "ltx25-distilled-transformer",
+        "path": "diffusion_models/ltx-2.5-22b-distilled-transformer-bf16.safetensors",
+        "result": "GatedRepoError",
+        "status_code": 403
+      }
+    ],
+    "id": "Lightricks/LTX-2.5",
+    "repository_metadata_probe": "authenticated_read_succeeded",
+    "resolved_revision": "6c7e5e573ac1667efc83407806fe9b0b93730e60",
+    "revision_match": true
+  },
+  "plan_revision": "M7B",
+  "plan_sha256": "c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_reference_sha": "5f403e3206b2c148be5f717038a89cb8a2a718d5",
+  "state": "blocked",
+  "token": {
+    "present": true,
+    "source": "pid1_transient",
+    "value_recorded": false
+  }
+}
