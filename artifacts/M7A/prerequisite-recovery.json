@@ -1,0 +1,29 @@
+{
+  "generated_at_utc": "2026-08-20T05:25:49Z",
+  "milestone": "M7A",
+  "model_access": {
+    "acceptable_status_codes": [
+      200,
+      206
+    ],
+    "failed_file_probe_count": 0,
+    "probe_bytes_read": 21,
+    "required_file_count": 21,
+    "successful_byte_range_probe_count": 21
+  },
+  "model_bytes_downloaded": false,
+  "plan_revision": "M7A",
+  "plan_sha256": "85da94394a9e37749d579bc333e79eedebe2a61f77324cacd7ecbd5d149247ba",
+  "probe": "authenticated one-byte HTTP range read at every pinned repository revision and path in artifacts/M0/model-access.json",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_branch": "codex/ltx-csharp-m7a",
+  "source_reference_sha": "fb6c9b630d0bacfb0e1431fc21684d71b9f99277",
+  "starting_m6_sha": "87ddf3078caf1d41290ee514b6c3c61e06448160",
+  "state": "recovered",
+  "token": {
+    "present": true,
+    "source": "pid1_transient",
+    "value_recorded": false
+  }
+}
