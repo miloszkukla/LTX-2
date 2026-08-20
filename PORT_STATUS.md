@@ -5,13 +5,18 @@
 - M0 bootstrap plan: `C_SHARP_PORT_PLAN.M0.md`, SHA-256 `d5b0f9559011a690da8e59e20455b2290ac882a85281f5f8640e2916ac7bbeb6`. This is the byte-for-byte plan accepted at M0 and remains immutable historical evidence.
 - Current M1 plan: `C_SHARP_PORT_PLAN.md`, revision M1, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M1.md`.
 
-## M1 — handoff acknowledged
+## M1 — accepted checkpoint
 
 - Handoff acknowledged on 2026-08-20 UTC from accepted M0 checkpoint `28ad7ad1e6e1594e5f3b8ce1a29d7065fb90bacb`; no M1 implementation was started before this documentation/status checkpoint.
-- Scope: C# foundation and ABI only, on `codex/ltx-csharp` and the existing single RTX 5090 32 GB worker.
-- Acceptance gate: `Ltx.sln` Release build, LTX TorchSharp/native CUDA smoke test, and parity-fixture runner must pass through `scripts/remote/verify-milestone.sh M1`.
-- State: plan/status checkpoint awaiting commit and push; implementation and M1 verification are pending.
-- Redacted heartbeat: M1 `plan_handoff`; no failure recorded.
+- Verification: `scripts/remote/verify-milestone.sh M1` (exit 0). The Release solution build completed with 0 warnings and 0 errors; the ABI/native smoke and parity runner both passed.
+- Starting/source checkpoint: `95328d650b26d7a6fb17f6ca991fb9534ddc1e90`; the final fork checkpoint SHA is recorded by the redacted heartbeat immediately after the atomic push because it cannot be embedded in its own commit.
+- Scope completed: .NET 10 solution and project boundaries for `Ltx.Core`, `Ltx.Cuda`, `Ltx.SafeTensors`, `Ltx.Media`, `Ltx.Pipelines`, `Ltx.Trainer`, and `Ltx.Cli`; M2+ assemblies remain explicit foundation-only placeholders.
+- ABI: TorchSharp managed API `0.107.0`; fork source `8f4def03b641b6753f18076aa5438f8eaaef2d30`; PyTorch `2.13.0+cu132`; CUDA `13.2`; C++11 ABI enabled; LTX native ABI `1.0`. No stock TorchSharp CUDA runtime package is referenced.
+- Worker: existing Vast instance `48162892`, single RTX 5090 32 GB, compute capability 12.0. `libltx_cuda.so` contains `sm_120` SASS and no PTX.
+- Numerical fixture: `m1-foundation-v1`, SHA-256 `84199de9aaac9d64d6c9812e894a87bb11352faa137024058b9b42d4b4b47ee2`; 2 FP32 cases passed at `rtol=1e-4`, `atol=1e-5` against the pinned Python oracle.
+- Redacted evidence: `artifacts/M1/abi-smoke.json`, `artifacts/M1/parity.json`, and `artifacts/M1/summary.json`; 6 checks passed, 0 failed, 0 skipped.
+- Compatibility note: PyTorch 2.13 removed named tensors. The maintained TorchSharp fork preserves the managed entry points and returns an explicit unsupported error if called; no in-scope LTX M1 path uses named tensors.
+- Known failures: none. Next milestone: M2 is not started.
 
 ## M0 — accepted checkpoint
 

@@ -1,0 +1,78 @@
+{
+  "abi": {
+    "cuda": "13.2",
+    "cxx11_abi": 1,
+    "ltx": "1.0",
+    "pytorch": "2.13.0",
+    "torchsharp_managed": "0.107.0",
+    "torchsharp_revision": "8f4def03b641b6753f18076aa5438f8eaaef2d30"
+  },
+  "artifact_sha256": {
+    "abi-smoke.json": "a5aa908e7c9aac7fd07e35229cf295fc58b9e7445c24597781d8647b47318348",
+    "parity.json": "a9ba15d4a93f62a102eadc5db4fb1267f98669940b0d6bcd25a87681e1e8c766"
+  },
+  "commands": [
+    {
+      "command": "dotnet build Ltx.sln --configuration Release --nologo",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-smoke.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/remote/run-m1-parity.sh",
+      "exit_code": 0
+    }
+  ],
+  "fixture_revision": "m1-foundation-v1",
+  "fixture_sha256": "84199de9aaac9d64d6c9812e894a87bb11352faa137024058b9b42d4b4b47ee2",
+  "generated_at_utc": "2026-08-20T02:04:23.719885Z",
+  "gpu": {
+    "compute_capability": "12.0",
+    "driver": "580.95.05",
+    "driver_policy": "CUDA 13.x minor-version compatibility; SASS-only native build; no PTX JIT",
+    "memory_total_mib": 32607,
+    "memory_used_mib": 2,
+    "name": "NVIDIA GeForce RTX 5090",
+    "sass_architecture": "sm_120",
+    "temperature_c": 35
+  },
+  "milestone": "M1",
+  "numerical_tolerances": {
+    "fp32": {
+      "atol": 1e-05,
+      "result": "pass",
+      "rtol": 0.0001
+    }
+  },
+  "plan_revision": "M1",
+  "plan_sha256": "7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea",
+  "schema_version": 1,
+  "secrets_recorded": false,
+  "source_reference_sha": "95328d650b26d7a6fb17f6ca991fb9534ddc1e90",
+  "state": "accepted",
+  "test_totals": {
+    "failed": 0,
+    "passed": 6,
+    "skipped": 0
+  },
+  "tests": {
+    "ltx_native_cuda": "pass",
+    "parity_fixtures": "2_pass",
+    "sass_only": "pass",
+    "torchsharp_abi_probe": "pass",
+    "torchsharp_cuda_tensor": "pass"
+  },
+  "toolchain": {
+    "cmake": "cmake version 3.28.3",
+    "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "cuda_release": "13.2",
+    "dotnet_sdk": "10.0.111",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "ninja": "1.11.1",
+    "python": "Python 3.12.3",
+    "uv": "uv 0.12.5 (x86_64-unknown-linux-gnu)"
+  },
+  "verification_command": "scripts/remote/verify-milestone.sh M1"
+}

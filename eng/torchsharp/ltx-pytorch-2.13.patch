@@ -1,0 +1,171 @@
+diff --git a/src/Native/LibTorchSharp/CMakeLists.txt b/src/Native/LibTorchSharp/CMakeLists.txt
+index 8e5e1e3..5374c77 100644
+--- a/src/Native/LibTorchSharp/CMakeLists.txt
++++ b/src/Native/LibTorchSharp/CMakeLists.txt
+@@ -29,6 +29,7 @@ set(SOURCES
+     THSJIT.cpp
+ 	THSLinearAlgebra.cpp
+ 	THSLoss.cpp
++    THSLtxAbi.cpp
+ 	THSModule.cpp
+     THSNN.cpp
+ 	THSNormalization.cpp
+diff --git a/src/Native/LibTorchSharp/THSAutograd.cpp b/src/Native/LibTorchSharp/THSAutograd.cpp
+index 63059eb..c0d2efa 100644
+--- a/src/Native/LibTorchSharp/THSAutograd.cpp
++++ b/src/Native/LibTorchSharp/THSAutograd.cpp
+@@ -103,17 +103,11 @@ variable_list CSharpNode::apply(variable_list&& inputs) {
+     return output;
+ }
+ 
+-void deleteNode(CSharpNode* node) {
+-    node->managedDeleteNode();
+-    torch::autograd::deleteNode(node);
+-}
+-
+-
+ CSharpNodePtr THSAutograd_CSharpNode_ctor(TensorArray(*applyFunc)(Tensor*, int size), void (*managedDeleteNode)())
+ {
+     CATCH_RETURN_RES(CSharpNodePtr, CSharpNodePtr(),
+-        res.shared_ptr = new std::shared_ptr<CSharpNode>(new CSharpNode(applyFunc, managedDeleteNode), deleteNode);
+-        res.weak_ptr = new std::weak_ptr<CSharpNode>(*res.shared_ptr);
++        res.shared_ptr = new c10::intrusive_ptr<CSharpNode>(c10::make_intrusive<CSharpNode>(applyFunc, managedDeleteNode));
++        res.weak_ptr = new c10::weak_intrusive_ptr<CSharpNode>(*res.shared_ptr);
+     )
+ }
+ 
+@@ -207,4 +201,4 @@ Tensor THSAutograd_SavedVariable_unpack(SavedVariable saved_variable, CSharpNode
+ 
+ void THSAutograd_SavedVariable_reset_data(SavedVariable saved_variable) {
+     CATCH((*saved_variable)->reset_data();)
+-}
+\ No newline at end of file
++}
+diff --git a/src/Native/LibTorchSharp/THSAutograd.h b/src/Native/LibTorchSharp/THSAutograd.h
+index 61d4c80..4f7279f 100644
+--- a/src/Native/LibTorchSharp/THSAutograd.h
++++ b/src/Native/LibTorchSharp/THSAutograd.h
+@@ -46,6 +46,7 @@ using variable_list = torch::autograd::variable_list;
+ struct CSharpNode : public torch::autograd::Node {
+     CSharpNode(std::function<TensorArray (Tensor*, int)> applyFunc, std::function<void()> managedDeleteNode)
+         : applyFunc(applyFunc), managedDeleteNode(managedDeleteNode) {}
++    ~CSharpNode() override { managedDeleteNode(); }
+ 
+     std::function<TensorArray (Tensor*, int)> applyFunc;
+     std::function<void()> managedDeleteNode;
+@@ -54,8 +55,8 @@ struct CSharpNode : public torch::autograd::Node {
+ };
+ 
+ struct CSharpNodePtr {
+-    std::shared_ptr<CSharpNode> *shared_ptr;
+-    std::weak_ptr<CSharpNode> *weak_ptr;
++    c10::intrusive_ptr<CSharpNode> *shared_ptr;
++    c10::weak_intrusive_ptr<CSharpNode> *weak_ptr;
+ };
+ 
+ EXPORT_API(CSharpNodePtr) THSAutograd_CSharpNode_ctor(TensorArray(*applyFunc)(Tensor*, int), void (*managedDeleteNode)());
+@@ -76,4 +77,4 @@ EXPORT_API(void) THSAutograd_SavedVariable_dispose(SavedVariable var);
+ 
+ EXPORT_API(Tensor) THSAutograd_SavedVariable_unpack(SavedVariable saved_variable, CSharpNodePtr saved_for);
+ 
+-EXPORT_API(void) THSAutograd_SavedVariable_reset_data(SavedVariable saved_variable);
+\ No newline at end of file
++EXPORT_API(void) THSAutograd_SavedVariable_reset_data(SavedVariable saved_variable);
+diff --git a/src/Native/LibTorchSharp/THSLtxAbi.cpp b/src/Native/LibTorchSharp/THSLtxAbi.cpp
+new file mode 100644
+index 0000000..e042256
+--- /dev/null
++++ b/src/Native/LibTorchSharp/THSLtxAbi.cpp
+@@ -0,0 +1,28 @@
++// LTX-specific ABI probe. This file is carried by the LTX TorchSharp fork.
++#include "THSTorch.h"
++#include <cuda_runtime_api.h>
++#include <torch/version.h>
++
++EXPORT_API(int32_t) THSLtx_abi_version()
++{
++    return 0x00010000;
++}
++
++EXPORT_API(const char*) THSLtx_torch_version()
++{
++    return TORCH_VERSION;
++}
++
++EXPORT_API(int32_t) THSLtx_cuda_version()
++{
++    return CUDART_VERSION;
++}
++
++EXPORT_API(int32_t) THSLtx_cxx11_abi()
++{
++#if _GLIBCXX_USE_CXX11_ABI
++    return 1;
++#else
++    return 0;
++#endif
++}
++diff --git a/src/Native/LibTorchSharp/THSTensor.cpp b/src/Native/LibTorchSharp/THSTensor.cpp
+index 3d4c2ea..c15b21f 100644
+--- a/src/Native/LibTorchSharp/THSTensor.cpp
++++ b/src/Native/LibTorchSharp/THSTensor.cpp
+@@ -2166,6 +2166,7 @@ Tensor THSTensor_histogram_out_i(const Tensor input, const int64_t bins, const d
+     return ResultTensor(std::get<0>(res));
+ }
+ 
++#if 0  // Named tensors were removed from PyTorch 2.13.
+ bool THSTensor_has_names(Tensor tensor)
+ {
+     CATCH(
+@@ -2303,6 +2304,51 @@ Tensor THSTensor_unflatten_names(Tensor tensor, const char** names, const int64_
+ 
+     return nullptr;
+ }
++#endif
++
++bool THSTensor_has_names(Tensor)
++{
++    return false;
++}
++
++void THSTensor_names(Tensor, const char** (*)(size_t))
++{
++}
++
++Tensor THSTensor_rename(Tensor, const char**, int64_t)
++{
++    CATCH(TORCH_CHECK(false, "Named tensors were removed from PyTorch 2.13."));
++    return nullptr;
++}
++
++void THSTensor_rename_(Tensor, const char**, int64_t)
++{
++    CATCH(TORCH_CHECK(false, "Named tensors were removed from PyTorch 2.13."));
++}
++
++Tensor THSTensor_refine_names(Tensor, const char**, int64_t)
++{
++    CATCH(TORCH_CHECK(false, "Named tensors were removed from PyTorch 2.13."));
++    return nullptr;
++}
++
++Tensor THSTensor_align_to(Tensor, const char**, int64_t)
++{
++    CATCH(TORCH_CHECK(false, "Named tensors were removed from PyTorch 2.13."));
++    return nullptr;
++}
++
++Tensor THSTensor_flatten_names(Tensor, const char**, int64_t)
++{
++    CATCH(TORCH_CHECK(false, "Named tensors were removed from PyTorch 2.13."));
++    return nullptr;
++}
++
++Tensor THSTensor_unflatten_names(Tensor, const char**, const int64_t*, int64_t)
++{
++    CATCH(TORCH_CHECK(false, "Named tensors were removed from PyTorch 2.13."));
++    return nullptr;
++}
+ 
+ Tensor THSTensor_quantize_per_tensor(const Tensor tensor, double scale, int64_t zero_point, int8_t scalar_type)
+ {

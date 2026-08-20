@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Managed API only. M1 builds the native bridge against PyTorch 2.13/CUDA 13.2. -->
+    <PackageVersion Include="TorchSharp" Version="0.107.0" />
+  </ItemGroup>
+</Project>

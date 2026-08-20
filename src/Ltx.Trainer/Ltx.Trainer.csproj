@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../Ltx.Core/Ltx.Core.csproj" />
+    <ProjectReference Include="../Ltx.Cuda/Ltx.Cuda.csproj" />
+    <ProjectReference Include="../Ltx.SafeTensors/Ltx.SafeTensors.csproj" />
+  </ItemGroup>
+</Project>

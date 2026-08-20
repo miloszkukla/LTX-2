@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Ltx.Pipelines/Ltx.Pipelines.csproj" />
+    <ProjectReference Include="../Ltx.Trainer/Ltx.Trainer.csproj" />
+  </ItemGroup>
+</Project>

@@ -45,9 +45,15 @@ wandb/
 *.webp
 
 # Tracked redacted milestone evidence
+!global.json
 !artifacts/
 !artifacts/M0/
 !artifacts/M0/*.json
+!artifacts/M1/
+!artifacts/M1/*.json
+!tests/fixtures/
+!tests/fixtures/M1/
+!tests/fixtures/M1/*.json
 
 # .NET build products
 **/bin/

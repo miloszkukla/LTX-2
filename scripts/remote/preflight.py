@@ -75,9 +75,10 @@ def main() -> int:
     if memory_bytes < 30 * 1024**3:
         raise SystemExit("at least 32 GB nominal host RAM is required")
 
-    plan_sha = command("sha256sum", str(ROOT / "C_SHARP_PORT_PLAN.md")).split()[0]
+    historical_plan = ROOT / "C_SHARP_PORT_PLAN.M0.md"
+    plan_sha = command("sha256sum", str(historical_plan)).split()[0]
     if plan_sha != EXPECTED_PLAN_SHA256:
-        raise SystemExit("C_SHARP_PORT_PLAN.md hash mismatch")
+        raise SystemExit("C_SHARP_PORT_PLAN.M0.md hash mismatch")
 
     environment_names = set(os.environ) | pid1_names()
     libraries = {
