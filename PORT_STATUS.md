@@ -7,7 +7,17 @@
 - Accepted M2 plan: `C_SHARP_PORT_PLAN.M2.md`, revision M2, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `f53c216a4a9598d1bc626923744095aac7311a46`.
 - Accepted M3 plan: `C_SHARP_PORT_PLAN.M3.md`, revision M3, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `ebbfd2b38a8eb5fd346ffe9b3e3833bab05277d4`.
 - Accepted M4 plan: `C_SHARP_PORT_PLAN.M4.md`, revision M4, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `f23816de4e48905904d72bce02924a88dad9705a`; the coordinator's M4 revision was content-identical to the accepted M1, M2, and M3 revisions.
-- Current M5 plan: `C_SHARP_PORT_PLAN.md`, revision M5, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M5.md` and adds the approved M7A/M7B/M8 delivery and teardown workflow.
+- Accepted M5 plan: `C_SHARP_PORT_PLAN.M5.md`, revision M5, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. This preserves the byte-for-byte plan accepted with checkpoint `829c61c8d3b9733ae9b813bdf7b0dc892e978a7e` and includes the approved M7A/M7B/M8 delivery and teardown workflow.
+- Current M6 plan: `C_SHARP_PORT_PLAN.md`, revision M6, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M6.md`; the coordinator's M6 revision is content-identical to the accepted M5 revision.
+
+## M6 — handoff acknowledged, implementation not started
+
+- Handoff acknowledged on 2026-08-20 UTC from accepted M5 checkpoint `829c61c8d3b9733ae9b813bdf7b0dc892e978a7e`; no M6 implementation was started before this documentation/status checkpoint.
+- Plan input: `/root/C_SHARP_PORT_PLAN.M6.md`, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`; tracked as `C_SHARP_PORT_PLAN.md` with accepted M0, M1, M2, M3, M4, and M5 plan copies retained as historical evidence.
+- Accepted prerequisite: `artifacts/M5/summary.json` records milestone M5 as accepted with 152 passing checks, 0 failed, and 0 skipped; `origin/codex/ltx-csharp` is at the same accepted M5 checkpoint and the worktree was clean at handoff.
+- Worker: existing Vast instance `48162892`, single RTX 5090 32 GB, compute capability 12.0. The accepted ABI remains PyTorch `2.13.0+cu132`, CUDA `13.2`, TorchSharp `0.107.0`, and LTX native ABI `1.0`.
+- Acceptance target: `scripts/remote/verify-milestone.sh M6` must exit 0 after preprocessing and one-step single-GPU LoRA training pass, including deterministic loss/gradient fixtures under the low-VRAM profile.
+- Known failures: none. Next action: implement M6 low-VRAM training only.
 
 ## M5 — accepted checkpoint
 
