@@ -67,7 +67,7 @@ fi
 
 blob=$(git -C "$repo_root" hash-object -w "$heartbeat_file")
 tree=$(printf '100644 blob %s\theartbeat.json\n' "$blob" | git -C "$repo_root" mktree)
-parent=$(GIT_SSH_COMMAND="$ssh_command" git -C "$repo_root" ls-remote origin refs/heads/codex/ltx-csharp-status | awk '{print $1}')
+parent=$(GIT_SSH_COMMAND="$ssh_command" git -C "$repo_root" ls-remote origin refs/heads/codex/ltx-csharp-m7a-status | awk '{print $1}')
 commit_args=("$tree")
 if [[ -n $parent ]]; then
     commit_args+=("-p" "$parent")
@@ -81,5 +81,5 @@ status_commit=$(
         git -C "$repo_root" commit-tree "${commit_args[@]}"
 )
 GIT_SSH_COMMAND="$ssh_command" git -C "$repo_root" push --force origin \
-    "$status_commit:refs/heads/codex/ltx-csharp-status" >/dev/null
+    "$status_commit:refs/heads/codex/ltx-csharp-m7a-status" >/dev/null
 echo "redacted heartbeat published"
