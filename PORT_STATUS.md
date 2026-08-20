@@ -8,7 +8,17 @@
 - Accepted M3 plan: `C_SHARP_PORT_PLAN.M3.md`, revision M3, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `ebbfd2b38a8eb5fd346ffe9b3e3833bab05277d4`.
 - Accepted M4 plan: `C_SHARP_PORT_PLAN.M4.md`, revision M4, SHA-256 `7dbc170e428101452a8764ba6fd2b3500b3b7db0397df43d44bda55a09a8f9ea`. This preserves the byte-for-byte plan accepted with checkpoint `f23816de4e48905904d72bce02924a88dad9705a`; the coordinator's M4 revision was content-identical to the accepted M1, M2, and M3 revisions.
 - Accepted M5 plan: `C_SHARP_PORT_PLAN.M5.md`, revision M5, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. This preserves the byte-for-byte plan accepted with checkpoint `829c61c8d3b9733ae9b813bdf7b0dc892e978a7e` and includes the approved M7A/M7B/M8 delivery and teardown workflow.
-- Current M6 plan: `C_SHARP_PORT_PLAN.md`, revision M6, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M6.md`; the coordinator's M6 revision is content-identical to the accepted M5 revision.
+- Accepted M6 plan: revision M6, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. Its byte-for-byte contents remain preserved by accepted checkpoint `87ddf3078caf1d41290ee514b6c3c61e06448160`; the coordinator's M6 revision was content-identical to the accepted M5 revision.
+- Current M7B plan: `C_SHARP_PORT_PLAN.md`, revision M7B, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`. It byte-matches the coordinator handoff at `/root/C_SHARP_PORT_PLAN.M7B.md`; the coordinator's M7B revision is content-identical to the accepted M6 revision, so no plan bytes changed.
+
+## M7B — handoff acknowledged, not started
+
+- Handoff acknowledged on 2026-08-20 UTC from accepted M6 checkpoint `87ddf3078caf1d41290ee514b6c3c61e06448160`; no M7B sample implementation or model download started before this documentation/status checkpoint.
+- Plan input: `/root/C_SHARP_PORT_PLAN.M7B.md`, SHA-256 `c4c4cc45fe0a429d70469ca1264aad0ee598026c1cbbffbdaa2234c2594a51a2`; tracked as `C_SHARP_PORT_PLAN.md`, which already byte-matched the handoff. All accepted M0–M6 plan and milestone evidence remains preserved in the tracked historical copies, accepted commits, and sections below.
+- Scope: M7B only on the existing single RTX 5090 32 GB worker, in parallel with the coordinator's separate M7A validation worker. The documented two-stage duration-then-resolution mitigation ladder is required before any diagnosed 32 GB VRAM fallback to the standalone distilled pipeline.
+- Intended verification: `scripts/remote/verify-milestone.sh M7B` after the final playable MP4, its matching SHA-256, model revisions, settings, GPU peak memory, and `ffprobe` evidence have been recorded.
+- Documentation/status checkpoint: this commit is pushed before M7B implementation; its exact SHA is published through the redacted heartbeat because a commit cannot embed its own SHA.
+- Known failures: none. M7B implementation is not started; M7A is outside this worker's scope.
 
 ## M6 — accepted checkpoint
 
